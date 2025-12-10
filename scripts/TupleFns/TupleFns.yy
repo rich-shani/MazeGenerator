@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"TupleFns",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"TupleFns",
+  "parent":{
+    "name":"scripts",
+    "path":"folders/scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

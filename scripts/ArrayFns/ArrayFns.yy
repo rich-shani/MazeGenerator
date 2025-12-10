@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ArrayFns",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ArrayFns",
+  "parent":{
+    "name":"scripts",
+    "path":"folders/scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

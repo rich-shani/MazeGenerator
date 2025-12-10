@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"pacman_maze",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"pacman_maze",
+  "parent":{
+    "name":"scripts",
+    "path":"folders/scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
