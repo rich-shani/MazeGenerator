@@ -10,7 +10,7 @@ for (var row = 0; row < mapHeight; row++) {
         
         if (spriteIndex >= 0) {
             // Draw sprite at position (col, row)
-            draw_sprite(maze_blue_red, spriteIndex, col * 32, offset+(row * 32));
+            draw_sprite(chompermazetiles, spriteIndex, col * 32, offset+(row * 32));
         }
     }
 }
