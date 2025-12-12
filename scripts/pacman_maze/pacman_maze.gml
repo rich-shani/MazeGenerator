@@ -939,13 +939,14 @@ function pacman_map_get_tile_map() {
         }
     }
     
-    // Set path blanks (tunnel areas)
-    pacman_map_set_tile(result, 1, sub.y - 8, TileState.PATHBLANK, sub.x, sub.y, midX);
+    // Set path blanks (Pacman)
+    pacman_map_set_tile(result, 1, sub.y - 8, TileState.PATH, sub.x, sub.y, midX);
     
     // Additional path blank logic (simplified - see original for full implementation)
+	// this is the empty path around the GHOST house location
     for (var i = 0; i < 7; i++) {
         var j = sub.y - 14;
-        pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
+        pacman_map_set_tile(result, i, j, TileState.PATH, sub.x, sub.y, midX);
         var jOffset = 1;
         while (pacman_map_get_tile_state(result, i, j + jOffset, sub.x, sub.y, midX) == TileState.PATH &&
                pacman_map_get_tile_state(result, i - 1, j + jOffset, sub.x, sub.y, midX) == TileState.WALL &&
