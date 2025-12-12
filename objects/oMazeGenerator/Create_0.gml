@@ -13,20 +13,8 @@ pacman_map_print_ascii(tileMap);
 var spriteMapJson = pacman_map_get_sprite_map_index(tileMap);
 
 // Parse and use the sprite map
-var mapData = json_parse(spriteMapJson);
-var layerData = mapData.layers[0].data;
-var mapWidth = mapData.layers[0].width;
-var mapHeight = mapData.layers[0].height;
+mapData = json_parse(spriteMapJson);
+layerData = mapData.layers[0].data;
+mapWidth = mapData.layers[0].width;
+mapHeight = mapData.layers[0].height;
 
-// Render the map
-for (var row = 0; row < mapHeight; row++) {
-    for (var col = 0; col < mapWidth; col++) {
-        var index = row * mapWidth + col;
-        var spriteIndex = layerData[index] - 1; // Tiled uses 1-based indexing
-        
-        if (spriteIndex >= 0) {
-            // Draw sprite at position (col, row)
-            draw_sprite(spr_tileset, spriteIndex, col * TILE_SIZE, row * TILE_SIZE);
-        }
-    }
-}

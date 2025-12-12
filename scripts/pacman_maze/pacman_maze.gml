@@ -1,5 +1,7 @@
 /// @description Generate a new procedural maze
 function pacman_map_generate() {
+    // Seed random number generator for different mazes each call
+    randomize();
     
     while (true) {
         pacman_map_reset();
@@ -115,7 +117,7 @@ function pacman_map_attempt_generate() {
     var singleCount = [0, 0];
     var probStopGrowingAtSize = [0.0, 0.0, 0.1, 0.5, 0.75, 1.0];
     var probTopAndBotSingleCellJoin = 0.35;
-    var probExtendAtSize2 = 1.0;
+    var probExtendAtSize2 = 0.5;
     var probExtendAtSize3or4 = 0.5;
     var longPieces = 0;
     var MAX_LONG_PIECES = 1;
@@ -1081,65 +1083,6 @@ function pacman_map_erase_until_intersection(tM, i, j, w, h, midX) {
     }
 }
 
-/// @description Generate sprite map index string (JSON format)
-function pacman_map_get_sprite_map_index(tileMap) {
-    var spriteMap = array_create(array_length(tileMap));
-    for (var i = 0; i < array_length(tileMap); i++) {
-        spriteMap[i] = array_create(array_length(tileMap[0]));
-    }
-    
-    var s = "{\n\"layers\":[\n\t{\n\t\"data\":[";
-    
-    var mapHeight = array_length(tileMap[0]);
-    var mapWidth = array_length(tileMap);
-    
-    for (var j = 0; j < mapHeight; j++) {
-        for (var i = 0; i < mapWidth; i++) {
-            var t11 = pacman_map_get_tile_from_map(tileMap, i, j);
-            
-            // Special case: first tile (left tunnel prefix)
-            if (i == 0) {
-                s += (t11 == TileState.PATHBLANK) ? "31,33,33," : "0,0,0,";
-            }
-            
-            var n = "";
-            
-            if (t11 == TileState.PATH) {
-                spriteMap[i][j] = 36;
-                n = "36,";
-            } else if (t11 == TileState.PATHBLANK) {
-                spriteMap[i][j] = 32;
-                n = "32,";
-            } else if (t11 == TileState.BLANK || t11 == TileState.GHOSTSPACE) {
-                spriteMap[i][j] = 0;
-                n = "0,";
-            } else if (t11 == TileState.ENERGIZER) {
-                spriteMap[i][j] = 37;
-                n = "37,";
-            } else if (t11 == TileState.GHOSTWALL) {
-                spriteMap[i][j] = 19;
-                n = "19,";
-            } else if (t11 == TileState.WALL) {
-                var tileDrawn = pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight);
-                spriteMap[i][j] = tileDrawn;
-                n = string(tileDrawn) + ",";
-            }
-            
-            s += n;
-            
-            // Special case: last tile (right tunnel suffix)
-            if (i == mapWidth - 1) {
-                s += (t11 == TileState.PATHBLANK) ? "33,33,31" : "0,0,0";
-                s += (j == mapHeight - 1) ? "" : ",";
-            }
-        }
-    }
-    
-    s += "],\n\t\"height\":31,\n\t\"width\":34\n\t}]\n}";
-    
-    return s;
-}
-
 /// @description Get tile state from tile map
 function pacman_map_get_tile_from_map(tM, i, j) {
     if (i < 0 || i >= array_length(tM) || j < 0 || j >= array_length(tM[0])) {
@@ -1172,11 +1115,49 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
     
     var tileDrawn = -1;
     
-    // Border column handling (simplified - see original for full logic)
-    if (i == 0 || i == mapWidth - 1) {
-        // Complex border logic (see original C# code lines 321-398)
-        // Simplified version - returns basic wall tile
-        tileDrawn = 9;
+    // Border column handling - check corners first, then borders
+    // Top-left corner
+    if (i == 0 && j == 0) {
+        tileDrawn = 4;
+    }
+    // Top-right corner
+    else if (i == mapWidth - 1 && j == 0) {
+        tileDrawn = 6;
+    }
+    // Bottom-left corner
+    else if (i == 0 && j == mapHeight - 1) {
+        tileDrawn = 24;
+    }
+    // Bottom-right corner
+    else if (i == mapWidth - 1 && j == mapHeight - 1) {
+        tileDrawn = 26;
+    }
+    // Left border (not corner)
+    else if (i == 0) {
+        // Pattern: wall right, wall above, wall below -> sprite 4 (corner)
+        if (w21 && w10 && w12) {
+            tileDrawn = 4;
+        }
+        // Pattern: wall right, wall above, path below -> sprite 24
+        else if (w21 && w10 && bp12) {
+            tileDrawn = 24;
+        }
+        // Pattern: wall right, path above, wall below -> sprite 9 (horizontal wall connection)
+        else if (w21 && bp10 && w12) {
+            tileDrawn = 9;
+        }
+        // Pattern: wall right with path above or below -> sprite 9 (horizontal wall connection)
+        else if (w21 && (bp10 || bp12)) {
+            tileDrawn = 9;
+        }
+        // Default left border (no wall connection)
+        else {
+            tileDrawn = 17;
+        }
+    }
+    // Right border (not corner)
+    else if (i == mapWidth - 1) {
+        tileDrawn = 17;
     } else {
         // Interior tile logic
         if (w01 && w21 && bp10 && (bgo12 || w12)) {
@@ -1263,6 +1244,9 @@ function pacman_map_print_ascii(tileMap) {
                     break;
                 case TileState.PATHBLANK:
                     char = " ";  // Space for empty path/tunnel
+                    break;
+			case TileState.PATHTUNNEL:
+                    char = "T";  // Space for empty path/tunnel
                     break;
                 case TileState.WALL:
                     char = "#";  // Hash for wall

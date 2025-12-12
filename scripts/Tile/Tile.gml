@@ -6,7 +6,8 @@ enum TileState {
     WALL = 3,           // Solid wall
     GHOSTWALL = 4,      // Wall that ghosts can pass through
     ENERGIZER = 5,      // Power pellet location
-    GHOSTSPACE = 6      // Ghost home/spawn area
+    GHOSTSPACE = 6,      // Ghost home/spawn area
+	PATHTUNNEL = 7
 }
 
 /// @param _x X coordinate
@@ -25,7 +26,7 @@ function Tile_create(_x, _y) constructor {
     // Instance method to check if tile is walkable
     static isWalkable = function() {
         return (state == TileState.PATH || 
-                state == TileState.PATHBLANK || 
+                state == TileState.PATHBLANK || state == TileState.PATHTUNNEL ||
                 state == TileState.ENERGIZER);
     }
     
@@ -60,6 +61,7 @@ function Tile_create(_x, _y) constructor {
             case TileState.BLANK: return "BLANK";
             case TileState.PATH: return "PATH";
             case TileState.PATHBLANK: return "PATHBLANK";
+			case TileState.PATHTUNNEL: return "PATHTUNNEL";
             case TileState.WALL: return "WALL";
             case TileState.GHOSTWALL: return "GHOSTWALL";
             case TileState.ENERGIZER: return "ENERGIZER";
@@ -80,7 +82,7 @@ function Tile_create(_x, _y) constructor {
 /// @returns true if tile can be walked on
 function Tile_isWalkable(tile) {
     return (tile.state == TileState.PATH || 
-            tile.state == TileState.PATHBLANK || 
+            tile.state == TileState.PATHBLANK ||  state == TileState.PATHTUNNEL ||
             tile.state == TileState.ENERGIZER);
 }
 
@@ -120,6 +122,7 @@ function Tile_getStateName(tile) {
         case TileState.BLANK: return "BLANK";
         case TileState.PATH: return "PATH";
         case TileState.PATHBLANK: return "PATHBLANK";
+		case TileState.PATHTUNNEL: return "PATHTUNNEL";
         case TileState.WALL: return "WALL";
         case TileState.GHOSTWALL: return "GHOSTWALL";
         case TileState.ENERGIZER: return "ENERGIZER";
