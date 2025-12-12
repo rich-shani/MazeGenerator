@@ -41,8 +41,21 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
     }
     // Left border (not corner)
     else if (i == 0) {
-        // Pattern: wall right, wall above, wall below -> sprite 4 (corner)
+        // Pattern: wall right, path above, wall below -> check if wall above has looped from left
         if (w21 && w10 && w12) {
+            // Check if wall above has looped out from left and is returning
+            // This means checking if there's a wall to the right of the path above
+            var t20 = pacman_map_get_tile_from_map(tileMap, i+1, j-1);
+            var w20 = (t20 == TileState.WALL || t20 == TileState.GHOSTWALL);
+            if (w20) {
+                // Wall has looped from left and is returning, connect down
+                tileDrawn = 4;
+            } else {
+                // Normal horizontal wall connection
+                tileDrawn = 24;
+            }
+        }// Pattern: wall right, wall above, wall below -> sprite 4 (corner)
+        else if (w21 && w10 && w12) {
             tileDrawn = 24;
         }
         // Pattern: wall right, wall above, path below -> sprite 24
@@ -52,10 +65,7 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
 		else if (w21 && w12 && bgo10) {
 			tileDrawn = 4;
 		}
-        // Pattern: wall right, path above, wall below -> sprite 9 (horizontal wall connection)
-        else if (w21 && bp10 && w12) {
-            tileDrawn = 9;
-        }
+        
         // Pattern: wall right with path above or below -> sprite 9 (horizontal wall connection)
         else if (w21 && (bp10 || bp12)) {
             tileDrawn = 9;
@@ -67,7 +77,39 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
     }
     // Right border (not corner)
     else if (i == mapWidth - 1) {
-        tileDrawn = 17;
+        // Pattern: wall left, path above, wall below -> check if wall above has looped from right
+        if (w01 && w10 && w12) {
+            // Check if wall above has looped out from right and is returning
+            // This means checking if there's a wall to the left of the path above
+            var t00 = pacman_map_get_tile_from_map(tileMap, i-1, j-1);
+            var w00 = (t00 == TileState.WALL || t00 == TileState.GHOSTWALL);
+            if (w00) {
+                // Wall has looped from right and is returning, connect down
+                tileDrawn = 6;
+            } else {
+                // Normal horizontal wall connection
+                tileDrawn = 26;
+            }
+        }// Pattern: wall left, wall above, wall below -> sprite 26 (corner)
+        else if (w01 && w10 && w12) {
+            tileDrawn = 26;
+        }
+        // Pattern: wall left, wall above, path below -> sprite 26
+        else if (w01 && w10 && bgo12) {
+            tileDrawn = 26;
+        }
+		else if (w01 && w12 && bgo10) {
+			tileDrawn = 6;
+		}
+        
+        // Pattern: wall left with path above or below -> sprite 9 (horizontal wall connection)
+        else if (w01 && (bp10 || bp12)) {
+            tileDrawn = 9;
+        }
+        // Default right border (no wall connection)
+        else {
+            tileDrawn = 17;
+        }
     } else {
         // Interior tile logic
         if (w01 && w21 && bp10 && (bgo12 || w12)) {
