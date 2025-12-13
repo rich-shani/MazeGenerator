@@ -1,50 +1,67 @@
 /// @description Cell map dimensions
-#macro CELL_MAP_SIZE_X 5
-#macro CELL_MAP_SIZE_Y 9
+/// The maze is generated at a high level using a 5x9 grid of cells.
+/// Each cell is then expanded into a 3x3 (or variable size) grid of tiles.
+/// This two-level approach allows for complex maze generation while maintaining
+/// the classic Pacman maze structure.
+#macro CELL_MAP_SIZE_X 5  // Width of cell map (5 cells)
+#macro CELL_MAP_SIZE_Y 9  // Height of cell map (9 cells)
 
 /// @description Tile map calculation constants
-#macro TILE_SCALE_X 3
-#macro TILE_SCALE_Y 3
-#macro TILE_OFFSET_X 2
-#macro TILE_OFFSET_Y 1
-#macro TILE_EXTRA_Y 3
+/// These constants define how cells are scaled into tiles.
+/// Each cell typically becomes a 3x3 block of tiles, but can be resized
+/// during generation for variation (tall rows, narrow columns).
+#macro TILE_SCALE_X 3     // Default tiles per cell width
+#macro TILE_SCALE_Y 3     // Default tiles per cell height
+#macro TILE_OFFSET_X 2    // X offset for tile positioning calculations
+#macro TILE_OFFSET_Y 1    // Y offset for tile positioning calculations
+#macro TILE_EXTRA_Y 3     // Extra tiles added to tile map height
 
 /// @description Initialize PacmanMap object variables
+/// Sets up all the global variables used for maze generation.
+/// This should be called before generating a new maze to ensure clean state.
 function pacman_map_init() {
-    // Initialize arrays
-    cellMap = undefined;
-    tileMap = undefined;
+    // Initialize arrays to undefined (will be created during generation)
+    cellMap = undefined;  // 2D array of Cell structures (5x9)
+    tileMap = undefined;  // 2D array of Tile structures (final rendered map)
     
-    // Initialize tallRows (one per column)
+    // Initialize tallRows array (one entry per column)
+    // tallRows[i] stores the row index where column i has a "tall" cell (4 tiles high instead of 3)
+    // -1 means no tall row in that column
     tallRows = array_create(CELL_MAP_SIZE_X);
     for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
         tallRows[i] = -1;  // -1 means no tall row in this column
     }
     
-    // Initialize narrowCols (one per row)
+    // Initialize narrowCols array (one entry per row)
+    // narrowCols[j] stores the column index where row j has a "narrow" cell (2 tiles wide instead of 3)
+    // -1 means no narrow column in that row
     narrowCols = array_create(CELL_MAP_SIZE_Y);
     for (var i = 0; i < CELL_MAP_SIZE_Y; i++) {
         narrowCols[i] = -1;  // -1 means no narrow column in this row
     }
     
-    // Reset generation counter
+    // Reset generation counter (tracks how many generation attempts were made)
     genCount = 0;
     
-    // Reset Cell static counter
+    // Reset Cell static counter (tracks total cells filled across all generations)
     Cell_create.numFilled = 0;
 }
 
 /// @description Get cell map
-/// @returns 2D array of cells
+/// Returns the 2D array of Cell structures representing the high-level maze structure.
+/// @returns 2D array of cells (cellMap[x][y]) or undefined if not initialized
 function pacman_map_get_cell_map() {
     return cellMap;
 }
 
 /// @description Get cell at position
-/// @param x X coordinate
-/// @param y Y coordinate
-/// @returns Cell structure or noone
+/// Retrieves a specific Cell from the cell map at the given coordinates.
+/// Returns noone if coordinates are out of bounds.
+/// @param x X coordinate in cell map (0 to CELL_MAP_SIZE_X-1)
+/// @param y Y coordinate in cell map (0 to CELL_MAP_SIZE_Y-1)
+/// @returns Cell structure at position (x, y) or noone if invalid
 function pacman_map_get_cell(x, y) {
+    // Check bounds before accessing array
     if (x < 0 || x >= CELL_MAP_SIZE_X || y < 0 || y >= CELL_MAP_SIZE_Y) {
         return noone;
     }
@@ -52,11 +69,16 @@ function pacman_map_get_cell(x, y) {
 }
 
 /// @description Get tile at position
-/// @param x X coordinate
-/// @param y Y coordinate
-/// @returns Tile structure or noone
+/// Retrieves a specific Tile from the tile map at the given coordinates.
+/// The tile map is the final rendered maze with all tiles in their final states.
+/// @param x X coordinate in tile map (0-based)
+/// @param y Y coordinate in tile map (0-based)
+/// @returns Tile structure at position (x, y) or noone if invalid or map not created
 function pacman_map_get_tile(x, y) {
+    // Check if tile map exists
     if (tileMap == undefined) return noone;
+    
+    // Check bounds before accessing array
     if (x < 0 || x >= array_length(tileMap) || 
         y < 0 || y >= array_length(tileMap[0])) {
         return noone;
@@ -76,9 +98,11 @@ function pacman_map_get_tile(x, y) {
 
 
 /// @description Set tile state at position
-/// @param x X coordinate
-/// @param y Y coordinate
-/// @param state New tile state
+/// Changes the state of a tile in the tile map (e.g., from BLANK to PATH or WALL).
+/// This is used during tile map generation to mark tiles appropriately.
+/// @param x X coordinate in tile map
+/// @param y Y coordinate in tile map
+/// @param state New TileState value to assign
 function pacman_map_set_tile_state(x, y, state) {
     var tile = pacman_map_get_tile(x, y);
     if (tile != noone) {
@@ -87,19 +111,25 @@ function pacman_map_set_tile_state(x, y, state) {
 }
 
 /// @description Get tall rows array
-/// @returns Array of tall row positions
+/// Returns the array tracking which columns have "tall" cells (4 tiles high).
+/// tallRows[i] = row index where column i has a tall cell, or -1 if none.
+/// @returns Array of tall row positions (one per column, -1 if no tall row)
 function pacman_map_get_tall_rows() {
     return tallRows;
 }
 
 /// @description Get narrow columns array
-/// @returns Array of narrow column positions
+/// Returns the array tracking which rows have "narrow" cells (2 tiles wide).
+/// narrowCols[j] = column index where row j has a narrow cell, or -1 if none.
+/// @returns Array of narrow column positions (one per row, -1 if no narrow column)
 function pacman_map_get_narrow_cols() {
     return narrowCols;
 }
 
 /// @description Get generation count
-/// @returns Number of generation attempts
+/// Returns the number of generation attempts made. This can be useful for
+/// debugging or understanding how many attempts were needed to find a valid maze.
+/// @returns Number of generation attempts (incremented each time generation is attempted)
 function pacman_map_get_gen_count() {
     return genCount;
 }

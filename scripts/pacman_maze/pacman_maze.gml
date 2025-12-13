@@ -1,105 +1,164 @@
 /// @description Generate a new procedural maze
+/// This is the main entry point for maze generation. It uses a trial-and-error
+/// approach: generate a maze, check if it meets quality criteria, and retry if not.
+/// The generation process involves multiple phases:
+/// 1. Reset and create cell map structure
+/// 2. Generate cell connections (maze paths)
+/// 3. Check if maze is desirable (meets quality criteria)
+/// 4. Setup tile coordinates from cell coordinates
+/// 5. Join walls for better structure
+/// 6. Create tunnels (wrap-around connections)
+/// The loop continues until a valid maze is generated.
 function pacman_map_generate() {
-    // Seed random number generator for different mazes each call
-    randomize();
     
+    // Keep trying until we generate a valid maze
     while (true) {
+        // Reset the cell map and all generation state
         pacman_map_reset();
         
+        // Attempt to generate the maze structure (cell connections)
         pacman_map_attempt_generate();
         
+        // Check if the generated maze meets quality criteria
+        // If not, restart the generation process
         if (!pacman_map_is_desirable()) {
             continue;
         }
         
+        // Calculate tile positions and sizes from cell positions
+        // This accounts for tall rows and narrow columns
         pacman_map_setup_scale_coords();
+        
+        // Join walls together for better maze structure
+        // This creates more cohesive wall patterns
         pacman_map_join_walls();
         
+        // Create tunnels (wrap-around connections at left/right edges)
+        // If tunnel creation fails, restart generation
         if (!pacman_map_create_tunnels()) {
             continue;
         }
         
+        // Successfully generated a valid maze - exit loop
         break;
     }
 }
 
 /// @description Reset the cell map for new generation
+/// Creates a fresh cell map structure and initializes all cells with their neighbors.
+/// Also sets up the ghost space area (ghost home) with pre-defined connections.
+/// This must be called before each generation attempt to ensure a clean state.
 function pacman_map_reset() {
+    // Reset the static counter that tracks filled cells
     Cell_create.numFilled = 0;
     
-    // Initialize cell map
+    // Initialize cell map as a 2D array (CELL_MAP_SIZE_X × CELL_MAP_SIZE_Y)
     var _cellMap = array_create(CELL_MAP_SIZE_X);
     for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
+        // Create array for each column
         _cellMap[i] = array_create(CELL_MAP_SIZE_Y);
         for (var j = 0; j < CELL_MAP_SIZE_Y; j++) {
+            // Create a new Cell at position (i, j)
             _cellMap[i][j] = new Cell_create(i, j);
         }
     }
     
-    // Set up cell connections
+    // Set up cell neighbor references (bidirectional connections)
+    // Each cell needs to know which cells are adjacent in each direction
     for (var j = 0; j < CELL_MAP_SIZE_Y; j++) {
         for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
             var c = _cellMap[i][j];
+            
+            // Set LEFT neighbor (if not at left edge)
             c.next[CellDirection.LEFT] = (i > 0) ? _cellMap[i-1][j] : noone;
+            
+            // Set RIGHT neighbor (if not at right edge)
             c.next[CellDirection.RIGHT] = (i < CELL_MAP_SIZE_X - 1) ? _cellMap[i+1][j] : noone;
+            
+            // Set UP neighbor (if not at top edge)
             c.next[CellDirection.UP] = (j > 0) ? _cellMap[i][j-1] : noone;
+            
+            // Set DOWN neighbor (if not at bottom edge)
             c.next[CellDirection.DOWN] = (j < CELL_MAP_SIZE_Y - 1) ? _cellMap[i][j+1] : noone;
         }
     }
     
-    // Set up ghost space
-    _cellMap[0][3].isGhostSpace = true;
-    _cellMap[0][3].filled = true;
-    _cellMap[0][3].connections[CellDirection.LEFT] = true;
-    _cellMap[0][3].connections[CellDirection.RIGHT] = true;
-    _cellMap[0][3].connections[CellDirection.DOWN] = true;
+    // Set up ghost space (ghost home area)
+    // The ghost space is a 2x2 area at the bottom-left of the maze (cells [0-1][3-4])
+    // These cells are pre-filled and have special connection rules to create the ghost house
     
+    // Top-left ghost space cell (0, 3)
+    _cellMap[0][3].isGhostSpace = true;
+    _cellMap[0][3].filled = true;  // Pre-filled, won't be part of generation
+    _cellMap[0][3].connections[CellDirection.LEFT] = true;   // Connects to left edge
+    _cellMap[0][3].connections[CellDirection.RIGHT] = true;  // Connects to right neighbor
+    _cellMap[0][3].connections[CellDirection.DOWN] = true;   // Connects down to (0, 4)
+    
+    // Top-right ghost space cell (1, 3)
     _cellMap[1][3].isGhostSpace = true;
     _cellMap[1][3].filled = true;
-    _cellMap[1][3].connections[CellDirection.LEFT] = true;
-    _cellMap[1][3].connections[CellDirection.DOWN] = true;
+    _cellMap[1][3].connections[CellDirection.LEFT] = true;   // Connects to left neighbor
+    _cellMap[1][3].connections[CellDirection.DOWN] = true;   // Connects down to (1, 4)
     
+    // Bottom-left ghost space cell (0, 4)
     _cellMap[0][4].isGhostSpace = true;
     _cellMap[0][4].filled = true;
-    _cellMap[0][4].connections[CellDirection.LEFT] = true;
-    _cellMap[0][4].connections[CellDirection.RIGHT] = true;
-    _cellMap[0][4].connections[CellDirection.UP] = true;
+    _cellMap[0][4].connections[CellDirection.LEFT] = true;   // Connects to left edge
+    _cellMap[0][4].connections[CellDirection.RIGHT] = true;  // Connects to right neighbor
+    _cellMap[0][4].connections[CellDirection.UP] = true;     // Connects up to (0, 3)
     
+    // Bottom-right ghost space cell (1, 4)
     _cellMap[1][4].isGhostSpace = true;
     _cellMap[1][4].filled = true;
-    _cellMap[1][4].connections[CellDirection.LEFT] = true;
-    _cellMap[1][4].connections[CellDirection.UP] = true;
+    _cellMap[1][4].connections[CellDirection.LEFT] = true;  // Connects to left neighbor
+    _cellMap[1][4].connections[CellDirection.UP] = true;     // Connects up to (1, 3)
     
-    // Reset tallRows and narrowCols
+    // Reset tallRows and narrowCols arrays
+    // These track which cells have been selected for size variation
     tallRows = array_create(CELL_MAP_SIZE_X);
     narrowCols = array_create(CELL_MAP_SIZE_Y);
+    
+    // Initialize all tallRows to -1 (no tall rows selected yet)
     for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
         tallRows[i] = -1;
     }
+    
+    // Initialize all narrowCols to -1 (no narrow columns selected yet)
     for (var i = 0; i < CELL_MAP_SIZE_Y; i++) {
         narrowCols[i] = -1;
     }
     
+    // Store the cell map in the global variable
     cellMap = _cellMap;
 }
 
 
 /// @description Get leftmost empty cells for generation
+/// Finds all unfilled cells in the leftmost column that has any empty cells.
+/// This is used during maze generation to ensure we always start from the left
+/// and work our way right, creating a consistent generation pattern.
+/// @returns Array of Cell structures that are unfilled and in the leftmost column with empty cells
 function pacman_map_get_leftmost_empty_cells() {
     var result = [];
     
+    // Safety check: ensure cellMap exists
     if (is_undefined(cellMap)) {
         show_debug_message("ERROR: cellMap is undefined in pacman_map_get_leftmost_empty_cells");
         return result;
     }
     
+    // Search columns from left to right
     for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
+        // Search all rows in this column
         for (var j = 0; j < CELL_MAP_SIZE_Y; j++) {
             var c = cellMap[i][j];
+            // If cell exists and is not filled, add it to results
             if (c != noone && !c.filled) {
                 array_push(result, c);
             }
         }
+        // If we found any empty cells in this column, stop searching
+        // (we only want the leftmost column with empty cells)
         if (array_length(result) > 0) {
             break;
         }
