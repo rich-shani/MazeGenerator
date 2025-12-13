@@ -5,10 +5,10 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
     var t10 = pacman_map_get_tile_from_map(tileMap, i, j-1);
     var t12 = pacman_map_get_tile_from_map(tileMap, i, j+1);
     
-    var bp01 = (t01 == TileState.PATHBLANK || t01 == TileState.PATH || t01 == TileState.ENERGIZER);
-    var bp21 = (t21 == TileState.PATHBLANK || t21 == TileState.PATH || t21 == TileState.ENERGIZER);
-    var bp10 = (t10 == TileState.PATHBLANK || t10 == TileState.PATH || t10 == TileState.ENERGIZER);
-    var bp12 = (t12 == TileState.PATHBLANK || t12 == TileState.PATH || t12 == TileState.ENERGIZER);
+    var bp01 = (t01 == TileState.PATHBLANK || t01 == TileState.PATH || t01 == TileState.PATHTUNNEL ||t01 == TileState.ENERGIZER);
+    var bp21 = (t21 == TileState.PATHBLANK || t21 == TileState.PATH || t21 == TileState.PATHTUNNEL ||t21 == TileState.ENERGIZER);
+    var bp10 = (t10 == TileState.PATHBLANK || t10 == TileState.PATH || t10 == TileState.PATHTUNNEL ||t10 == TileState.ENERGIZER);
+    var bp12 = (t12 == TileState.PATHBLANK || t12 == TileState.PATH || t12 == TileState.PATHTUNNEL ||t12 == TileState.ENERGIZER);
     
     var bgo01 = (t01 == TileState.BLANK || t01 == TileState.GHOSTSPACE || t01 == -1);
     var bgo21 = (t21 == TileState.BLANK || t21 == TileState.GHOSTSPACE || t21 == -1);

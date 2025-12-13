@@ -885,8 +885,11 @@ function pacman_map_get_tile_map() {
     while (c != noone) {
         if (c.topTunnel) {
             var j = c.tilePosition.y + 1;
-            pacman_map_set_tile(result, sub.x - 1, j, TileState.PATH, sub.x, sub.y, midX);
-            pacman_map_set_tile(result, sub.x - 2, j, TileState.PATH, sub.x, sub.y, midX);
+            // Mark tunnel exit tile (rightmost edge) as PATHTUNNEL
+            pacman_map_set_tile(result, sub.x - 1, j, TileState.PATHTUNNEL, sub.x, sub.y, midX);
+            
+            // Trace back and mark path leading into tunnel as PATHTUNNEL
+            pacman_map_mark_tunnel_path(result, sub.x - 2, j, sub.x, sub.y, midX);
         }
         c = c.next[CellDirection.DOWN];
     }
@@ -894,12 +897,14 @@ function pacman_map_get_tile_map() {
     // Generate walls
     for (var j = 0; j < sub.y; j++) {
         for (var i = 0; i < sub.x; i++) {
-            if (pacman_map_get_tile_state(result, i, j, sub.x, sub.y, midX) != TileState.PATH) {
+            var currentState = pacman_map_get_tile_state(result, i, j, sub.x, sub.y, midX);
+            if (currentState != TileState.PATH && currentState != TileState.PATHTUNNEL) {
                 var isAdjacent = false;
                 for (var di = -1; di <= 1; di++) {
                     for (var dj = -1; dj <= 1; dj++) {
                         if (di == 0 && dj == 0) continue;
-                        if (pacman_map_get_tile_state(result, i + di, j + dj, sub.x, sub.y, midX) == TileState.PATH) {
+                        var adjState = pacman_map_get_tile_state(result, i + di, j + dj, sub.x, sub.y, midX);
+                        if (adjState == TileState.PATH || adjState == TileState.PATHTUNNEL) {
                             isAdjacent = true;
                             break;
                         }
@@ -1054,6 +1059,46 @@ function pacman_map_get_bot_energizer_range(tM, w, h, midX) {
     }
     
     return [miny, maxy - 1];
+}
+
+/// @description Mark path leading into tunnel as PATHTUNNEL
+function pacman_map_mark_tunnel_path(tM, startI, j, w, h, midX) {
+    var i = startI;
+    
+    // Trace left from tunnel, marking PATH tiles as PATHTUNNEL
+    while (i >= 0) {
+      
+        // Check if we've reached an intersection (vertical paths indicate intersection)
+        var hasVerticalPath = false;
+        var upState = pacman_map_get_tile_state(tM, i, j - 1, w, h, midX);
+        var downState = pacman_map_get_tile_state(tM, i, j + 1, w, h, midX);
+        
+        if ((upState == TileState.PATH) || (downState == TileState.PATH)) {
+            hasVerticalPath = true;
+			
+			break;
+        }
+        
+        var currentState = pacman_map_get_tile_state(tM, i, j, w, h, midX);
+		
+        // If current tile is PATH, mark it as PATHTUNNEL
+        if (currentState == TileState.PATH || currentState == TileState.PATHBLANK) {
+            pacman_map_set_tile(tM, i, j, TileState.PATHTUNNEL, w, h, midX);
+        } else if (currentState != TileState.PATHTUNNEL) {
+            // Stop if we hit a non-path tile
+            break;
+        }
+		
+        //// Check next tile to the left
+        //var nextState = pacman_map_get_tile_state(tM, i - 1, j, w, h, midX);
+        //if (nextState != TileState.PATHBLANK && nextState != TileState.PATHTUNNEL) {
+        //    // No more path to the left, stop
+        //    break;
+        //}
+        
+        // Move left
+        i--;
+    }
 }
 
 /// @description Erase path until intersection

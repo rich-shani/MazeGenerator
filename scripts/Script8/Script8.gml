@@ -28,8 +28,8 @@ function pacman_map_get_sprite_map_index(tileMap) {
                 spriteMap[i][j] = 0; //32;
                 n = "0,";
             } else if (t11 == TileState.PATHTUNNEL) {
-                spriteMap[i][j] = 33;
-                n = "33,";				
+                spriteMap[i][j] = 31;
+                n = "31,";				
 			} else if (t11 == TileState.BLANK || t11 == TileState.GHOSTSPACE) {
                 spriteMap[i][j] = 0;
                 n = "0,";
