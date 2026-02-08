@@ -70,7 +70,36 @@ function pacman_map_get_sprite_map_index(tileMap) {
                 var tileDrawn = pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight);
                 spriteMap[i][j] = tileDrawn;
                 n = string(tileDrawn) + ",";
-            }
+            } else if (t11 == TileState.PACMAN) {
+				// Pacman start location
+				spriteMap[i][j] = 28;
+				n = "28,";
+			} 
+			else if (t11 == TileState.BLINKY) {
+				// Blinky start location
+				spriteMap[i][j] = 36;
+				n = "36,";
+			}
+			else if (t11 == TileState.PINKY) {
+				// Pinky start location
+				spriteMap[i][j] = 35;
+				n = "35,";				
+			}
+			else if (t11 == TileState.INKY) {
+				// Inky start location
+				spriteMap[i][j] = 36;
+				n = "33,";				
+			}
+			else if (t11 == TileState.CLYDE) {
+				// Clyde start location
+				spriteMap[i][j] = 34;
+				n = "34,";			
+			}
+			else if (t11 == TileState.FRUIT) {
+				// Fruit location
+				spriteMap[i][j] = 32;
+				n = "32,";					
+			}
             
             // Append sprite index to JSON string
             s += n;

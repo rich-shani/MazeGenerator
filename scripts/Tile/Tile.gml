@@ -10,8 +10,16 @@ enum TileState {
     GHOSTWALL = 4,      // Special wall that ghosts can pass through but players cannot
     ENERGIZER = 5,      // Power pellet location - large pellet that makes ghosts vulnerable
     GHOSTSPACE = 6,     // Ghost home/spawn area - where ghosts start and respawn
-    PATHTUNNEL = 7      // Tunnel path - special path connecting left and right edges
-}
+    PATHTUNNEL = 7,      // Tunnel path - special path connecting left and right edges
+	
+	// used to mark the start locations for Pacman, and each of the Ghosts
+	PACMAN = 8,
+	BLINKY = 9,
+	PINKY = 10,
+	INKY = 11,
+	CLYDE = 12,
+	FRUIT = 13
+} 
 
 /// @description Create a new Tile structure
 /// A Tile represents a single square in the final rendered maze map.
@@ -68,7 +76,13 @@ function Tile_create(_x, _y) constructor {
     static isGhostSpace = function() {
         return (state == TileState.GHOSTSPACE);
     }
-    
+  
+	// Instance method to check if tile is ghost space
+    // Returns true if this tile is part of the ghost home/spawn area
+    static isPacman = function() {
+        return (state == TileState.PACMAN);
+    }
+	
     // Instance method to set state
     // Changes the tile's state to a new value
     // @param newState The new TileState value to assign

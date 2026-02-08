@@ -39,6 +39,9 @@ function pacman_map_generate() {
             continue;
         }
         
+		// set the location for PACMAN, and the GHOSTs
+		pacman_map_set_character_location();
+		
         // Successfully generated a valid maze - exit loop
         break;
     }
@@ -673,6 +676,10 @@ function pacman_map_join_walls() {
     }
 }
 
+function pacman_map_set_character_location() {
+	
+}
+
 /// @description Create tunnel connections
 function pacman_map_create_tunnels() {
     var singleDeadEndCells = [];
@@ -1004,15 +1011,15 @@ function pacman_map_get_tile_map() {
     }
     
     // Set path blanks (Pacman)
-    pacman_map_set_tile(result, 1, sub.y - 8, TileState.PATH, sub.x, sub.y, midX);
+    pacman_map_set_tile(result, 1, sub.y - 8, TileState.PATHBLANK, sub.x, sub.y, midX);
     
     // Additional path blank logic (simplified - see original for full implementation)
 	// this is the empty path around the GHOST house location
     for (var i = 0; i < 7; i++) {
         var j = sub.y - 14;
-        pacman_map_set_tile(result, i, j, TileState.PATH, sub.x, sub.y, midX);
+        pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
         var jOffset = 1;
-        while (pacman_map_get_tile_state(result, i, j + jOffset, sub.x, sub.y, midX) == TileState.PATH &&
+        if (pacman_map_get_tile_state(result, i, j + jOffset, sub.x, sub.y, midX) == TileState.PATH &&
                pacman_map_get_tile_state(result, i - 1, j + jOffset, sub.x, sub.y, midX) == TileState.WALL &&
                pacman_map_get_tile_state(result, i + 1, j + jOffset, sub.x, sub.y, midX) == TileState.WALL) {
             pacman_map_set_tile(result, i, j + jOffset, TileState.PATHBLANK, sub.x, sub.y, midX);
@@ -1022,7 +1029,7 @@ function pacman_map_get_tile_map() {
         j = sub.y - 20;
         pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
         var j0 = 1;
-        while (pacman_map_get_tile_state(result, i, j - j0, sub.x, sub.y, midX) == TileState.PATH &&
+        if (pacman_map_get_tile_state(result, i, j - j0, sub.x, sub.y, midX) == TileState.PATH &&
                pacman_map_get_tile_state(result, i - 1, j - j0, sub.x, sub.y, midX) == TileState.WALL &&
                pacman_map_get_tile_state(result, i + 1, j - j0, sub.x, sub.y, midX) == TileState.WALL) {
             pacman_map_set_tile(result, i, j - j0, TileState.PATHBLANK, sub.x, sub.y, midX);
@@ -1032,17 +1039,24 @@ function pacman_map_get_tile_map() {
     
     for (var n = 0; n < 7; n++) {
         var i = 6;
-        var j = sub.y - 14 - i;
+        var j = sub.y - 14 - n;
         pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
         var j0 = 1;
-        while (pacman_map_get_tile_state(result, i + j0, j, sub.x, sub.y, midX) == TileState.PATH &&
-               pacman_map_get_tile_state(result, i + j0, j - 1, sub.x, sub.y, midX) == TileState.WALL &&
-               pacman_map_get_tile_state(result, i + j0, j + 1, sub.x, sub.y, midX) == TileState.WALL) {
-            pacman_map_set_tile(result, i + j0, j, TileState.PATHBLANK, sub.x, sub.y, midX);
-            j0++;
+        if (pacman_map_get_tile_state(result, i, j, sub.x, sub.y, midX) == TileState.PATH &&
+               pacman_map_get_tile_state(result, i-1, j, sub.x, sub.y, midX) == TileState.WALL &&
+               pacman_map_get_tile_state(result, i+1, j, sub.x, sub.y, midX) == TileState.WALL) {
+            pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
         }
     }
     
+	// set the Pacman, and Ghost locations
+	result[14][23].state = TileState.PACMAN;
+	result[12][11].state = TileState.BLINKY;
+	result[12][14].state = TileState.PINKY;
+	result[13][14].state = TileState.INKY;
+	result[14][14].state = TileState.CLYDE;
+	result[14][17].state = TileState.FRUIT;
+	
     tileMap = result;
     return result;
 }
@@ -1216,7 +1230,8 @@ function pacman_map_print_ascii(tileMap) {
     
     // Build the ASCII representation row by row
     var asciiMap = "";
-    
+    var nPills = 0;
+	
     for (var j = 0; j < mapHeight; j++) {
         var row = "";
         for (var i = 0; i < mapWidth; i++) {
@@ -1229,11 +1244,12 @@ function pacman_map_print_ascii(tileMap) {
                     break;
                 case TileState.PATH:
                     char = ".";  // Dot for pellet path
+					nPills++;
                     break;
                 case TileState.PATHBLANK:
                     char = " ";  // Space for empty path/tunnel
                     break;
-			case TileState.PATHTUNNEL:
+				case TileState.PATHTUNNEL:
                     char = "T";  // Space for empty path/tunnel
                     break;
                 case TileState.WALL:
@@ -1248,6 +1264,24 @@ function pacman_map_print_ascii(tileMap) {
                 case TileState.GHOSTSPACE:
                     char = "G";  // G for ghost space
                     break;
+				case TileState.PACMAN:
+					char = "M";
+					break;
+				case TileState.BLINKY:
+					char = "B";
+					break;
+				case TileState.PINKY:
+					char = "P";
+					break;
+				case TileState.INKY:
+					char = "I";
+					break;
+				case TileState.CLYDE:
+					char = "C";
+					break;
+				case TileState.FRUIT:
+					char = "F";
+					break;
                 default:
                     char = "?";
                     break;
@@ -1262,6 +1296,7 @@ function pacman_map_print_ascii(tileMap) {
     show_debug_message(asciiMap);
     
     // Print legend
+	show_debug_message("number of power pills: " + string(nPills));
     show_debug_message("Legend:");
     show_debug_message("  [ ] = Blank/Void");
     show_debug_message("  [.] = Path (pellet)");
