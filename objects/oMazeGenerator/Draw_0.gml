@@ -6,7 +6,8 @@
 // Offset the maze rendering down by 96 pixels (3 rows × 32 pixels per row)
 var x_offset = 0;
 var y_offset = 0;
-	
+var gridSize = 16;
+
 for (var row = 0; row < mapHeight; row++) {
 	for (var col = 0; col < mapWidth; col++) {
 		
@@ -18,17 +19,17 @@ for (var row = 0; row < mapHeight; row++) {
             // Draw the sprite at the calculated screen position
             // col * 32: X position (each tile is 32 pixels wide)
             // offset + (row * 32): Y position (each tile is 32 pixels tall, offset for UI)
-            draw_sprite(maze_green_yellow_dots, spriteIndex, x_offset + (col * 32), y_offset + (row * 32));
+            draw_sprite(sGrid2, spriteIndex, x_offset + (col * gridSize), y_offset + (row * gridSize));
 		}		
-		else if (tileMap[col][row].hasPellet()) {
-			instance_create_layer(x_offset + (col * 32), y_offset + (row * 32), "GameElements", oDot);
-		}
-		else if (tileMap[col][row].isEnergizer()) {
-			instance_create_layer(x_offset + (col * 32), y_offset + (row * 32), "GameElements", oPowerPill);			
-		}		
-		else if (tileMap[col][row].isPacman()) {
-			instance_create_layer(x_offset + (col * 32), y_offset + (row * 32), "GameElements", oPacman);			
-		}
+		//else if (tileMap[col][row].hasPellet()) {
+		//	instance_create_layer(x_offset + (col * gridSize), y_offset + (row * gridSize), "GameElements", oDot);
+		//}
+		//else if (tileMap[col][row].isEnergizer()) {
+		//	instance_create_layer(x_offset + (col * gridSize), y_offset + (row * gridSize), "GameElements", oPowerPill);			
+		//}		
+		//else if (tileMap[col][row].isPacman()) {
+		//	instance_create_layer(x_offset + (col * gridSize), y_offset + (row * gridSize), "GameElements", oPacman);			
+		//}
 	}
 }
 

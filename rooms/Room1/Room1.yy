@@ -16,7 +16,7 @@
         {"$GMRInstance":"v4","%Name":"inst_5C82C215","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_5C82C215","objectId":{"name":"oMazeGenerator","path":"objects/oMazeGenerator/oMazeGenerator.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":64.0,"y":32.0,},
       ],"layers":[],"name":"PacmanGrid","properties":[
         {"name":"g_Intensity","type":0,"value":"1",},
-        {"name":"g_TintCol","type":1,"value":"#FF26FF55",},
+        {"name":"g_TintCol","type":1,"value":"#FFFFBE7A",},
       ],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRBackgroundLayer":"","%Name":"Background","animationFPS":30.0,"animationSpeedType":0,"colour":4294967295,"depth":300,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"hspeed":0.0,"htiled":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Background","properties":[],"resourceType":"GMRBackgroundLayer","resourceVersion":"2.0","spriteId":{"name":"BlueGradient","path":"sprites/BlueGradient/BlueGradient.yy",},"stretch":true,"userdefinedAnimFPS":false,"userdefinedDepth":false,"visible":true,"vspeed":0.0,"vtiled":false,"x":0,"y":0,},
   ],
@@ -36,14 +36,14 @@
   "resourceType":"GMRoom",
   "resourceVersion":"2.0",
   "roomSettings":{
-    "Height":992,
+    "Height":496,
     "inheritRoomSettings":false,
     "persistent":false,
-    "Width":896,
+    "Width":448,
   },
   "sequenceId":null,
   "views":[
-    {"hborder":32,"hport":734,"hspeed":-1,"hview":1224,"inherit":false,"objectId":null,"vborder":32,"visible":true,"vspeed":-1,"wport":870,"wview":1450,"xport":0,"xview":0,"yport":0,"yview":0,},
+    {"hborder":32,"hport":992,"hspeed":-1,"hview":496,"inherit":false,"objectId":null,"vborder":32,"visible":true,"vspeed":-1,"wport":896,"wview":448,"xport":0,"xview":0,"yport":0,"yview":0,},
     {"hborder":32,"hport":768,"hspeed":-1,"hview":768,"inherit":false,"objectId":null,"vborder":32,"visible":false,"vspeed":-1,"wport":1366,"wview":1366,"xport":0,"xview":0,"yport":0,"yview":0,},
     {"hborder":32,"hport":768,"hspeed":-1,"hview":768,"inherit":false,"objectId":null,"vborder":32,"visible":false,"vspeed":-1,"wport":1366,"wview":1366,"xport":0,"xview":0,"yport":0,"yview":0,},
     {"hborder":32,"hport":768,"hspeed":-1,"hview":768,"inherit":false,"objectId":null,"vborder":32,"visible":false,"vspeed":-1,"wport":1366,"wview":1366,"xport":0,"xview":0,"yport":0,"yview":0,},
@@ -55,7 +55,7 @@
   "viewSettings":{
     "clearDisplayBuffer":true,
     "clearViewBackground":false,
-    "enableViews":false,
+    "enableViews":true,
     "inheritViewSettings":false,
   },
   "volume":1.0,

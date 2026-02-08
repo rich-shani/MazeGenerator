@@ -62,22 +62,22 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
     // Top-left corner (0, 0)
     // Uses sprite 4 - outer corner piece facing down and right
     if (i == 0 && j == 0) {
-        tileDrawn = 1; //4;
+        tileDrawn = 7; //4;
     }
     // Top-right corner (mapWidth-1, 0)
     // Uses sprite 6 - outer corner piece facing down and left
     else if (i == mapWidth - 1 && j == 0) {
-        tileDrawn = 3;//6;
+        tileDrawn = 6;//6;
     }
     // Bottom-left corner (0, mapHeight-1)
     // Uses sprite 24 - outer corner piece facing up and right
     else if (i == 0 && j == mapHeight - 1) {
-        tileDrawn = 21;//24;
+        tileDrawn = 8;//24;
     }
     // Bottom-right corner (mapWidth-1, mapHeight-1)
     // Uses sprite 26 - outer corner piece facing up and left
     else if (i == mapWidth - 1 && j == mapHeight - 1) {
-        tileDrawn = 23;//26;
+        tileDrawn = 5;//26;
     }
     // Left border (not corner) - tiles at x=0 but not at corners
     else if (i == 0) {
@@ -92,35 +92,35 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
             if (w20) {
                 // Wall has looped from left and is returning, connect down
                 // Use sprite 4 - corner piece connecting the loop
-                tileDrawn = 1;//4;
+                tileDrawn = 7;//4;
             } else {
                 // Normal horizontal wall connection
                 // Use sprite 24 - vertical wall edge
-                tileDrawn = 21;//24;
+                tileDrawn = 8;//24;
             }
         }
         // Pattern: wall right, wall above, path/void below
         // Wall continues vertically, path below means edge facing down
         else if (w21 && w10 && bgo12) {
-            tileDrawn = 21;//24;
+            tileDrawn = 8;//24;
         }
         // Pattern: wall right, path/void above, wall below
         // Wall continues vertically, path above means edge facing up
         else if (w21 && w12 && bgo10) {
-            tileDrawn = 1;//4;
+            tileDrawn = 7;//4;
         }
         // Pattern: wall right with path above or below
         // Horizontal wall connection - wall extends right, path on top or bottom
         // Use sprite 9 - horizontal wall edge
         else if (w21 && (bp10 || bp12)) {
-            if (bp10) tileDrawn = 22;//9;
+            if (bp10) tileDrawn = 4;//9;
 			else tileDrawn = 2;
         }
         // Default left border (no wall connection to right)
         // Isolated wall piece or edge case
         // Use sprite 17 - standalone wall piece
         else {
-            tileDrawn = 11;//17;
+            tileDrawn = 1;//11;//17;
         }
     }
     // Right border (not corner) - tiles at x=mapWidth-1 but not at corners
@@ -135,32 +135,32 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
             if (w00) {
                 // Wall has looped from right and is returning, connect down
                 // Use sprite 6 - corner piece connecting the loop
-                tileDrawn = 3;//6;
+                tileDrawn = 6;//6;
             } else {
                 // Normal horizontal wall connection
                 // Use sprite 26 - vertical wall edge
-                tileDrawn = 23;//26;
+                tileDrawn = 5;//26;
             }
         }
         // Pattern: wall left, wall above, path/void below
         else if (w01 && w10 && bgo12) {
-            tileDrawn = 23;//26;
+            tileDrawn = 5;//26;
         }
         // Pattern: wall left, path/void above, wall below
         else if (w01 && w12 && bgo10) {
-            tileDrawn = 3;//6;
+            tileDrawn = 6;//6;
         }
         // Pattern: wall left with path above or below
         // Horizontal wall connection - wall extends left, path on top or bottom
         // Use sprite 9 - horizontal wall edge
         else if (w01 && (bp10 || bp12)) {
-            if (bp10) tileDrawn = 22;//9;
+            if (bp10) tileDrawn = 4;//9;
 			else tileDrawn = 2;
         }
         // Default right border (no wall connection to left)
         // Use sprite 17 - standalone wall piece
         else {
-            tileDrawn = 13;//17;
+            tileDrawn = 3;//13;//17;
         }
     } else {
         // Interior tile logic - tiles not on map edges
@@ -169,7 +169,7 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
         // Pattern: walls left and right, path above, wall/void below
         // Horizontal wall with path on top
         if (w01 && w21 && bp10 && (bgo12 || w12)) {
-            tileDrawn = 22;//9;  // Horizontal wall edge
+            tileDrawn = 4;//9;  // Horizontal wall edge
         }
         // Pattern: walls left and right, wall/void above, path below
         // Horizontal wall with path on bottom
@@ -179,32 +179,32 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
         // Pattern: wall/void left, path right, walls above and below
         // Vertical wall with path on right
         else if ((bgo01 || w01) && bp21 && w10 && w12) {
-            tileDrawn = 11;//17;  // Vertical wall edge
+            tileDrawn = 1;//11;//17;  // Vertical wall edge
         }
         // Pattern: path left, wall/void right, walls above and below
         // Vertical wall with path on left
         else if (bp01 && (bgo21 || w21) && w10 && w12) {
-            tileDrawn = 13;//17;  // Vertical wall edge
+            tileDrawn = 3;//13;//17;  // Vertical wall edge
         }
         // Pattern: path left, wall right, path above, wall below
         // Top-left inner corner (path in top-left, walls elsewhere)
         else if (bp01 && w21 && bp10 && w12) {
-            tileDrawn = 29;//4;  // Inner corner (top-left)
+            tileDrawn = 36;//4;  // Inner corner (top-left)
         }
         // Pattern: wall left, path right, path above, wall below
         // Top-right inner corner (path in top-right, walls elsewhere)
         else if (w01 && bp21 && bp10 && w12) {
-            tileDrawn = 31;//6;  // Inner corner (top-right)
+            tileDrawn = 39;//6;  // Inner corner (top-right)
         }
         // Pattern: wall left, path right, wall above, path below
         // Bottom-right inner corner (path in bottom-right, walls elsewhere)
         else if (w01 && bp21 && w10 && bp12) {
-            tileDrawn = 32;//26;  // Inner corner (bottom-right)
+            tileDrawn = 38;//26;  // Inner corner (bottom-right)
         }
         // Pattern: path left, wall right, wall above, path below
         // Bottom-left inner corner (path in bottom-left, walls elsewhere)
         else if (bp01 && w21 && w10 && bp12) {
-            tileDrawn = 30;//24;  // Inner corner (bottom-left)
+            tileDrawn = 37;//24;  // Inner corner (bottom-left)
         } else {
             // Check diagonal neighbors for inverse corners
             // These are corners where the path is diagonal to the wall tile
@@ -229,22 +229,22 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
             // Pattern: path top-left diagonal, walls/voids elsewhere
             // Inverse corner - path approaches from top-left
             if (bp00 && wbgo20 && wbgo02 && wbgo22) {
-                tileDrawn = 23;//26;  // Outer corner (bottom-right)
+                tileDrawn = 5;//26;  // Outer corner (bottom-right)
             }
             // Pattern: path bottom-left diagonal, walls/voids elsewhere
             // Inverse corner - path approaches from bottom-left
             else if (wbgo00 && wbgo20 && bp02 && wbgo22) {
-                tileDrawn = 3;//6;  // Outer corner (top-right)
+                tileDrawn = 6;//6;  // Outer corner (top-right)
             }
             // Pattern: path bottom-right diagonal, walls/voids elsewhere
             // Inverse corner - path approaches from bottom-right
             else if (wbgo00 && wbgo20 && wbgo02 && bp22) {
-                tileDrawn = 1;//4;  // Outer corner (top-left)
+                tileDrawn = 7;//4;  // Outer corner (top-left)
             }
             // Pattern: path top-right diagonal, walls/voids elsewhere
             // Inverse corner - path approaches from top-right
             else if (wbgo00 && bp20 && wbgo02 && wbgo22) {
-                tileDrawn = 21;//24;  // Outer corner (bottom-left)
+                tileDrawn = 8;//24;  // Outer corner (bottom-left)
             }
             // Default case: no clear pattern matches
             // Use default horizontal wall sprite
