@@ -4,8 +4,8 @@
 
 // Top 3 rows are reserved for UI elements (1UP, HIGHSCORE text)
 // Offset the maze rendering down by 96 pixels (3 rows × 32 pixels per row)
-var x_offset = 352;
-var y_offset = 168;
+var x_offset = 0;
+var y_offset = 0;
 	
 for (var row = 0; row < mapHeight; row++) {
 	for (var col = 0; col < mapWidth; col++) {

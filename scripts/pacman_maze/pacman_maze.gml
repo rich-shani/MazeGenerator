@@ -1051,10 +1051,10 @@ function pacman_map_get_tile_map() {
     
 	// set the Pacman, and Ghost locations
 	result[14][23].state = TileState.PACMAN;
-	result[12][11].state = TileState.BLINKY;
-	result[12][14].state = TileState.PINKY;
-	result[13][14].state = TileState.INKY;
-	result[14][14].state = TileState.CLYDE;
+	//result[12][11].state = TileState.BLINKY;
+	//result[12][14].state = TileState.PINKY;
+	//result[13][14].state = TileState.INKY;
+	//result[14][14].state = TileState.CLYDE;
 	result[14][17].state = TileState.FRUIT;
 	
     tileMap = result;

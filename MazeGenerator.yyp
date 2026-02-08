@@ -21,6 +21,7 @@
   "ForcedPrefabProjectReferences":[
     {"link":"io.gamemaker.gm_filter_outline-1.0.0","name":"io.gamemaker.gm_filter_outline-1.0.0","path":"io.gamemaker.gm_filter_outline-1.0.0.yyp",},
     {"link":"io.gamemaker.gm_filter_edgedetect-1.0.0","name":"io.gamemaker.gm_filter_edgedetect-1.0.0","path":"io.gamemaker.gm_filter_edgedetect-1.0.0.yyp",},
+    {"link":"io.gamemaker.gm_filter_colourise-1.0.0","name":"io.gamemaker.gm_filter_colourise-1.0.0","path":"io.gamemaker.gm_filter_colourise-1.0.0.yyp",},
   ],
   "IncludedFiles":[],
   "isEcma":false,
