@@ -28,8 +28,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sPacman",
-    "path":"sprites/sPacman/sPacman.yy",
+    "name":"sPacman_Left",
+    "path":"sprites/sPacman_Left/sPacman_Left.yy",
   },
   "spriteMaskId":null,
   "visible":true,

@@ -21,24 +21,30 @@ mapWidth = array_length(tileMap);
 // Useful for debugging and visualizing the generated maze structure
 pacman_map_print_ascii(tileMap);
 
+initializeGridElements = false;
+
+x_offset = 0;
+y_offset = 0;
+gridSize = 16;
+
 // Get the ID of the background layer
-var layer_id = layer_get_id("Grid"); 
+//var layer_id = layer_get_id("Grid"); 
 
-// Get the ID of the background element on that layer
-grid_id = layer_background_get_id(layer_id); 
+//// Get the ID of the background element on that layer
+//grid_id = layer_background_get_id(layer_id); 
 
-//// Get the sprite map JSON string
-//// Converts the tile map into a JSON format compatible with tile map editors
-//// (like Tiled). The JSON contains sprite indices for each tile position.
-var spriteMapJson = pacman_map_get_sprite_map_index(tileMap);
+////// Get the sprite map JSON string
+////// Converts the tile map into a JSON format compatible with tile map editors
+////// (like Tiled). The JSON contains sprite indices for each tile position.
+//var spriteMapJson = pacman_map_get_sprite_map_index(tileMap);
 
-//// Parse and use the sprite map
-//// Parse the JSON string into a data structure we can use for rendering
-mapData = json_parse(spriteMapJson);
+////// Parse and use the sprite map
+////// Parse the JSON string into a data structure we can use for rendering
+//mapData = json_parse(spriteMapJson);
 
-//// Extract layer data - the actual tile indices array
-//// This is a 1D array of sprite indices, row-major order
-layerData = mapData.layers[0].data;
+////// Extract layer data - the actual tile indices array
+////// This is a 1D array of sprite indices, row-major order
+//layerData = mapData.layers[0].data;
 
 //// Extract map dimensions from the JSON data
 //mapWidth = mapData.layers[0].width;   // Width in tiles (typically 28)

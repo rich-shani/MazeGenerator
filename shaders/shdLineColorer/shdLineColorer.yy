@@ -1,0 +1,12 @@
+{
+  "$GMShader":"",
+  "%Name":"shdLineColorer",
+  "name":"shdLineColorer",
+  "parent":{
+    "name":"MazeGenerator",
+    "path":"MazeGenerator.yyp",
+  },
+  "resourceType":"GMShader",
+  "resourceVersion":"2.0",
+  "type":1,
+}
