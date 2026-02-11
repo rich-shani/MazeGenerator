@@ -17,6 +17,12 @@ if (!initializeGridElements) {
 		}
 	}
 
+	// setup Ghosts
+	var elementX = x_offset + (12 * gridSize);
+	var elementY = y_offset + (11 * gridSize);
+			
+	instance_create_layer(elementX, elementY, "GameElements", oBlinky);		
+	
 	initializeGridElements = true;
 }
 

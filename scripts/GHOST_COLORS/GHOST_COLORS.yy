@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GHOST_COLORS",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GHOST_COLORS",
+  "parent":{
+    "name":"GHOST_LOGIC",
+    "path":"folders/scripts/GHOST_LOGIC.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
