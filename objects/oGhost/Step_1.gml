@@ -51,7 +51,7 @@ else {
 /// Flashing is only active near the END of power pellet
 /// - First ~2 seconds: ghost stays visible (early in power pellet)
 /// - Last ~2 seconds: ghost flashes on/off (warning effect)
-/// - Pac.alarm[0] tracks remaining frames (120 frames = ~2 seconds)
+/// - oPacman.alarm[0] tracks remaining frames (120 frames = ~2 seconds)
 
 if (state == GHOST_STATE.FRIGHTENED) {
     /// Power pellet ACTIVE: Handle flashing

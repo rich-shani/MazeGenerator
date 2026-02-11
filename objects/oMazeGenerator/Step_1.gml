@@ -1,4 +1,11 @@
 if (!initializeGridElements) {
+
+	// setup Ghosts
+	var elementX = x_offset + (12 * gridSize);
+	var elementY = y_offset + (11 * gridSize);
+			
+	instance_create_layer(elementX, elementY, "GameElements", oBlinky);		
+
 	for (var row = 0; row < mapHeight; row++) {
 		for (var col = 0; col < mapWidth; col++) {
 			
@@ -17,11 +24,7 @@ if (!initializeGridElements) {
 		}
 	}
 
-	// setup Ghosts
-	var elementX = x_offset + (12 * gridSize);
-	var elementY = y_offset + (11 * gridSize);
-			
-	instance_create_layer(elementX, elementY, "GameElements", oBlinky);		
+
 	
 	initializeGridElements = true;
 }

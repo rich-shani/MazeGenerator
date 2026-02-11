@@ -55,7 +55,7 @@ switch (state) {
 /// Different sprites for different game modes
 /// Game mode affects which sprite set is used
 
-var _spr = spr_Ghost;  // Default placeholder
+var _spr = sGhost;  // Default placeholder
 
 /// Child ghosts override draw event to set correct sprite
 
@@ -85,13 +85,13 @@ if (state == GHOST_STATE.FRIGHTENED) {
 	/// Eyes are drawn separately from body
 	/// Eyes use dedicated sprite with white color
 	var eye_offset = (visible ? 0:1);
-	draw_sprite(spr_Eyes, 4+eye_offset, x, y);	
+	draw_sprite(sEyes, 4+eye_offset, x, y);	
 }
 else {
 	// ===== DRAW EYES =====
 	/// Eyes are drawn separately from body
 	/// Eyes use dedicated sprite with white color
-	draw_sprite(spr_Eyes, dir, x, y);
+	draw_sprite(sEyes, dir, x, y);
 }
 
 //var _eye_spr = spr_Eyes;  // Eyes sprite (same for all ghosts)

@@ -151,12 +151,12 @@ state = GHOST_STATE.CHASE;
 
 // ===== ELROY MODE (Faster pursuit when dots are low) =====
 /// Dot count threshold for Elroy mode 1 (first speed increase)
-/// When Pac.Pac.dotcount <= this value, ghost becomes faster
+/// When oPacman.oPacman.dotcount <= this value, ghost becomes faster
 /// Set by child object (Blinky uses 244)
 elroydots = 244;
 
 /// Dot count threshold for Elroy mode 2 (maximum speed)
-/// When Pac.Pac.dotcount <= this value, ghost is at maximum speed
+/// When oPacman.oPacman.dotcount <= this value, ghost is at maximum speed
 /// Set by child object
 elroydots2 = 0;
 
@@ -235,7 +235,7 @@ spfright = 1.25;  // Power pellet speed
 /// Elroy mode 1 speed (pixels per frame)
 /// Faster hunting speed when dots below first threshold
 /// Makes ghosts more dangerous in late game
-/// Triggered when Pac.dotcount <= elroydots (varies by ghost)
+/// Triggered when oPacman.dotcount <= elroydots (varies by ghost)
 /// Standard value: 2.0 pixels/frame (6.7% faster)
 
 spelroy = 2.0;  // Elroy mode 1 (faster)
@@ -243,7 +243,7 @@ spelroy = 2.0;  // Elroy mode 1 (faster)
 /// Elroy mode 2 speed (pixels per frame)
 /// Maximum hunting speed when dots below second threshold
 /// Most aggressive ghost speed, hardest to escape
-/// Triggered when Pac.dotcount <= elroydots2 (usually ~150 dots left)
+/// Triggered when oPacman.dotcount <= elroydots2 (usually ~150 dots left)
 /// Standard value: 2.125 pixels/frame (13% faster than normal)
 
 spelroy2 = 2.125;  // Elroy mode 2 (fastest)

@@ -39,7 +39,7 @@ if (state == GHOST_STATE.CHASE) {
     pursuex = _pac_tile_x;
     pursuey = _pac_tile_y;
     
-    /// Note: In scatter mode (when Pac.scatter == 1), the pathfinding script
+    /// Note: In scatter mode (when oPacman.scatter == 1), the pathfinding script
     /// in Step_2 will override this target and chase the scatter corner instead.
     /// This direct chase target is only used during normal chase mode.
 }

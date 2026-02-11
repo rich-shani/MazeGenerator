@@ -37,8 +37,8 @@
 ///     /// Child ghosts override with their unique targeting strategies
 ///
 ///     // Snap Pac's position to 16-pixel grid
-///     pursuex = 16 * round(Pac.x / 16);
-///     pursuey = 16 * round(Pac.y / 16);
+///     pursuex = 16 * round(oPacman.x / 16);
+///     pursuey = 16 * round(oPacman.y / 16);
 ///
 ///     /// Scatter mode handling:
 ///     /// When Pac is in certain "scatter zones", ghosts ignore Pac and chase corners
@@ -125,13 +125,13 @@ else if (state == GHOST_STATE.HOUSE_READY) {
 /// if state == GHOST_STATE.CHASE {
 ///     // Anticipation: Target 4 tiles ahead of Pac in direction he's moving
 ///     // If Pac moving right, target is 4 tiles to his right
-///     // Pac.xdir and Pac.ydir are his unit movement directions
+///     // oPacman.xdir and oPacman.ydir are his unit movement directions
 ///
-///     var _ahead_x = 2 * Pac.xdir;  // 2 tiles ahead (4x multiplier in some versions)
-///     var _ahead_y = 2 * Pac.ydir;
+///     var _ahead_x = 2 * oPacman.xdir;  // 2 tiles ahead (4x multiplier in some versions)
+///     var _ahead_y = 2 * oPacman.ydir;
 ///
-///     pursuex = 16 * round((Pac.x + _ahead_x * 16) / 16);
-///     pursuey = 16 * round((Pac.y + _ahead_y * 16) / 16);
+///     pursuex = 16 * round((oPacman.x + _ahead_x * 16) / 16);
+///     pursuey = 16 * round((oPacman.y + _ahead_y * 16) / 16);
 /// }
 /// else if state == GHOST_STATE.FRIGHTENED {
 ///     script_execute(random_direction);  // Same as base
@@ -149,7 +149,7 @@ else if (state == GHOST_STATE.HOUSE_READY) {
 ///
 /// if state == GHOST_STATE.CHASE {
 ///     // Calculate distance from Clyde to Pac
-///     var _distance = point_distance(x, y, Pac.x, Pac.y);
+///     var _distance = point_distance(x, y, oPacman.x, oPacman.y);
 ///
 ///     if (_distance < 128) {
 ///         // Too close! Pac is threatening, flee to scatter corner
@@ -159,8 +159,8 @@ else if (state == GHOST_STATE.HOUSE_READY) {
 ///     }
 ///     else {
 ///         // Safe distance, pursue normally like Blinky
-///         pursuex = 16 * round(Pac.x / 16);
-///         pursuey = 16 * round(Pac.y / 16);
+///         pursuex = 16 * round(oPacman.x / 16);
+///         pursuey = 16 * round(oPacman.y / 16);
 ///     }
 /// }
 /// else if state == GHOST_STATE.FRIGHTENED {
@@ -179,8 +179,8 @@ else if (state == GHOST_STATE.HOUSE_READY) {
 ///
 /// if state == GHOST_STATE.CHASE {
 ///     // Vector from Pac to Blinky
-///     var _vec_x = Blinky.x - Pac.x;
-///     var _vec_y = Blinky.y - Pac.y;
+///     var _vec_x = Blinky.x - oPacman.x;
+///     var _vec_y = Blinky.y - oPacman.y;
 ///
 ///     // Extend vector from Blinky in same direction
 ///     var _target_x = Blinky.x + _vec_x;

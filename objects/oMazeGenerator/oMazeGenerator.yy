@@ -11,8 +11,8 @@
   "name":"oMazeGenerator",
   "overriddenProperties":[],
   "parent":{
-    "name":"group1",
-    "path":"folders/Objects/group1.yy",
+    "name":"Maze",
+    "path":"folders/Objects/Maze.yy",
   },
   "parentObjectId":null,
   "persistent":false,

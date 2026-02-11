@@ -2,7 +2,7 @@
 /// oGHOST - BASE GHOST OBJECT - ALARM_0 EVENT
 /// ===============================================================================
 /// Purpose: Handle response when Pac eats a power pellet
-/// Triggered: When Pac.alarm[0] is set (in Pac object)
+/// Triggered: When oPacman.alarm[0] is set (in Pac object)
 /// Logic: Reverse direction for all non-in-house ghosts
 ///
 /// When Pac eats a power pellet:
@@ -23,7 +23,7 @@
 if (chomped == 1) {
     /// This ghost was just eaten by Pac
     /// Transition to Eyes state so ghost returns to house
-    Pac.chomp = 0;  /// Reset Pac's chomp animation flag (eaten ghost - animation done)
+    oPacman.chomp = 0;  /// Reset Pac's chomp animation flag (eaten ghost - animation done)
     state = GHOST_STATE.EYES;
 
     /// Reverse direction by 180° (running away)

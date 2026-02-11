@@ -33,8 +33,9 @@ ghost_color = ghost_color_blinky();         // Red color: RGB(255, 0, 0)
 /// ===== STARTING POSITION & SPAWN LOCATION =====
 /// Set where Blinky spawns (center of ghost house)
 /// Blinky starts in the center of the ghost house
-xstart = 216;                               // Spawn X coordinate (pixel)
-ystart = 224;                               // Spawn Y coordinate (pixel)
+xstart = 192;//216;                               // Spawn X coordinate (pixel)
+ystart = 176;//224;                               // Spawn Y coordinate (pixel)
+
 x = xstart;                                 // Place instance at spawn X
 y = ystart;                                 // Place instance at spawn Y
 

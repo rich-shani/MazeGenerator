@@ -42,7 +42,7 @@ if (hspeed > 0) {
     /// Teleport to left side
 
     x = -24 + (x - (room_width + 24));
-    /// New X = -24 Pac.plus how far off we went
+    /// New X = -24 oPacman.plus how far off we went
     /// Example: if x = room_width+30 (6 pixels past), new x = -24 + 6 = -18
 
     /// Update tile position after wraparound

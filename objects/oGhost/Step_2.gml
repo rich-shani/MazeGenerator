@@ -33,7 +33,7 @@
 ///   - Middle: (216, 240-272) - bounce zone
 ///   - Exit: Top of house, leading to maze
 
-if (Pac.dead == 0 && Pac.finish == 0) {
+if (oPacman.dead == 0 && oPacman.finish == 0) {
     /// Only process house logic when Pac is alive and game not finished
 
     // ===== HOUSE: TILE ALIGNMENT WHEN INSIDE =====
@@ -135,7 +135,7 @@ if (Pac.dead == 0 && Pac.finish == 0) {
 /// - spelroy2: Elroy mode 2 (2.125 pixels/frame)
 /// - speyes: Eyes return speed (4.0 pixels/frame)
 
-if (Pac.dead == 0 && Pac.finish == 0) {
+if (oPacman.dead == 0 && oPacman.finish == 0) {
     /// Only process speed when Pac is alive
 
     if (house == 0) {
@@ -145,7 +145,7 @@ if (Pac.dead == 0 && Pac.finish == 0) {
         // ===== LOCATION CHECK =====
         /// Check if ghost is in slow area (tunnel or special zone)
         /// Uses collision_point with "Slow" collision object
-        var _in_slow_area = collision_point(tilex, tiley, Slow, false, true);
+        var _in_slow_area = false; //collision_point(tilex, tiley, Slow, false, true);
 
         // ===== SPEED BY STATE =====
         /// Determine base speed based on ghost's behavioral state
@@ -161,12 +161,12 @@ if (Pac.dead == 0 && Pac.finish == 0) {
                 /// Normal maze area: check Elroy mode activation
                 /// Elroy makes ghosts faster when dots are nearly gone
 
-                if (Pac.dotcount >= elroydots2 && (Pac.dotcount >= Pac.csig || Clyde.house == 0)) {
+                if (oPacman.dotcount >= elroydots2 && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
                     /// ELROY MODE 2: Dots at ultra-low threshold
                     /// Ghost at maximum hunting speed
                     speed = spelroy2;  // 2.125 pixels/frame (fastest)
                 }
-                else if (Pac.dotcount >= elroydots && (Pac.dotcount >= Pac.csig || Clyde.house == 0)) {
+                else if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
                     /// ELROY MODE 1: Dots at first low threshold
                     /// Ghost noticeably faster
                     speed = spelroy;   // 2.0 pixels/frame (fast)
@@ -221,9 +221,9 @@ if (y > 48 && y < room_height - 48) {
         /// Only pathfind when ghost is FREE (not in house bouncing)
         /// When house == 1, movement is controlled by house state machine above
 
-        if (Pac.chomp == 0 || state == GHOST_STATE.EYES) {
+        if (oPacman.chomp == 0 || state == GHOST_STATE.EYES) {
             /// Only turn when Pac is moving (chomp==0) OR in eyes mode (always pathfind)
-            /// Pac.chomp pauses ghost turning when Pac is eating (maintains sync)
+            /// oPacman.chomp pauses ghost turning when Pac is eating (maintains sync)
 
             if (newtile == 0) {
                 /// newtile=0 means ghost has NOT reached intersection yet
@@ -250,10 +250,10 @@ if (y > 48 && y < room_height - 48) {
                             /// CHASE MODE: Hunt Pac using ghost-specific strategy
                             /// (overridden by child ghosts with unique behavior)
 
-                            if (Pac.scatter == 1) {
+                            if (oPacman.scatter == 1) {
                                 /// Scatter mode active: ghosts avoid Pac, go to corners
 
-                                if (Pac.dotcount >= elroydots && (Pac.dotcount >= Pac.csig || Clyde.house == 0)) {
+                                if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
                                     /// Elroy mode 1+: Chase Pac even in scatter
                                     script_execute(chase_object, tilex, tiley, pursuex, pursuey);
                                 } else {
@@ -316,9 +316,9 @@ if (y > 48 && y < room_height - 48) {
 /// - When turning, we need to snap back to grid while moving perpendicular
 /// - The math: apply offset equal to drift amount in perpendicular direction
 
-if (Pac.dead == 0 && Pac.finish == 0) {
+if (oPacman.dead == 0 && oPacman.finish == 0) {
 
-    if (Pac.chomp == 0 || state == GHOST_STATE.EYES) {
+    if (oPacman.chomp == 0 || state == GHOST_STATE.EYES) {
         /// Turn only when Pac is not eating (not paused) OR in eyes mode
         /// This keeps ghost movement synchronized with Pac
 
@@ -500,13 +500,13 @@ if (Pac.dead == 0 && Pac.finish == 0) {
 /// Elroy threshold logic:
 /// - elroydots2: Ultra-aggressive threshold (2nd speed boost)
 /// - elroydots: Initial aggressive threshold (1st speed boost)
-/// - Both require Pac.csig condition (ghosts released from house) or Clyde free
+/// - Both require oPacman.csig condition (ghosts released from house) or Clyde free
 
-if (Pac.dotcount >= elroydots2 && (Pac.dotcount >= Pac.csig || Clyde.house == 0)) {
+if (oPacman.dotcount >= elroydots2 && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
     /// ELROY MODE 2: Ultra-aggressive, fastest speed
     /// Triggers when dot count drops to lowest threshold
     elroy = 2;
-} else if (Pac.dotcount >= elroydots && (Pac.dotcount >= Pac.csig || Clyde.house == 0)) {
+} else if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
     /// ELROY MODE 1: Aggressive, fast speed
     /// Triggers when dot count drops to first threshold
     elroy = 1;
