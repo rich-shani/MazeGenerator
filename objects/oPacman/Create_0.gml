@@ -153,7 +153,7 @@ tiley = 0;
 finish = 0;
 
 /// Total dots collected this level
-dotcount = 0;
+dotcount = 240;
 
 /// Countdown timer (for death/respawn sequences)
 countdown  = 0;
@@ -162,7 +162,7 @@ countdown  = 0;
 /// Scatter mode active flag
 /// 0 = Chase mode (ghosts hunt Pac)
 /// 1 = Scatter mode (ghosts flee to corners)
-scatter = 0;
+scatter = 1;
 
 /// Game cycle counter
 /// Tracks which phase of level cycle is active

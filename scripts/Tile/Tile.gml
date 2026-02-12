@@ -57,7 +57,11 @@ function Tile_create(_x, _y) constructor {
     static isWall = function() {
         return (state == TileState.WALL || state == TileState.GHOSTWALL);
     }
-    
+ 
+     static isTunnel = function() {
+        return (state == TileState.PATHTUNNEL);
+    }
+	
     // Instance method to check if tile has a pellet
     // Returns true if this tile contains a small pellet that can be collected
     static hasPellet = function() {
@@ -129,6 +133,13 @@ function Tile_isWalkable(tile) {
 /// @returns true if tile is a wall
 function Tile_isWall(tile) {
     return (tile.state == TileState.WALL || tile.state == TileState.GHOSTWALL);
+}
+
+/// @description Check if tile is a tunnel path
+/// @param tile Tile structure
+/// @returns true if tile is a tunnel path
+function Tile_isTunnel(tile) {
+    return (tile.state == TileState.PATHTUNNEL);
 }
 
 /// @description Check if tile has a pellet

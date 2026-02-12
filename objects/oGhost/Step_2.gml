@@ -145,7 +145,7 @@ if (oPacman.dead == 0 && oPacman.finish == 0) {
         // ===== LOCATION CHECK =====
         /// Check if ghost is in slow area (tunnel or special zone)
         /// Uses collision_point with "Slow" collision object
-        var _in_slow_area = false; //collision_point(tilex, tiley, Slow, false, true);
+        var _in_slow_area = collision_point(tilex, tiley, Slow, false, true);
 
         // ===== SPEED BY STATE =====
         /// Determine base speed based on ghost's behavioral state
@@ -212,7 +212,7 @@ if (oPacman.dead == 0 && oPacman.finish == 0) {
 /// 4. On new tile: Make turning decision based on state
 /// 5. Apply pathfinding script based on behavior mode
 
-if (y > 48 && y < room_height - 48) {
+if (y > 8 && y < room_height - 8) {
     /// Keep ghost in vertical bounds (avoids room edges where wrapping occurs)
     /// Top: y > 48 (below top of screen)
     /// Bottom: y < room_height - 48 (above bottom of screen)
@@ -249,22 +249,17 @@ if (y > 48 && y < room_height - 48) {
                         if (state == GHOST_STATE.CHASE) {
                             /// CHASE MODE: Hunt Pac using ghost-specific strategy
                             /// (overridden by child ghosts with unique behavior)
-
+ 
                             if (oPacman.scatter == 1) {
-                                /// Scatter mode active: ghosts avoid Pac, go to corners
-
+								/// Scatter mode active: ghosts avoid Pac, go to corners
+          
                                 if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
                                     /// Elroy mode 1+: Chase Pac even in scatter
                                     script_execute(chase_object, tilex, tiley, pursuex, pursuey);
                                 } else {
                                     /// Normal scatter: Go to scatter corner (or random if exception)
-                                    if (global.ex1 == 0 && room_width == 448) {
                                         /// Standard mode: Chase to corner
-                                        script_execute(chase_object, tilex, tiley, cornerx, cornery);
-                                    } else {
-                                        /// Exception mode: Random movement
-                                        script_execute(random_direction);
-                                    }
+                                        script_execute(chase_object, tilex, tiley, cornerx, cornery);   
                                 }
                             } else {
                                 /// Normal chase: Hunt Pac using this ghost's strategy

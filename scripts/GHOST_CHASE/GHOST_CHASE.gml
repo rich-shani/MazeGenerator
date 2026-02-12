@@ -27,8 +27,6 @@
 /// ===============================================================================
 
 function chase_object(argument0, argument1, argument2, argument3) {
-	return 0;
-	/*
 	
     /// Only process when object is within valid horizontal bounds
     /// Avoids edge cases where wraparound occurs
@@ -51,7 +49,7 @@ function chase_object(argument0, argument1, argument2, argument3) {
             if (direction == 180) {
                 dir = 2;  // Continue left
                 return 0;
-            }
+            } 
             /// Currently moving down - choose horizontal direction toward target
             if (direction == 270) {
                 if ((chasex - objx) > 0) {
@@ -1225,6 +1223,4 @@ function chase_object(argument0, argument1, argument2, argument3) {
             }
         }
     }
-	
-	*/
 }
