@@ -25,20 +25,20 @@ function ghost_chase_utils_can_go(_objx, _objy, _dir) {
 
     switch (_dir) {
         case GHOST_DIRECTION.RIGHT:
-            _nx = _objx + 16;
+            _nx = _objx + TILE_PIXELS;
             _ny = _objy;
             break;
         case GHOST_DIRECTION.UP:
             _nx = _objx;
-            _ny = _objy - 16;
+            _ny = _objy - TILE_PIXELS;
             break;
         case GHOST_DIRECTION.LEFT:
-            _nx = _objx - 16;
+            _nx = _objx - TILE_PIXELS;
             _ny = _objy;
             break;
         case GHOST_DIRECTION.DOWN:
             _nx = _objx;
-            _ny = _objy + 16;
+            _ny = _objy + TILE_PIXELS;
             break;
     }
 

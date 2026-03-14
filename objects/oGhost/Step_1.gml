@@ -90,8 +90,8 @@ else if (!visible) {
 /// - Pathfinding needs GRID coordinates to determine directions
 /// - tilex/tiley are snapped to grid; x/y are sub-pixel
 
-tilex = 16 * round(x / 16);  // Snap x to nearest 16-pixel grid cell
-tiley = 16 * round(y / 16);  // Snap y to nearest 16-pixel grid cell
+tilex = TILE_PIXELS * round(x / TILE_PIXELS);
+tiley = TILE_PIXELS * round(y / TILE_PIXELS);
 /// Example: If x=217.5, tilex becomes 16*round(217.5/16) = 16*14 = 224
 
 /// ===============================================================================

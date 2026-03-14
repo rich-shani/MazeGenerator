@@ -16,190 +16,8 @@
 /// Structure: House logic → Speed → Turning → Special checks → Visibility
 /// ===============================================================================
 
-// ===== HOUSE STATE MACHINE =====
-/// Handle ghosts inside the ghost house (bouncing and exiting)
-/// This system manages the complex behavior of ghosts bouncing up/down inside the house
-/// and exiting to roam the maze
-///
-/// House system overview:
-/// - house == 0: Ghost is FREE, roaming the maze
-/// - house == 1: Ghost is INSIDE house, in exit sequence
-/// - housestate: Variable state machine (0-4) tracking progress within house
-/// - Different ghosts may override this event with custom house logic
-///
-/// Ghost house location (standard): xstart=216, ystart=224 (center of house)
-/// House zones:
-///   - Entrance: (216, 224) - where eyes arrive
-///   - Middle: (216, 240-272) - bounce zone
-///   - Exit: Top of house, leading to maze
-
-if (oPacman.dead == 0 && oPacman.finish == 0) {
-    /// Only process house logic when Pac is alive and game not finished
-
-    // ===== HOUSE: TILE ALIGNMENT WHEN INSIDE =====
-    /// Keep ghost position aligned to grid while in house
-    /// House movement uses fixed coordinates, not pathfinding
-
-    if (house == 1) {
-        /// Ghost is inside house: keep it grid-aligned for consistent behavior
-        /// Calculate grid position relative to house center
-        tilex = (xstart - 216) + 224;  /// Align X to house center
-        tiley = (ystart - 224) + 224;  /// Align Y to house center
-    }
-
-    // ===== HOUSE: EYES ARRIVAL & ENTRY =====
-    /// When ghost eyes reach house entrance, transform back into full ghost
-    /// Eyes float to position (216±8, 224) then enter house
-
-    if (house == 0 && state == GHOST_STATE.EYES &&
-        x > (xstart - 216) + 212 && x < (xstart - 216) + 220 &&
-        y == (ystart - 224) + 224) {
-        /// Eyes reached entrance (x within ±8, y exact match)
-
-        // Snap position and set up house entry
-        housestate = 0;  /// Start house state machine (phase 0)
-        x = (xstart - 216) + 216;  /// Snap to house center X
-        y = (ystart - 224) + 224;  /// Snap to entrance Y
-        hspeed = 0;  /// Stop horizontal movement
-        vspeed = speyes;  /// Move down at eyes speed
-        house = 1;  /// Now in house
-        dir = GHOST_DIRECTION.DOWN;  /// Face down to begin bounce sequence
-    }
-
-    // ===== HOUSE: PHASE 1 - DOWN BOUNCE =====
-    /// Eyes move down into house, reaching the bounce floor
-    /// Once reached, begin moving back up toward exit
-
-    if (house == 1 && state == GHOST_STATE.EYES &&
-        x == (xstart - 216) + 216 && y > (ystart - 224) + 272 + 8) {
-        /// Reached bottom of house bounce zone (y > 280)
-
-        // Transition to phase 2: exit sequence
-        housestate = 1;  /// Phase 1 complete, moving to phase 2
-        x = (xstart - 216) + 216;  /// Maintain center X
-        y = (ystart - 224) + 272 + 8;  /// Snap to bottom position
-        hspeed = 0;  /// Stop horizontal movement
-        vspeed = -spslow;  /// Move up slowly (standard slow speed)
-        state = GHOST_STATE.CHASE;  /// Resume normal ghost behavior (not just eyes)
-        dir = GHOST_DIRECTION.UP;  /// Face up to exit
-    }
-
-    // ===== HOUSE: PHASE 2 - UP EXIT =====
-    /// Ghost moves up through house from bounce zone toward entrance
-    /// Continues until reaching entrance (y < 224)
-
-    if (housestate == 1) {
-        /// Phase 2 active: continuously move up at slow speed
-        /// This persists every frame until ghost reaches entrance
-
-        hspeed = 0;  /// Stay centered horizontally
-        vspeed = -spslow;  /// Move up slowly
-    }
-
-    // ===== HOUSE: COMPLETE EXIT =====
-    /// Ghost successfully exits house and becomes free
-    /// Position is snapped to entrance and movement begins
-
-    if (house == 1 && state < GHOST_STATE.EYES &&
-        x == (xstart - 216) + 216 && y < (ystart - 224) + 224) {
-        /// Ghost reached entrance (y < 224) while not in eyes state
-        /// This means full ghost (not eyes) is at exit point
-
-        // Finalize exit and release ghost
-        housestate = 0;  /// Reset house state (no longer in house)
-        x = (xstart - 216) + 216;  /// Snap to entrance X
-        y = (ystart - 224) + 224;  /// Snap to entrance Y
-        hspeed = sp;  /// Begin moving left (at normal speed)
-        vspeed = 0;  /// No vertical movement
-        house = 0;  /// RELEASED - now free to roam maze
-        newtile = 0;  /// Reset intersection flag for pathfinding
-        dir = GHOST_DIRECTION.LEFT;  /// Face left to exit maze
-    }
-
-}  // End Pac alive check
-
-// ===== SPEED DETERMINATION =====
-/// Calculate ghost movement speed based on current state and map location
-/// This determines how fast the ghost moves each frame
-///
-/// Speed hierarchy:
-/// 1. Location check: Is ghost in slow area (tunnel)?
-/// 2. State check: What is ghost doing (Chase/Frightened/Eyes)?
-/// 3. Dot check: For chase mode, is Elroy mode active?
-///
-/// Speeds available:
-/// - sp: Normal speed (1.875 pixels/frame)
-/// - spslow: Tunnel speed (1.0 pixels/frame)
-/// - spfright: Frightened speed (1.25 pixels/frame)
-/// - spelroy: Elroy mode 1 (2.0 pixels/frame)
-/// - spelroy2: Elroy mode 2 (2.125 pixels/frame)
-/// - speyes: Eyes return speed (4.0 pixels/frame)
-
-if (oPacman.dead == 0 && oPacman.finish == 0) {
-    /// Only process speed when Pac is alive
-
-    if (house == 0) {
-        /// Ghost is FREE (not in house bouncing/exiting)
-        /// Calculate appropriate speed for current situation
-
-        // ===== LOCATION CHECK =====
-        /// Check if ghost is in slow area (tunnel or special zone)
-        /// Uses collision_point with "Slow" collision object
-        var _in_slow_area = collision_point(tilex, tiley, Slow, false, true);
-
-        // ===== SPEED BY STATE =====
-        /// Determine base speed based on ghost's behavioral state
-
-        if (state == GHOST_STATE.CHASE) {
-            /// CHASE MODE: Hunt Pac using pathfinding
-            /// Speed depends on location and dot count (Elroy mode)
-
-            if (_in_slow_area) {
-                /// In tunnel or slow zone: reduce to tunnel speed
-                speed = spslow;
-            } else {
-                /// Normal maze area: check Elroy mode activation
-                /// Elroy makes ghosts faster when dots are nearly gone
-
-                if (oPacman.dotcount >= elroydots2 && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
-                    /// ELROY MODE 2: Dots at ultra-low threshold
-                    /// Ghost at maximum hunting speed
-                    speed = spelroy2;  // 2.125 pixels/frame (fastest)
-                }
-                else if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
-                    /// ELROY MODE 1: Dots at first low threshold
-                    /// Ghost noticeably faster
-                    speed = spelroy;   // 2.0 pixels/frame (fast)
-                }
-                else {
-                    /// NORMAL SPEED: Plenty of dots remain
-                    /// Standard hunt speed
-                    speed = sp;        // 1.875 pixels/frame (normal)
-                }
-            }
-        }
-        else if (state == GHOST_STATE.FRIGHTENED) {
-            /// FRIGHTENED MODE: Power pellet active, ghost is vulnerable
-            /// Ghost moves slower when power pellet is active
-
-            if (_in_slow_area) {
-                /// In tunnel: use slow tunnel speed (already slow enough)
-                speed = spslow;
-            } else {
-                /// Normal maze: use frightened speed (reduced from normal)
-                speed = spfright;  // 1.25 pixels/frame (slower)
-            }
-        }
-        else if (state == GHOST_STATE.EYES) {
-            /// EYES MODE: Ghost was eaten, eyes returning to house
-            /// Eyes move very fast to resurrect quickly
-
-            speed = speyes;  // 4.0 pixels/frame (very fast)
-            /// Note: Tunnel speed doesn't apply to eyes (they go straight to house)
-        }
-    }
-
-}  // End Pac alive check
+ghost_house_step();
+ghost_speed_step();
 
 // ===== PATHFINDING AT INTERSECTIONS =====
 /// Core ghost pathfinding logic: when ghost reaches a new tile, decide next direction
@@ -230,15 +48,15 @@ if (y > 8 && y < room_height - 8) {
                 /// Keep checking if we're aligned to grid
 
                 // Check if ghost position matches grid (no offset)
-                var _is_grid_aligned = (tilex == (16 * round(x / 16)) && tiley == (16 * round(y / 16)));
+                var _is_grid_aligned = (tilex == (TILE_PIXELS * round(x / TILE_PIXELS)) && tiley == (TILE_PIXELS * round(y / TILE_PIXELS)));
 
                 if (!_is_grid_aligned) {
                     /// Ghost has JUST reached a new tile (position changed since last frame)
                     /// Update newtile flag and calculate new tile coordinates
 
                     newtile = 1;  // Mark that we hit intersection
-                    tilex = (16 * round(x / 16));
-                    tiley = (16 * round(y / 16));
+                    tilex = (TILE_PIXELS * round(x / TILE_PIXELS));
+                    tiley = (TILE_PIXELS * round(y / TILE_PIXELS));
 
                     /// ===== DIRECTION DECISION LOGIC =====
                     /// Now decide which direction to turn based on state and behavior
@@ -275,22 +93,16 @@ if (y > 8 && y < room_height - 8) {
                             /// EYES MODE: Chase house entrance to resurrect
                             /// Ghost is just eyes, returning home at high speed
                             /// Target is always house entrance (xstart, ystart)
-                            var _house_x = (xstart - 216) + 208;
-                            var _house_y = (ystart - 224) + 224;
+                            var _house_x = (xstart - GHOST_HOUSE_CENTER_X) + GHOST_HOUSE_ENTRANCE_X;
+                            var _house_y = (ystart - GHOST_HOUSE_ENTRANCE_Y) + GHOST_HOUSE_ENTRANCE_Y;
                             script_execute(chase_object, tilex, tiley, _house_x, _house_y);
                         }
                     }
                     else {
                         /// ABOUT-FACE: Ghost needs to reverse direction (power pellet eaten)
-                        /// Convert current direction (angle) to cardinal direction
-                        /// direction is in degrees (0, 90, 180, 270)
-                        /// dir is cardinal (0-3)
-
-                        dir = round(direction / 90) + 2;  // Rotate 180 degrees
-                        if (dir > 3) {
-                            dir = dir - 4;  // Wrap around (0-3 range)
-                        }
-                        aboutface = 0;  // Clear flag, reversal complete
+                        /// Use GHOST_DIRECTION as single conversion layer
+                        dir = direction_opposite(cardinal_from_direction(direction));
+                        aboutface = 0;
                     }
                 }
             }

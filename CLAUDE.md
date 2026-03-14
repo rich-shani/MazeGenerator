@@ -53,7 +53,7 @@ Conversion helpers are in `scripts/GHOST_DIRECTION/GHOST_DIRECTION.gml` and `scr
 
 ### Ghost AI
 
-`scripts/GHOST_CHASE/GHOST_CHASE.gml` is a thin entry point: it calls `ghost_chase_utils_no_up`, `ghost_chase_utils_forced_zones`, and `ghost_chase_pathfinding`. Pathfinding logic lives in `GHOST_CHASE_UTILS` (wall checks, NoUp/forced zones, data-driven priority table) and `GHOST_CHASE_PATHFINDING`. Grid-aligned turning at intersections is data-driven in `GHOST_GRID_TURN` (`ghost_apply_grid_turn`). Frightened-mode random direction: `random_direction` script. `scripts/GHOST_STATE/GHOST_STATE.gml` defines the state machine with a documented ASCII state diagram.
+`scripts/GHOST_CHASE/GHOST_CHASE.gml` is a thin entry point: it calls `ghost_chase_utils_no_up`, `ghost_chase_utils_forced_zones`, and `ghost_chase_pathfinding`. Pathfinding logic lives in `GHOST_CHASE_UTILS` (wall checks, NoUp/forced zones, data-driven priority table) and `GHOST_CHASE_PATHFINDING`. Grid-aligned turning at intersections is data-driven in `GHOST_GRID_TURN` (`ghost_apply_grid_turn`). Frightened-mode random direction: `random_direction` script. House behavior (bounce and exit) is in `GHOST_HOUSE` (`ghost_house_step`); speed selection (tunnel/chase/frightened/eyes, Elroy) is in `GHOST_SPEED` (`ghost_speed_step`). Both are called from `oGhost` Step_2. `scripts/GHOST_STATE/GHOST_STATE.gml` defines the state machine with a documented ASCII state diagram.
 
 ### Wall Sprite Selection
 

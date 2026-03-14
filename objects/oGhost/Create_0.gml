@@ -214,47 +214,22 @@ codir = 0;  // Co-direction
 /// Adjusted per level (varies from 1.8 to 2.0)
 /// Standard value: 1.875 pixels/frame
 
-sp = 1.875;  // Normal speed
+sp = SPEED_NORMAL;
 
 /// Tunnel/slow area speed (pixels per frame)
-/// Reduced speed when ghost is in tunnel zone
-/// Makes escape through tunnel more viable
-/// Used in both CHASE and FRIGHTENED modes in tunnels
-/// Standard value: 1.0 pixels/frame (33% slower)
-
-spslow = 1.0;  // Tunnel speed
+spslow = SPEED_TUNNEL;
 
 /// Frightened mode speed (pixels per frame)
-/// Speed when power pellet active, making ghost slower
-/// Reduces from normal 1.875 to more manageable 1.25
-/// Gives player chance to catch/flee from vulnerable ghosts
-/// Standard value: 1.25 pixels/frame
-
-spfright = 1.25;  // Power pellet speed
+spfright = SPEED_FRIGHTENED;
 
 /// Elroy mode 1 speed (pixels per frame)
-/// Faster hunting speed when dots below first threshold
-/// Makes ghosts more dangerous in late game
-/// Triggered when oPacman.dotcount <= elroydots (varies by ghost)
-/// Standard value: 2.0 pixels/frame (6.7% faster)
-
-spelroy = 2.0;  // Elroy mode 1 (faster)
+spelroy = SPEED_ELROY;
 
 /// Elroy mode 2 speed (pixels per frame)
-/// Maximum hunting speed when dots below second threshold
-/// Most aggressive ghost speed, hardest to escape
-/// Triggered when oPacman.dotcount <= elroydots2 (usually ~150 dots left)
-/// Standard value: 2.125 pixels/frame (13% faster than normal)
-
-spelroy2 = 2.125;  // Elroy mode 2 (fastest)
+spelroy2 = SPEED_ELROY2;
 
 /// Eyes return speed (pixels per frame)
-/// Very fast speed for ghost eyes returning to house
-/// Makes resurrection quick and avoids dead-time
-/// Used only in EYES state (after being eaten)
-/// Standard value: 4.0 pixels/frame (over 2x normal speed)
-
-speyes = 4.0;  // Eyes return speed
+speyes = SPEED_EYES;
 
 // ===== DRAW/RENDER VARIABLES =====
 /// Base draw color for ghost sprite

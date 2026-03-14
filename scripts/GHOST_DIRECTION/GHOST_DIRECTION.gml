@@ -1,6 +1,10 @@
 /// ===============================================================================
-/// GHOST_DIRECTION ENUM
+/// GHOST_DIRECTION - Single conversion layer for directions
 /// ===============================================================================
+/// All degree/cardinal conversion for ghost movement should use this script.
+/// Do not use ad-hoc math (e.g. round(direction/90)+2); use cardinal_from_direction,
+/// direction_from_cardinal, direction_opposite instead.
+///
 /// Purpose: Define cardinal directions for ghost movement (4-directional grid)
 /// Usage: Replaces numeric 0-3 values with meaningful direction names
 ///

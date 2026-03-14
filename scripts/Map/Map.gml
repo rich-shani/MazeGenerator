@@ -106,7 +106,7 @@ function pacman_map_get_tile(x, y) {
 function pacman_map_set_tile_state(x, y, state) {
     var tile = pacman_map_get_tile(x, y);
     if (tile != noone) {
-        Tile_setState(tile, state);
+        tile.setState(state);
     }
 }
 

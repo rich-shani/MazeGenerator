@@ -75,8 +75,8 @@ else if (state == GHOST_STATE.EYES) {
     /// - Y = 240 (entrance point, just below house boundary)
     /// This position is same for all ghosts (universal house entrance)
 
-    pursuex = 216;  /// House center X coordinate
-    pursuey = 240;  /// House entrance Y coordinate
+    pursuex = GHOST_HOUSE_ENTRANCE_X;
+    pursuey = GHOST_HOUSE_ENTRANCE_Y_EYES;
 }
 
 // ===== IN_HOUSE MODE - NO TARGET NEEDED =====
