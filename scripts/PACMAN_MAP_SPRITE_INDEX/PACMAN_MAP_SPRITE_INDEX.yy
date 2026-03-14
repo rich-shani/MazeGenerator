@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PACMAN_MAP_SPRITE_INDEX",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PACMAN_MAP_SPRITE_INDEX",
+  "parent":{
+    "name":"PACMAN_LOGIC",
+    "path":"folders/scripts/PACMAN_LOGIC.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

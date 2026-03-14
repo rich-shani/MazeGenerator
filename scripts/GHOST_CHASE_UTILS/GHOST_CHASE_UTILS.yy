@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Script8",
+  "%Name":"GHOST_CHASE_UTILS",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Script8",
+  "name":"GHOST_CHASE_UTILS",
   "parent":{
-    "name":"scripts",
-    "path":"folders/scripts.yy",
+    "name":"GHOST_LOGIC",
+    "path":"folders/scripts/GHOST_LOGIC.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

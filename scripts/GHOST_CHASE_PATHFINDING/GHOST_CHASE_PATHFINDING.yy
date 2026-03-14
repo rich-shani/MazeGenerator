@@ -1,0 +1,14 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GHOST_CHASE_PATHFINDING",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GHOST_CHASE_PATHFINDING",
+  "parent":{
+    "name":"GHOST_LOGIC",
+    "path":"folders/scripts/GHOST_LOGIC.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
+

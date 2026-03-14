@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"PACMAN_MAP_WALL_TILE",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PACMAN_MAP_WALL_TILE",
+  "parent":{
+    "name":"PACMAN_LOGIC",
+    "path":"folders/scripts/PACMAN_LOGIC.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

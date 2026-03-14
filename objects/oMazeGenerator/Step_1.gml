@@ -9,8 +9,8 @@ if (!initializeGridElements) {
 	for (var row = 0; row < mapHeight; row++) {
 		for (var col = 0; col < mapWidth; col++) {
 			
-            var elementX = x_offset + (col * gridSize);
-            var elementY = y_offset + (row * gridSize);
+            elementX = x_offset + (col * gridSize);
+            elementY = y_offset + (row * gridSize);
 	
 			if (tileMap[col][row].isWall()) {
 				instance_create_layer(elementX, elementY, "GameElements", Wall);

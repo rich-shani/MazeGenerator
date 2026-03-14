@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Script9",
+  "%Name":"GHOST_GRID_TURN",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Script9",
+  "name":"GHOST_GRID_TURN",
   "parent":{
-    "name":"scripts",
-    "path":"folders/scripts.yy",
+    "name":"GHOST_LOGIC",
+    "path":"folders/scripts/GHOST_LOGIC.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

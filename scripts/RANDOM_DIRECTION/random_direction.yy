@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"random_direction",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"random_direction",
+  "parent":{
+    "name":"GHOST_LOGIC",
+    "path":"folders/scripts/GHOST_LOGIC.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
