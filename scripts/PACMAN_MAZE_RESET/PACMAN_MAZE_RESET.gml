@@ -9,7 +9,7 @@
 /// @description Reset the cell map for new generation
 function pacman_map_reset() {
     Cell_create.numFilled = 0;
-    
+
     var _cellMap = array_create(CELL_MAP_SIZE_X);
     for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
         _cellMap[i] = array_create(CELL_MAP_SIZE_Y);
@@ -17,44 +17,46 @@ function pacman_map_reset() {
             _cellMap[i][j] = new Cell_create(i, j);
         }
     }
-    
+
+    // Wire up neighbor pointers using GRID_DIRECTION indices
     for (var j = 0; j < CELL_MAP_SIZE_Y; j++) {
         for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
             var c = _cellMap[i][j];
-            c.next[CellDirection.LEFT] = (i > 0) ? _cellMap[i-1][j] : noone;
-            c.next[CellDirection.RIGHT] = (i < CELL_MAP_SIZE_X - 1) ? _cellMap[i+1][j] : noone;
-            c.next[CellDirection.UP] = (j > 0) ? _cellMap[i][j-1] : noone;
-            c.next[CellDirection.DOWN] = (j < CELL_MAP_SIZE_Y - 1) ? _cellMap[i][j+1] : noone;
+            c.next[GRID_DIRECTION.LEFT]  = (i > 0)                    ? _cellMap[i-1][j] : noone;
+            c.next[GRID_DIRECTION.RIGHT] = (i < CELL_MAP_SIZE_X - 1)  ? _cellMap[i+1][j] : noone;
+            c.next[GRID_DIRECTION.UP]    = (j > 0)                    ? _cellMap[i][j-1] : noone;
+            c.next[GRID_DIRECTION.DOWN]  = (j < CELL_MAP_SIZE_Y - 1)  ? _cellMap[i][j+1] : noone;
         }
     }
-    
-    _cellMap[0][3].isGhostSpace = true;
-    _cellMap[0][3].filled = true;
-    _cellMap[0][3].connections[CellDirection.LEFT] = true;
-    _cellMap[0][3].connections[CellDirection.RIGHT] = true;
-    _cellMap[0][3].connections[CellDirection.DOWN] = true;
-    
-    _cellMap[1][3].isGhostSpace = true;
-    _cellMap[1][3].filled = true;
-    _cellMap[1][3].connections[CellDirection.LEFT] = true;
-    _cellMap[1][3].connections[CellDirection.DOWN] = true;
-    
-    _cellMap[0][4].isGhostSpace = true;
-    _cellMap[0][4].filled = true;
-    _cellMap[0][4].connections[CellDirection.LEFT] = true;
-    _cellMap[0][4].connections[CellDirection.RIGHT] = true;
-    _cellMap[0][4].connections[CellDirection.UP] = true;
-    
-    _cellMap[1][4].isGhostSpace = true;
-    _cellMap[1][4].filled = true;
-    _cellMap[1][4].connections[CellDirection.LEFT] = true;
-    _cellMap[1][4].connections[CellDirection.UP] = true;
-    
+
+    // Pre-fill ghost space cells and set their connections
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y0].isGhostSpace = true;
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y0].filled = true;
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y0].connections[GRID_DIRECTION.LEFT]  = true;
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y0].connections[GRID_DIRECTION.RIGHT] = true;
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y0].connections[GRID_DIRECTION.DOWN]  = true;
+
+    _cellMap[GHOST_SPACE_X1][GHOST_SPACE_Y0].isGhostSpace = true;
+    _cellMap[GHOST_SPACE_X1][GHOST_SPACE_Y0].filled = true;
+    _cellMap[GHOST_SPACE_X1][GHOST_SPACE_Y0].connections[GRID_DIRECTION.LEFT] = true;
+    _cellMap[GHOST_SPACE_X1][GHOST_SPACE_Y0].connections[GRID_DIRECTION.DOWN] = true;
+
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y1].isGhostSpace = true;
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y1].filled = true;
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y1].connections[GRID_DIRECTION.LEFT]  = true;
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y1].connections[GRID_DIRECTION.RIGHT] = true;
+    _cellMap[GHOST_SPACE_X0][GHOST_SPACE_Y1].connections[GRID_DIRECTION.UP]    = true;
+
+    _cellMap[GHOST_SPACE_X1][GHOST_SPACE_Y1].isGhostSpace = true;
+    _cellMap[GHOST_SPACE_X1][GHOST_SPACE_Y1].filled = true;
+    _cellMap[GHOST_SPACE_X1][GHOST_SPACE_Y1].connections[GRID_DIRECTION.LEFT] = true;
+    _cellMap[GHOST_SPACE_X1][GHOST_SPACE_Y1].connections[GRID_DIRECTION.UP]   = true;
+
     tallRows = array_create(CELL_MAP_SIZE_X);
     narrowCols = array_create(CELL_MAP_SIZE_Y);
     for (var i = 0; i < CELL_MAP_SIZE_X; i++) tallRows[i] = -1;
     for (var i = 0; i < CELL_MAP_SIZE_Y; i++) narrowCols[i] = -1;
-    
+
     cellMap = _cellMap;
 }
 

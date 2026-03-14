@@ -99,9 +99,8 @@ if (y > 8 && y < room_height - 8) {
                         }
                     }
                     else {
-                        /// ABOUT-FACE: Ghost needs to reverse direction (power pellet eaten)
-                        /// Use GHOST_DIRECTION as single conversion layer
-                        dir = direction_opposite(cardinal_from_direction(direction));
+                        /// ABOUT-FACE: Reverse the actual current movement direction
+                        dir = direction_opposite(dir_applied);
                         aboutface = 0;
                     }
                 }
@@ -130,12 +129,19 @@ if (oPacman.dead == 0 && oPacman.finish == 0) {
         /// This keeps ghost movement synchronized with Pac
 
         if (newtile == 1) {
-            /// Data-driven grid turn: one lookup (dir, direction) -> apply correction and clear newtile
-            var _r = ghost_apply_grid_turn(dir, direction, tilex, tiley, x, y);
+            /// Data-driven grid turn: one lookup (desired dir, current dir) -> apply correction and clear newtile
+            var _r = ghost_apply_grid_turn(dir, dir_applied, tilex, tiley, x, y);
             if (_r.applied) {
-                x = _r.x;
-                y = _r.y;
-                direction = _r.direction;
+                x         = _r.x;
+                y         = _r.y;
+                dir_applied = _r.dir;
+                // Convert GRID_DIRECTION → GML physics degrees (single conversion point)
+                switch (dir_applied) {
+                    case GRID_DIRECTION.RIGHT: direction = 0;   break;
+                    case GRID_DIRECTION.UP:    direction = 90;  break;
+                    case GRID_DIRECTION.LEFT:  direction = 180; break;
+                    case GRID_DIRECTION.DOWN:  direction = 270; break;
+                }
                 newtile = 0;
             }
         }

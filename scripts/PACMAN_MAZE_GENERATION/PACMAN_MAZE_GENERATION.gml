@@ -1,4 +1,4 @@
-/// PACMAN_MAZE_GENERATION - Fill and validate cell structure
+﻿/// PACMAN_MAZE_GENERATION - Fill and validate cell structure
 /// Responsibility: attempt_generate, is_desirable, resize/tall/narrow selection.
 /// Globals: cellMap, tallRows, narrowCols.
 
@@ -41,7 +41,7 @@ function pacman_map_attempt_generate() {
             random(1.0) < probTopAndBotSingleCellJoin) {
             var singleCountPos = (cell.position.y == 0) ? 0 : 1;
             if (singleCount[singleCountPos] == 0) {
-                var dirToConnect = (cell.position.y == 0) ? CellDirection.UP : CellDirection.DOWN;
+                var dirToConnect = (cell.position.y == 0) ? GRID_DIRECTION.UP : GRID_DIRECTION.DOWN;
                 cell.connections[dirToConnect] = true;
                 singleCount[singleCountPos]++;
                 numGroups++;
@@ -52,7 +52,7 @@ function pacman_map_attempt_generate() {
         var size = 1;
         
         if (cell.position.x == CELL_MAP_SIZE_X - 1) {
-            cell.connections[CellDirection.RIGHT] = true;
+            cell.connections[GRID_DIRECTION.RIGHT] = true;
             cell.isRaiseHeightCandidate = true;
         } else {
             while (size < 5) {
@@ -61,28 +61,28 @@ function pacman_map_attempt_generate() {
                 // Size 2 extension logic
                 if (size == 2) {
                     var c = firstCell;
-                    if (c.position.x > 0 && c.connections[CellDirection.RIGHT] &&
-                        c.next[CellDirection.RIGHT] != noone &&
-                        c.next[CellDirection.RIGHT].next[CellDirection.RIGHT] != noone) {
+                    if (c.position.x > 0 && c.connections[GRID_DIRECTION.RIGHT] &&
+                        c.next[GRID_DIRECTION.RIGHT] != noone &&
+                        c.next[GRID_DIRECTION.RIGHT].next[GRID_DIRECTION.RIGHT] != noone) {
                         if (longPieces < MAX_LONG_PIECES &&
                             random(1.0) < probExtendAtSize2) {
                             var chosenDir = -1;
-                            c = c.next[CellDirection.RIGHT].next[CellDirection.RIGHT];
+                            c = c.next[GRID_DIRECTION.RIGHT].next[GRID_DIRECTION.RIGHT];
                             var dirs = [false, false, false, false];
                             
-                            if (c.isOpen(CellDirection.UP)) dirs[CellDirection.UP] = true;
-                            if (c.isOpen(CellDirection.DOWN)) dirs[CellDirection.DOWN] = true;
+                            if (c.isOpen(GRID_DIRECTION.UP)) dirs[GRID_DIRECTION.UP] = true;
+                            if (c.isOpen(GRID_DIRECTION.DOWN)) dirs[GRID_DIRECTION.DOWN] = true;
                             
-                            if (dirs[CellDirection.UP] && dirs[CellDirection.DOWN]) {
-                                chosenDir = (random(1.0) < 0.5) ? CellDirection.UP : CellDirection.DOWN;
-                            } else if (dirs[CellDirection.UP]) {
-                                chosenDir = CellDirection.UP;
-                            } else if (dirs[CellDirection.DOWN]) {
-                                chosenDir = CellDirection.DOWN;
+                            if (dirs[GRID_DIRECTION.UP] && dirs[GRID_DIRECTION.DOWN]) {
+                                chosenDir = (random(1.0) < 0.5) ? GRID_DIRECTION.UP : GRID_DIRECTION.DOWN;
+                            } else if (dirs[GRID_DIRECTION.UP]) {
+                                chosenDir = GRID_DIRECTION.UP;
+                            } else if (dirs[GRID_DIRECTION.DOWN]) {
+                                chosenDir = GRID_DIRECTION.DOWN;
                             }
                             
                             if (chosenDir != -1) {
-                                c.connect(CellDirection.LEFT);
+                                c.connect(GRID_DIRECTION.LEFT);
                                 Cell_fill(c, numGroups);
                                 c.connect(chosenDir);
                                 Cell_fill(c.next[chosenDir], numGroups);
@@ -130,12 +130,12 @@ function pacman_map_attempt_generate() {
                     if (size == 2) {
                         var c = firstCell;
                         if (c.position.x == CELL_MAP_SIZE_X - 1) {
-                            if (c.connections[CellDirection.UP]) {
-                                c = c.next[CellDirection.UP];
+                            if (c.connections[GRID_DIRECTION.UP]) {
+                                c = c.next[GRID_DIRECTION.UP];
                             }
-                            c.connections[CellDirection.RIGHT] = true;
-                            if (c.next[CellDirection.DOWN] != noone) {
-                                c.next[CellDirection.DOWN].connections[CellDirection.RIGHT] = true;
+                            c.connections[GRID_DIRECTION.RIGHT] = true;
+                            if (c.next[GRID_DIRECTION.DOWN] != noone) {
+                                c.next[GRID_DIRECTION.DOWN].connections[GRID_DIRECTION.RIGHT] = true;
                             }
                         }
                     } else if (size == 3 || size == 4) {
@@ -179,32 +179,32 @@ function pacman_map_set_resize_candidates() {
             var q = c.connections;
             
             // Raise height candidate
-            if ((c.position.x == 0 || !q[CellDirection.LEFT]) &&
-                (c.position.x == CELL_MAP_SIZE_X - 1 || !q[CellDirection.RIGHT]) &&
-                q[CellDirection.UP] != q[CellDirection.DOWN]) {
+            if ((c.position.x == 0 || !q[GRID_DIRECTION.LEFT]) &&
+                (c.position.x == CELL_MAP_SIZE_X - 1 || !q[GRID_DIRECTION.RIGHT]) &&
+                q[GRID_DIRECTION.UP] != q[GRID_DIRECTION.DOWN]) {
                 c.isRaiseHeightCandidate = true;
             }
             
             // Check pair for raise height
-            var c2 = c.next[CellDirection.RIGHT];
+            var c2 = c.next[GRID_DIRECTION.RIGHT];
             if (c2 != noone) {
                 var q2 = c2.connections;
-                if (((c.position.x == 0 || !q[CellDirection.LEFT]) && !q[CellDirection.UP] && !q[CellDirection.DOWN]) &&
-                    ((c2.position.x == CELL_MAP_SIZE_X - 1 || !q2[CellDirection.RIGHT]) &&
-                     !q2[CellDirection.UP] && !q2[CellDirection.DOWN])) {
+                if (((c.position.x == 0 || !q[GRID_DIRECTION.LEFT]) && !q[GRID_DIRECTION.UP] && !q[GRID_DIRECTION.DOWN]) &&
+                    ((c2.position.x == CELL_MAP_SIZE_X - 1 || !q2[GRID_DIRECTION.RIGHT]) &&
+                     !q2[GRID_DIRECTION.UP] && !q2[GRID_DIRECTION.DOWN])) {
                     c.isRaiseHeightCandidate = true;
                     c2.isRaiseHeightCandidate = true;
                 }
             }
             
             // Shrink width candidate
-            if (c.position.x == CELL_MAP_SIZE_X - 1 && q[CellDirection.RIGHT]) {
+            if (c.position.x == CELL_MAP_SIZE_X - 1 && q[GRID_DIRECTION.RIGHT]) {
                 c.isShrinkWidthCandidate = true;
             }
             
-            if ((c.position.y == 0 || !q[CellDirection.UP]) &&
-                (c.position.y == CELL_MAP_SIZE_Y - 1 || !q[CellDirection.DOWN]) &&
-                q[CellDirection.LEFT] != q[CellDirection.RIGHT]) {
+            if ((c.position.y == 0 || !q[GRID_DIRECTION.UP]) &&
+                (c.position.y == CELL_MAP_SIZE_Y - 1 || !q[GRID_DIRECTION.DOWN]) &&
+                q[GRID_DIRECTION.LEFT] != q[GRID_DIRECTION.RIGHT]) {
                 c.isShrinkWidthCandidate = true;
             }
         }
@@ -215,13 +215,13 @@ function pacman_map_set_resize_candidates() {
 function pacman_map_is_desirable() {
     // Check top right corner
     var c = cellMap[CELL_MAP_SIZE_X - 1][0];
-    if (c.connections[CellDirection.UP] || c.connections[CellDirection.RIGHT]) {
+    if (c.connections[GRID_DIRECTION.UP] || c.connections[GRID_DIRECTION.RIGHT]) {
         return false;
     }
     
     // Check bottom right corner
     c = cellMap[CELL_MAP_SIZE_X - 1][CELL_MAP_SIZE_Y - 1];
-    if (c.connections[CellDirection.DOWN] || c.connections[CellDirection.RIGHT]) {
+    if (c.connections[GRID_DIRECTION.DOWN] || c.connections[GRID_DIRECTION.RIGHT]) {
         return false;
     }
     
@@ -238,16 +238,16 @@ function pacman_map_is_desirable() {
                 
                 // Join the stacked pieces
                 var g = cellMap[i][j].group;
-                cellMap[i][j].connections[CellDirection.DOWN] = true;
-                cellMap[i][j].connections[CellDirection.RIGHT] = true;
-                cellMap[i + 1][j].connections[CellDirection.DOWN] = true;
-                cellMap[i + 1][j].connections[CellDirection.LEFT] = true;
+                cellMap[i][j].connections[GRID_DIRECTION.DOWN] = true;
+                cellMap[i][j].connections[GRID_DIRECTION.RIGHT] = true;
+                cellMap[i + 1][j].connections[GRID_DIRECTION.DOWN] = true;
+                cellMap[i + 1][j].connections[GRID_DIRECTION.LEFT] = true;
                 cellMap[i + 1][j].group = g;
-                cellMap[i][j + 1].connections[CellDirection.UP] = true;
-                cellMap[i][j + 1].connections[CellDirection.RIGHT] = true;
+                cellMap[i][j + 1].connections[GRID_DIRECTION.UP] = true;
+                cellMap[i][j + 1].connections[GRID_DIRECTION.RIGHT] = true;
                 cellMap[i][j + 1].group = g;
-                cellMap[i + 1][j + 1].connections[CellDirection.UP] = true;
-                cellMap[i + 1][j + 1].connections[CellDirection.LEFT] = true;
+                cellMap[i + 1][j + 1].connections[GRID_DIRECTION.UP] = true;
+                cellMap[i + 1][j + 1].connections[GRID_DIRECTION.LEFT] = true;
                 cellMap[i + 1][j + 1].group = g;
             }
         }
@@ -269,9 +269,9 @@ function pacman_map_is_stacked_horizontal(i, j) {
     var q1 = cellMap[i][j].connections;
     var q2 = cellMap[i + 1][j].connections;
     
-    return !q1[CellDirection.UP] && !q1[CellDirection.DOWN] && (i == 0 || !q1[CellDirection.LEFT]) &&
-           q1[CellDirection.RIGHT] && !q2[CellDirection.UP] && !q2[CellDirection.DOWN] &&
-           q2[CellDirection.LEFT] && !q2[CellDirection.RIGHT];
+    return !q1[GRID_DIRECTION.UP] && !q1[GRID_DIRECTION.DOWN] && (i == 0 || !q1[GRID_DIRECTION.LEFT]) &&
+           q1[GRID_DIRECTION.RIGHT] && !q2[GRID_DIRECTION.UP] && !q2[GRID_DIRECTION.DOWN] &&
+           q2[GRID_DIRECTION.LEFT] && !q2[GRID_DIRECTION.RIGHT];
 }
 
 /// @description Check if cells are stacked vertically
@@ -280,13 +280,13 @@ function pacman_map_is_stacked_vertical(i, j) {
     var q2 = cellMap[i][j + 1].connections;
     
     if (i == CELL_MAP_SIZE_X - 1) {
-        return !q1[CellDirection.LEFT] && !q1[CellDirection.UP] && !q1[CellDirection.DOWN] &&
-               !q2[CellDirection.LEFT] && !q2[CellDirection.UP] && !q2[CellDirection.DOWN];
+        return !q1[GRID_DIRECTION.LEFT] && !q1[GRID_DIRECTION.UP] && !q1[GRID_DIRECTION.DOWN] &&
+               !q2[GRID_DIRECTION.LEFT] && !q2[GRID_DIRECTION.UP] && !q2[GRID_DIRECTION.DOWN];
     }
     
-    return !q1[CellDirection.LEFT] && !q1[CellDirection.RIGHT] && !q1[CellDirection.UP] &&
-           q1[CellDirection.DOWN] && !q2[CellDirection.LEFT] && !q2[CellDirection.RIGHT] &&
-           q2[CellDirection.UP] && !q2[CellDirection.DOWN];
+    return !q1[GRID_DIRECTION.LEFT] && !q1[GRID_DIRECTION.RIGHT] && !q1[GRID_DIRECTION.UP] &&
+           q1[GRID_DIRECTION.DOWN] && !q2[GRID_DIRECTION.LEFT] && !q2[GRID_DIRECTION.RIGHT] &&
+           q2[GRID_DIRECTION.UP] && !q2[GRID_DIRECTION.DOWN];
 }
 
 /// @description Choose tall rows for variation
@@ -311,9 +311,9 @@ function pacman_map_can_raise_height(i, j) {
     var c2 = noone;
     for (var y0 = j; y0 >= 0; y0--) {
         var c = cellMap[i][y0];
-        c2 = c.next[CellDirection.RIGHT];
-        if ((!c.connections[CellDirection.UP] || c.isCrossCenter()) &&
-            (!c2.connections[CellDirection.UP] || c2.isCrossCenter())) {
+        c2 = c.next[GRID_DIRECTION.RIGHT];
+        if ((!c.connections[GRID_DIRECTION.UP] || c.isCrossCenter()) &&
+            (!c2.connections[GRID_DIRECTION.UP] || c2.isCrossCenter())) {
             break;
         }
     }
@@ -324,12 +324,12 @@ function pacman_map_can_raise_height(i, j) {
             array_push(candidates, c2);
         }
         
-        if ((!c2.connections[CellDirection.DOWN] || c2.isCrossCenter()) &&
-            (!c2.next[CellDirection.LEFT].connections[CellDirection.DOWN] ||
-             c2.next[CellDirection.LEFT].isCrossCenter())) {
+        if ((!c2.connections[GRID_DIRECTION.DOWN] || c2.isCrossCenter()) &&
+            (!c2.next[GRID_DIRECTION.LEFT].connections[GRID_DIRECTION.DOWN] ||
+             c2.next[GRID_DIRECTION.LEFT].isCrossCenter())) {
             break;
         }
-        c2 = c2.next[CellDirection.DOWN];
+        c2 = c2.next[GRID_DIRECTION.DOWN];
     }
     
     // Shuffle candidates
@@ -374,9 +374,9 @@ function pacman_map_can_shrink_width(i, j) {
     var c2 = noone;
     for (var x0 = i; x0 < CELL_MAP_SIZE_X; x0++) {
         var c = cellMap[x0][j];
-        c2 = c.next[CellDirection.DOWN];
-        if ((!c.connections[CellDirection.RIGHT] || c.isCrossCenter()) &&
-            (!c2.connections[CellDirection.RIGHT] || c.isCrossCenter())) {
+        c2 = c.next[GRID_DIRECTION.DOWN];
+        if ((!c.connections[GRID_DIRECTION.RIGHT] || c.isCrossCenter()) &&
+            (!c2.connections[GRID_DIRECTION.RIGHT] || c.isCrossCenter())) {
             break;
         }
     }
@@ -387,12 +387,12 @@ function pacman_map_can_shrink_width(i, j) {
             array_push(candidates, c2);
         }
         
-        if ((!c2.connections[CellDirection.LEFT] || c2.isCrossCenter()) &&
-            (!c2.next[CellDirection.UP].connections[CellDirection.LEFT] ||
-             c2.next[CellDirection.UP].isCrossCenter())) {
+        if ((!c2.connections[GRID_DIRECTION.LEFT] || c2.isCrossCenter()) &&
+            (!c2.next[GRID_DIRECTION.UP].connections[GRID_DIRECTION.LEFT] ||
+             c2.next[GRID_DIRECTION.UP].isCrossCenter())) {
             break;
         }
-        c2 = c2.next[CellDirection.LEFT];
+        c2 = c2.next[GRID_DIRECTION.LEFT];
     }
     
     // Shuffle candidates

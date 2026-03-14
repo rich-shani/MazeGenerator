@@ -1,4 +1,4 @@
-/// ===============================================================================
+﻿/// ===============================================================================
 /// GHOST_HOUSE - Ghost house state machine (bounce and exit)
 /// ===============================================================================
 /// Called from oGhost Step_2. Runs in calling instance context; updates house,
@@ -24,7 +24,7 @@ function ghost_house_step() {
         hspeed = 0;
         vspeed = speyes;
         house = 1;
-        dir = GHOST_DIRECTION.DOWN;
+        dir = GRID_DIRECTION.DOWN;
     }
 
     if (house == 1 && state == GHOST_STATE.EYES &&
@@ -35,7 +35,7 @@ function ghost_house_step() {
         hspeed = 0;
         vspeed = -spslow;
         state = GHOST_STATE.CHASE;
-        dir = GHOST_DIRECTION.UP;
+        dir = GRID_DIRECTION.UP;
     }
 
     if (housestate == 1) {
@@ -52,6 +52,6 @@ function ghost_house_step() {
         vspeed = 0;
         house = 0;
         newtile = 0;
-        dir = GHOST_DIRECTION.LEFT;
+        dir = GRID_DIRECTION.LEFT;
     }
 }

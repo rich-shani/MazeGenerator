@@ -10,7 +10,6 @@ function pacman_map_generate() {
         pacman_map_setup_scale_coords();
         pacman_map_join_walls();
         if (!pacman_map_create_tunnels()) continue;
-        pacman_map_set_character_location();
         break;
     }
 }

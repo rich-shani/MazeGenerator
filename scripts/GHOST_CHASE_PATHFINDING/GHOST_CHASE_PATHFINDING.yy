@@ -11,4 +11,3 @@
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
 }
-

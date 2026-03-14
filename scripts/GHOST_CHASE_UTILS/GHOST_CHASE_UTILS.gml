@@ -18,25 +18,25 @@ function ghost_chase_utils_free(_x, _y) {
 
 /// @function ghost_chase_utils_can_go(_objx, _objy, _dir)
 /// @description Return true if the neighbor tile in direction `_dir` is open.
-/// `_dir` is a cardinal GHOST_DIRECTION (0=RIGHT,1=UP,2=LEFT,3=DOWN).
+/// `_dir` is a GRID_DIRECTION (RIGHT=0, UP=1, LEFT=2, DOWN=3).
 function ghost_chase_utils_can_go(_objx, _objy, _dir) {
     var _nx = _objx;
     var _ny = _objy;
 
     switch (_dir) {
-        case GHOST_DIRECTION.RIGHT:
+        case GRID_DIRECTION.RIGHT:
             _nx = _objx + TILE_PIXELS;
             _ny = _objy;
             break;
-        case GHOST_DIRECTION.UP:
+        case GRID_DIRECTION.UP:
             _nx = _objx;
             _ny = _objy - TILE_PIXELS;
             break;
-        case GHOST_DIRECTION.LEFT:
+        case GRID_DIRECTION.LEFT:
             _nx = _objx - TILE_PIXELS;
             _ny = _objy;
             break;
-        case GHOST_DIRECTION.DOWN:
+        case GRID_DIRECTION.DOWN:
             _nx = _objx;
             _ny = _objy + TILE_PIXELS;
             break;
@@ -50,20 +50,20 @@ function ghost_chase_utils_can_go(_objx, _objy, _dir) {
 /// Returns true if it sets `dir` and handles the move, false otherwise.
 function ghost_chase_utils_no_up(_objx, _objy, _chasex) {
     if (collision_point(_objx, _objy, NoUp, false, true) && state < 2) {
-        if (direction == 0) {
-            dir = GHOST_DIRECTION.RIGHT;
+        if (dir == GRID_DIRECTION.RIGHT) {
+            dir = GRID_DIRECTION.RIGHT;
             return true;
         }
-        if (direction == 180) {
-            dir = GHOST_DIRECTION.LEFT;
+        if (dir == GRID_DIRECTION.LEFT) {
+            dir = GRID_DIRECTION.LEFT;
             return true;
         }
-        if (direction == 270) {
+        if (dir == GRID_DIRECTION.DOWN) {
             if ((_chasex - _objx) > 0) {
-                dir = GHOST_DIRECTION.RIGHT;
+                dir = GRID_DIRECTION.RIGHT;
                 return true;
             } else {
-                dir = GHOST_DIRECTION.LEFT;
+                dir = GRID_DIRECTION.LEFT;
                 return true;
             }
         }
@@ -75,31 +75,31 @@ function ghost_chase_utils_no_up(_objx, _objy, _chasex) {
 /// @description Encapsulate the Up/Left/Down/Right forced-direction zones.
 /// Returns true if it sets `dir` and handles the move, false otherwise.
 function ghost_chase_utils_forced_zones(_objx, _objy) {
-    // Force UP direction
+    // Force UP direction (allowed when not already going DOWN)
     if (fruity == 0 && collision_point(_objx, _objy, Up, false, true) &&
-        state == 2 && direction < 270) {
-        dir = GHOST_DIRECTION.UP;
+        state == 2 && dir != GRID_DIRECTION.DOWN) {
+        dir = GRID_DIRECTION.UP;
         return true;
     }
 
-    // Force LEFT direction
+    // Force LEFT direction (allowed when not already going RIGHT)
     if (fruity == 0 && collision_point(_objx, _objy, Left, false, true) &&
-        state == 2 && direction > 0) {
-        dir = GHOST_DIRECTION.LEFT;
+        state == 2 && dir != GRID_DIRECTION.RIGHT) {
+        dir = GRID_DIRECTION.LEFT;
         return true;
     }
 
-    // Force DOWN direction
+    // Force DOWN direction (allowed when not already going UP)
     if (fruity == 0 && collision_point(_objx, _objy, Down, false, true) &&
-        state == 2 && (direction > 90 || direction < 90)) {
-        dir = GHOST_DIRECTION.DOWN;
+        state == 2 && dir != GRID_DIRECTION.UP) {
+        dir = GRID_DIRECTION.DOWN;
         return true;
     }
 
-    // Force RIGHT direction
+    // Force RIGHT direction (allowed when not already going LEFT)
     if (fruity == 0 && collision_point(_objx, _objy, Right, false, true) &&
-        state == 2 && (direction > 180 || direction < 180)) {
-        dir = GHOST_DIRECTION.RIGHT;
+        state == 2 && dir != GRID_DIRECTION.LEFT) {
+        dir = GRID_DIRECTION.RIGHT;
         return true;
     }
 
@@ -165,10 +165,10 @@ function ghost_chase_utils_try_directions(_objx, _objy, _codir, _dir1, _dir2, _d
 ///   - direction = 0 (RIGHT)
 ///   - dx > 0, dy > 0  → quadrant Q0 (RIGHT+DOWN)
 ///   - abs(dy) > abs(dx) → VERT_GREATER (0)
-///   - PRIORITY[0][0][0] = [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP]
+///   - PRIORITY[0][0][0] = [GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP]
 ///     → "Down > Right > Up" (matches original comment).
 
-function ghost_chase_utils_get_priority_triple(_direction_degrees, _quadrant_index, _distance_case) {
+function ghost_chase_utils_get_priority_triple(_dir, _quadrant_index, _distance_case) {
     static _table_initialized = false;
     static _priority = noone;
 
@@ -181,38 +181,38 @@ function ghost_chase_utils_get_priority_triple(_direction_degrees, _quadrant_ind
             // Q0: RIGHT+DOWN
             [
                 // Vert>Horiz: "Down > Right > Up"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP],
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP],
                 // Horiz>Vert: "Right > Down > Up"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.UP],
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.DOWN, GRID_DIRECTION.UP],
                 // Equal:      "Down > Right > Up"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP]
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP]
             ],
             // Q1: RIGHT+UP
             [
                 // Vert>Horiz: "Up > Right > Down"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.DOWN],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT, GRID_DIRECTION.DOWN],
                 // Horiz>Vert: "Right > Up > Down"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP, GHOST_DIRECTION.DOWN],
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP, GRID_DIRECTION.DOWN],
                 // Equal:      "Up > Right > Down"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.DOWN]
+                [GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT, GRID_DIRECTION.DOWN]
             ],
             // Q2: LEFT+DOWN
             [
                 // Vert>Horiz: "Down > Right > Up"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP],
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP],
                 // Horiz>Vert: "Down > Up > Right"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT],
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT],
                 // Equal:      "Down > Up > Right"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT]
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT]
             ],
             // Q3: LEFT+UP
             [
                 // Vert>Horiz: "Up > Right > Down"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.DOWN],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT, GRID_DIRECTION.DOWN],
                 // Horiz>Vert: "Up > Down > Right"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT],
                 // Equal:      "Up > Down > Right"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT]
+                [GRID_DIRECTION.UP, GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT]
             ]
         ];
 
@@ -221,38 +221,38 @@ function ghost_chase_utils_get_priority_triple(_direction_degrees, _quadrant_ind
             // Q0: RIGHT+DOWN
             [
                 // Vert>Horiz: "Right > Left > Up"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.UP],
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.LEFT, GRID_DIRECTION.UP],
                 // Horiz>Vert: "Right > Up > Left"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP, GRID_DIRECTION.LEFT],
                 // Equal:      "Right > Up > Left"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT]
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP, GRID_DIRECTION.LEFT]
             ],
             // Q1: RIGHT+UP
             [
                 // Vert>Horiz: "Up > Right > Left"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT, GRID_DIRECTION.LEFT],
                 // Horiz>Vert: "Right > Up > Left"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP, GRID_DIRECTION.LEFT],
                 // Equal:      "Up > Right > Left"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.LEFT]
+                [GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT, GRID_DIRECTION.LEFT]
             ],
             // Q2: LEFT+DOWN
             [
                 // Vert>Horiz: "Left > Right > Up"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.UP],
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.RIGHT, GRID_DIRECTION.UP],
                 // Horiz>Vert: "Left > Up > Right"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT],
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT],
                 // Equal:      "Left > Up > Right"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT]
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT]
             ],
             // Q3: LEFT+UP
             [
                 // Vert>Horiz: "Up > Left > Right"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.RIGHT],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.LEFT, GRID_DIRECTION.RIGHT],
                 // Horiz>Vert: "Up > Right > Left"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.RIGHT, GRID_DIRECTION.LEFT],
                 // Equal:      "Up > Left > Right"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.RIGHT]
+                [GRID_DIRECTION.UP, GRID_DIRECTION.LEFT, GRID_DIRECTION.RIGHT]
             ]
         ];
 
@@ -261,38 +261,38 @@ function ghost_chase_utils_get_priority_triple(_direction_degrees, _quadrant_ind
             // Q0: RIGHT+DOWN
             [
                 // Vert>Horiz: "Down > Left > Up"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.UP],
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT, GRID_DIRECTION.UP],
                 // Horiz>Vert: "Down > Up > Left"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.UP, GRID_DIRECTION.LEFT],
                 // Equal:      "Down > Left > Up"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.UP]
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT, GRID_DIRECTION.UP]
             ],
             // Q1: RIGHT+UP
             [
                 // Vert>Horiz: "Up > Left > Down"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN],
                 // Horiz>Vert: "Up > Down > Left"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT],
                 // Equal:      "Up > Left > Down"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN]
+                [GRID_DIRECTION.UP, GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN]
             ],
             // Q2: LEFT+DOWN
             [
                 // Vert>Horiz: "Down > Left > Up"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.UP],
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT, GRID_DIRECTION.UP],
                 // Horiz>Vert: "Left > Down > Up"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.UP],
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN, GRID_DIRECTION.UP],
                 // Equal:      "Down > Left > Up"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.UP]
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT, GRID_DIRECTION.UP]
             ],
             // Q3: LEFT+UP
             [
                 // Vert>Horiz: "Up > Left > Down"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN],
+                [GRID_DIRECTION.UP, GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN],
                 // Horiz>Vert: "Left > Up > Down"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.UP, GHOST_DIRECTION.DOWN],
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.UP, GRID_DIRECTION.DOWN],
                 // Equal:      "Up > Left > Down"
-                [GHOST_DIRECTION.UP, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN]
+                [GRID_DIRECTION.UP, GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN]
             ]
         ];
 
@@ -301,63 +301,45 @@ function ghost_chase_utils_get_priority_triple(_direction_degrees, _quadrant_ind
             // Q0: RIGHT+DOWN
             [
                 // Vert>Horiz: "Down > Right > Left"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT, GRID_DIRECTION.LEFT],
                 // Horiz>Vert: "Right > Down > Left"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT],
                 // Equal:      "Down > Right > Left"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.LEFT]
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT, GRID_DIRECTION.LEFT]
             ],
             // Q1: RIGHT+UP
             [
                 // Vert>Horiz: "Right > Left > Down"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN],
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN],
                 // Horiz>Vert: "Right > Down > Left"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT],
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT],
                 // Equal:      "Right > Left > Down"
-                [GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN]
+                [GRID_DIRECTION.RIGHT, GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN]
             ],
             // Q2: LEFT+DOWN
             [
                 // Vert>Horiz: "Down > Left > Right"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.RIGHT],
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT, GRID_DIRECTION.RIGHT],
                 // Horiz>Vert: "Left > Down > Right"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT],
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT],
                 // Equal:      "Down > Left > Right"
-                [GHOST_DIRECTION.DOWN, GHOST_DIRECTION.LEFT, GHOST_DIRECTION.RIGHT]
+                [GRID_DIRECTION.DOWN, GRID_DIRECTION.LEFT, GRID_DIRECTION.RIGHT]
             ],
             // Q3: LEFT+UP
             [
                 // Vert>Horiz: "Left > Right > Down"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.RIGHT, GHOST_DIRECTION.DOWN],
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.RIGHT, GRID_DIRECTION.DOWN],
                 // Horiz>Vert: "Left > Down > Right"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT],
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT],
                 // Equal:      "Left > Down > Right"
-                [GHOST_DIRECTION.LEFT, GHOST_DIRECTION.DOWN, GHOST_DIRECTION.RIGHT]
+                [GRID_DIRECTION.LEFT, GRID_DIRECTION.DOWN, GRID_DIRECTION.RIGHT]
             ]
         ];
 
         _table_initialized = true;
     }
 
-    var _dir_index;
-    switch (_direction_degrees) {
-        case 0:
-            _dir_index = 0; // RIGHT
-            break;
-        case 90:
-            _dir_index = 1; // UP
-            break;
-        case 180:
-            _dir_index = 2; // LEFT
-            break;
-        case 270:
-            _dir_index = 3; // DOWN
-            break;
-        default:
-            _dir_index = 0;
-            break;
-    }
-
-    return _priority[_dir_index][_quadrant_index][_distance_case];
+    // GRID_DIRECTION values (RIGHT=0, UP=1, LEFT=2, DOWN=3) map directly to table indices
+    return _priority[_dir][_quadrant_index][_distance_case];
 }
 

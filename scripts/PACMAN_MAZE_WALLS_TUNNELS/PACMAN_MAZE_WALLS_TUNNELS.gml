@@ -1,4 +1,4 @@
-/// PACMAN_MAZE_WALLS_TUNNELS - Walls and tunnels
+﻿/// PACMAN_MAZE_WALLS_TUNNELS - Walls and tunnels
 /// Responsibility: setup_scale_coords, join_walls, create_tunnels, replace_group, etc.
 /// Globals: cellMap, tallRows, narrowCols.
 
@@ -29,19 +29,19 @@ function pacman_map_join_walls() {
     // Top row joining
     for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
         var c = cellMap[i][0];
-        if (!c.connections[CellDirection.LEFT] && !c.connections[CellDirection.RIGHT] &&
-            !c.connections[CellDirection.UP] &&
-            (!c.connections[CellDirection.DOWN] || 
-             (c.next[CellDirection.DOWN] != noone && !c.next[CellDirection.DOWN].connections[CellDirection.DOWN]))) {
-            if ((c.next[CellDirection.LEFT] == noone || !c.next[CellDirection.LEFT].connections[CellDirection.UP]) &&
-                (c.next[CellDirection.RIGHT] != noone && !c.next[CellDirection.RIGHT].connections[CellDirection.UP])) {
-                if (!(c.next[CellDirection.DOWN] != noone &&
-                      c.next[CellDirection.DOWN].connections[CellDirection.RIGHT] &&
-                      c.next[CellDirection.DOWN].next[CellDirection.RIGHT] != noone &&
-                      c.next[CellDirection.DOWN].next[CellDirection.RIGHT].connections[CellDirection.RIGHT])) {
+        if (!c.connections[GRID_DIRECTION.LEFT] && !c.connections[GRID_DIRECTION.RIGHT] &&
+            !c.connections[GRID_DIRECTION.UP] &&
+            (!c.connections[GRID_DIRECTION.DOWN] || 
+             (c.next[GRID_DIRECTION.DOWN] != noone && !c.next[GRID_DIRECTION.DOWN].connections[GRID_DIRECTION.DOWN]))) {
+            if ((c.next[GRID_DIRECTION.LEFT] == noone || !c.next[GRID_DIRECTION.LEFT].connections[GRID_DIRECTION.UP]) &&
+                (c.next[GRID_DIRECTION.RIGHT] != noone && !c.next[GRID_DIRECTION.RIGHT].connections[GRID_DIRECTION.UP])) {
+                if (!(c.next[GRID_DIRECTION.DOWN] != noone &&
+                      c.next[GRID_DIRECTION.DOWN].connections[GRID_DIRECTION.RIGHT] &&
+                      c.next[GRID_DIRECTION.DOWN].next[GRID_DIRECTION.RIGHT] != noone &&
+                      c.next[GRID_DIRECTION.DOWN].next[GRID_DIRECTION.RIGHT].connections[GRID_DIRECTION.RIGHT])) {
                     c.isJoinCandidate = true;
                     if (random(1.0) <= 0.25) {
-                        c.connections[CellDirection.UP] = true;
+                        c.connections[GRID_DIRECTION.UP] = true;
                     }
                 }
             }
@@ -51,19 +51,19 @@ function pacman_map_join_walls() {
     // Bottom row joining
     for (var i = 0; i < CELL_MAP_SIZE_X; i++) {
         var c = cellMap[i][CELL_MAP_SIZE_Y - 1];
-        if (!c.connections[CellDirection.LEFT] && !c.connections[CellDirection.RIGHT] &&
-            !c.connections[CellDirection.DOWN] &&
-            (!c.connections[CellDirection.UP] ||
-             (c.next[CellDirection.UP] != noone && !c.next[CellDirection.UP].connections[CellDirection.UP]))) {
-            if ((c.next[CellDirection.LEFT] == noone || !c.next[CellDirection.LEFT].connections[CellDirection.DOWN]) &&
-                (c.next[CellDirection.RIGHT] != noone && !c.next[CellDirection.RIGHT].connections[CellDirection.DOWN])) {
-                if (!(c.next[CellDirection.UP] != noone &&
-                      c.next[CellDirection.UP].connections[CellDirection.RIGHT] &&
-                      c.next[CellDirection.UP].next[CellDirection.RIGHT] != noone &&
-                      c.next[CellDirection.UP].next[CellDirection.RIGHT].connections[CellDirection.RIGHT])) {
+        if (!c.connections[GRID_DIRECTION.LEFT] && !c.connections[GRID_DIRECTION.RIGHT] &&
+            !c.connections[GRID_DIRECTION.DOWN] &&
+            (!c.connections[GRID_DIRECTION.UP] ||
+             (c.next[GRID_DIRECTION.UP] != noone && !c.next[GRID_DIRECTION.UP].connections[GRID_DIRECTION.UP]))) {
+            if ((c.next[GRID_DIRECTION.LEFT] == noone || !c.next[GRID_DIRECTION.LEFT].connections[GRID_DIRECTION.DOWN]) &&
+                (c.next[GRID_DIRECTION.RIGHT] != noone && !c.next[GRID_DIRECTION.RIGHT].connections[GRID_DIRECTION.DOWN])) {
+                if (!(c.next[GRID_DIRECTION.UP] != noone &&
+                      c.next[GRID_DIRECTION.UP].connections[GRID_DIRECTION.RIGHT] &&
+                      c.next[GRID_DIRECTION.UP].next[GRID_DIRECTION.RIGHT] != noone &&
+                      c.next[GRID_DIRECTION.UP].next[GRID_DIRECTION.RIGHT].connections[GRID_DIRECTION.RIGHT])) {
                     c.isJoinCandidate = true;
                     if (random(1.0) <= 0.25) {
-                        c.connections[CellDirection.DOWN] = true;
+                        c.connections[GRID_DIRECTION.DOWN] = true;
                     }
                 }
             }
@@ -77,26 +77,22 @@ function pacman_map_join_walls() {
             continue;
         }
         
-        if (!c.connections[CellDirection.RIGHT] && !c.connections[CellDirection.UP] &&
-            !c.connections[CellDirection.DOWN] &&
-            (c.next[CellDirection.UP] == noone || !c.next[CellDirection.UP].connections[CellDirection.RIGHT]) &&
-            (c.next[CellDirection.DOWN] == noone || !c.next[CellDirection.DOWN].connections[CellDirection.RIGHT])) {
-            if (c.connections[CellDirection.LEFT]) {
-                var c2 = c.next[CellDirection.LEFT];
-                if (!c2.connections[CellDirection.UP] && !c2.connections[CellDirection.DOWN] &&
-                    !c2.connections[CellDirection.LEFT]) {
+        if (!c.connections[GRID_DIRECTION.RIGHT] && !c.connections[GRID_DIRECTION.UP] &&
+            !c.connections[GRID_DIRECTION.DOWN] &&
+            (c.next[GRID_DIRECTION.UP] == noone || !c.next[GRID_DIRECTION.UP].connections[GRID_DIRECTION.RIGHT]) &&
+            (c.next[GRID_DIRECTION.DOWN] == noone || !c.next[GRID_DIRECTION.DOWN].connections[GRID_DIRECTION.RIGHT])) {
+            if (c.connections[GRID_DIRECTION.LEFT]) {
+                var c2 = c.next[GRID_DIRECTION.LEFT];
+                if (!c2.connections[GRID_DIRECTION.UP] && !c2.connections[GRID_DIRECTION.DOWN] &&
+                    !c2.connections[GRID_DIRECTION.LEFT]) {
                     c.isJoinCandidate = true;
                     if (random(1.0) <= 0.5) {
-                        c.connections[CellDirection.RIGHT] = true;
+                        c.connections[GRID_DIRECTION.RIGHT] = true;
                     }
                 }
             }
         }
     }
-}
-
-function pacman_map_set_character_location() {
-	
 }
 
 /// @description Create tunnel connections
@@ -115,7 +111,7 @@ function pacman_map_create_tunnels() {
     for (var j = 0; j < CELL_MAP_SIZE_Y; j++) {
         var c = cellMap[CELL_MAP_SIZE_X - 1][j];
         
-        if (c.connections[CellDirection.UP]) {
+        if (c.connections[GRID_DIRECTION.UP]) {
             continue;
         }
         
@@ -129,10 +125,10 @@ function pacman_map_create_tunnels() {
             }
         }
         
-        var upDead = (c.next[CellDirection.UP] == noone || c.next[CellDirection.UP].connections[CellDirection.RIGHT]);
-        var downDead = (c.next[CellDirection.DOWN] == noone || c.next[CellDirection.DOWN].connections[CellDirection.RIGHT]);
+        var upDead = (c.next[GRID_DIRECTION.UP] == noone || c.next[GRID_DIRECTION.UP].connections[GRID_DIRECTION.RIGHT]);
+        var downDead = (c.next[GRID_DIRECTION.DOWN] == noone || c.next[GRID_DIRECTION.DOWN].connections[GRID_DIRECTION.RIGHT]);
         
-        if (c.connections[CellDirection.RIGHT]) {
+        if (c.connections[GRID_DIRECTION.RIGHT]) {
             if (upDead) {
                 c.isVoidTunnelCandidate = true;
                 array_push(voidTunnelCells, c);
@@ -143,16 +139,16 @@ function pacman_map_create_tunnels() {
                 }
             }
         } else {
-            if (c.connections[CellDirection.DOWN]) {
+            if (c.connections[GRID_DIRECTION.DOWN]) {
                 continue;
             }
             
             if (upDead != downDead) {
                 if (!c.raiseHeight && c.position.y < CELL_MAP_SIZE_Y - 1 &&
-                    c.next[CellDirection.LEFT] != noone && !c.next[CellDirection.LEFT].connections[CellDirection.LEFT]) {
+                    c.next[GRID_DIRECTION.LEFT] != noone && !c.next[GRID_DIRECTION.LEFT].connections[GRID_DIRECTION.LEFT]) {
                     array_push(singleDeadEndCells, c);
                     c.isSingleDeadEndCandidate = true;
-                    c.singleDeadEndDir = upDead ? CellDirection.UP : CellDirection.DOWN;
+                    c.singleDeadEndDir = upDead ? GRID_DIRECTION.UP : GRID_DIRECTION.DOWN;
                     var offset = upDead ? 1 : 0;
                     if (c.position.y <= 1 + offset) {
                         array_push(topSingleDeadEndCells, c);
@@ -162,9 +158,9 @@ function pacman_map_create_tunnels() {
                 }
             } else if (upDead && downDead) {
                 if (j > 0 && j < CELL_MAP_SIZE_Y - 1) {
-                    if (c.next[CellDirection.LEFT] != noone &&
-                        c.next[CellDirection.LEFT].connections[CellDirection.UP] &&
-                        c.next[CellDirection.LEFT].connections[CellDirection.DOWN]) {
+                    if (c.next[GRID_DIRECTION.LEFT] != noone &&
+                        c.next[GRID_DIRECTION.LEFT].connections[GRID_DIRECTION.UP] &&
+                        c.next[GRID_DIRECTION.LEFT].connections[GRID_DIRECTION.DOWN]) {
                         c.isDoubleDeadEndCandidate = true;
                         if (c.position.y >= 2 && c.position.y <= CELL_MAP_SIZE_Y - 4) {
                             array_push(doubleDeadEndCells, c);
@@ -193,10 +189,10 @@ function pacman_map_create_tunnels() {
     } else if (numTunnelsDesired == 2) {
         if (array_length(doubleDeadEndCells) > 0) {
             var c = doubleDeadEndCells[floor(random(array_length(doubleDeadEndCells)))];
-            c.connections[CellDirection.RIGHT] = true;
+            c.connections[GRID_DIRECTION.RIGHT] = true;
             c.topTunnel = true;
-            if (c.next[CellDirection.DOWN] != noone) {
-                c.next[CellDirection.DOWN].topTunnel = true;
+            if (c.next[GRID_DIRECTION.DOWN] != noone) {
+                c.next[GRID_DIRECTION.DOWN].topTunnel = true;
             }
         } else {
             var numTunnelsCreated = 1;
@@ -240,9 +236,9 @@ function pacman_map_create_tunnels() {
             _exit = true;
             topy = c.tilePosition.y;
             var tempC = c;
-            while (tempC.next[CellDirection.LEFT] != noone) {
-                tempC = tempC.next[CellDirection.LEFT];
-                if (!tempC.connections[CellDirection.UP] && tempC.tilePosition.y == topy) {
+            while (tempC.next[GRID_DIRECTION.LEFT] != noone) {
+                tempC = tempC.next[GRID_DIRECTION.LEFT];
+                if (!tempC.connections[GRID_DIRECTION.UP] && tempC.tilePosition.y == topy) {
                     continue;
                 } else {
                     _exit = false;
@@ -260,10 +256,10 @@ function pacman_map_create_tunnels() {
     for (var i = 0; i < len; i++) {
         var c = voidTunnelCells[i];
         if (!c.topTunnel) {
-            pacman_map_replace_group(c.group, c.next[CellDirection.UP].group);
-            c.connections[CellDirection.UP] = true;
-            if (c.next[CellDirection.UP] != noone) {
-                c.next[CellDirection.UP].connections[CellDirection.DOWN] = true;
+            pacman_map_replace_group(c.group, c.next[GRID_DIRECTION.UP].group);
+            c.connections[GRID_DIRECTION.UP] = true;
+            if (c.next[GRID_DIRECTION.UP] != noone) {
+                c.next[GRID_DIRECTION.UP].connections[GRID_DIRECTION.DOWN] = true;
             }
         }
     }
@@ -273,12 +269,12 @@ function pacman_map_create_tunnels() {
 
 /// @description Select and configure single dead end tunnel
 function pacman_map_select_single_dead_end(c) {
-    c.connections[CellDirection.RIGHT] = true;
-    if (c.singleDeadEndDir == CellDirection.UP) {
+    c.connections[GRID_DIRECTION.RIGHT] = true;
+    if (c.singleDeadEndDir == GRID_DIRECTION.UP) {
         c.topTunnel = true;
     } else {
-        if (c.next[CellDirection.DOWN] != noone) {
-            c.next[CellDirection.DOWN].topTunnel = true;
+        if (c.next[GRID_DIRECTION.DOWN] != noone) {
+            c.next[GRID_DIRECTION.DOWN].topTunnel = true;
         }
     }
 }

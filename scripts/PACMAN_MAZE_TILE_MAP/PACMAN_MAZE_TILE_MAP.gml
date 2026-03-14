@@ -1,4 +1,4 @@
-/// PACMAN_MAZE_TILE_MAP - Tile grid build and helpers
+﻿/// PACMAN_MAZE_TILE_MAP - Tile grid build and helpers
 /// Responsibility: get_tile_map, set_tile, get_tile_state, get_tile_from_map, print_ascii, etc.
 /// Globals: tileMap (written by get_tile_map).
 
@@ -53,13 +53,13 @@ function pacman_map_get_tile_map() {
             if (c != noone) {
                 if ((cl != noone && c.group != cl.group) ||
                     (cu != noone && c.group != cu.group) ||
-                    (cu == noone && !c.connections[CellDirection.UP])) {
+                    (cu == noone && !c.connections[GRID_DIRECTION.UP])) {
                     pacman_map_set_tile(result, i, j, TileState.PATH, sub.x, sub.y, midX);
                 }
             } else {
-                if ((cl != noone && (!cl.connections[CellDirection.RIGHT] ||
+                if ((cl != noone && (!cl.connections[GRID_DIRECTION.RIGHT] ||
                      pacman_map_get_tile_state(result, i-1, j, sub.x, sub.y, midX) == TileState.PATH)) ||
-                    (cu != noone && (!cu.connections[CellDirection.DOWN] ||
+                    (cu != noone && (!cu.connections[GRID_DIRECTION.DOWN] ||
                      pacman_map_get_tile_state(result, i, j-1, sub.x, sub.y, midX) == TileState.PATH))) {
                     pacman_map_set_tile(result, i, j, TileState.PATH, sub.x, sub.y, midX);
                 }
@@ -84,7 +84,7 @@ function pacman_map_get_tile_map() {
             // Trace back and mark path leading into tunnel as PATHTUNNEL
             pacman_map_mark_tunnel_path(result, sub.x - 2, j, sub.x, sub.y, midX);
         }
-        c = c.next[CellDirection.DOWN];
+        c = c.next[GRID_DIRECTION.DOWN];
     }
     
     // Generate walls
@@ -112,8 +112,8 @@ function pacman_map_get_tile_map() {
     }
     
     // Set ghost wall
-    pacman_map_set_tile(result, 2, 12, TileState.GHOSTWALL, sub.x, sub.y, midX);
-    
+    pacman_map_set_tile(result, GHOST_WALL_HALF_TILE_X, GHOST_WALL_HALF_TILE_Y, TileState.GHOSTWALL, sub.x, sub.y, midX);
+
     // Place energizers
     var range = pacman_map_get_top_energizer_range(result, sub.x, sub.y, midX);
     if (range != noone) {
@@ -121,14 +121,14 @@ function pacman_map_get_tile_map() {
         var i = sub.x - 2;
         pacman_map_set_tile(result, i, j, TileState.ENERGIZER, sub.x, sub.y, midX);
     }
-    
+
     range = pacman_map_get_bot_energizer_range(result, sub.x, sub.y, midX);
     if (range != noone) {
         var j = irandom_range(range[0], range[1]);
         var i = sub.x - 2;
         pacman_map_set_tile(result, i, j, TileState.ENERGIZER, sub.x, sub.y, midX);
     }
-    
+
     // Erase until intersection
     for (var j = 0; j < sub.y; j++) {
         var i = sub.x - 1;
@@ -136,14 +136,13 @@ function pacman_map_get_tile_map() {
             pacman_map_erase_until_intersection(result, i, j, sub.x, sub.y, midX);
         }
     }
-    
-    // Set path blanks (Pacman)
-    pacman_map_set_tile(result, 1, sub.y - 8, TileState.PATHBLANK, sub.x, sub.y, midX);
-    
-    // Additional path blank logic (simplified - see original for full implementation)
-	// this is the empty path around the GHOST house location
-    for (var i = 0; i < 7; i++) {
-        var j = sub.y - 14;
+
+    // Set Pac-Man path blank
+    pacman_map_set_tile(result, 1, sub.y - TILEMAP_PACMAN_ROW_OFFSET, TileState.PATHBLANK, sub.x, sub.y, midX);
+
+    // Empty path around the ghost house location
+    for (var i = 0; i < TILEMAP_GHOST_BLANK_COL_COUNT; i++) {
+        var j = sub.y - TILEMAP_GHOST_BLANK_BOTTOM_OFFSET;
         pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
         var jOffset = 1;
         if (pacman_map_get_tile_state(result, i, j + jOffset, sub.x, sub.y, midX) == TileState.PATH &&
@@ -152,8 +151,8 @@ function pacman_map_get_tile_map() {
             pacman_map_set_tile(result, i, j + jOffset, TileState.PATHBLANK, sub.x, sub.y, midX);
             jOffset++;
         }
-        
-        j = sub.y - 20;
+
+        j = sub.y - TILEMAP_GHOST_BLANK_TOP_OFFSET;
         pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
         var j0 = 1;
         if (pacman_map_get_tile_state(result, i, j - j0, sub.x, sub.y, midX) == TileState.PATH &&
@@ -163,26 +162,25 @@ function pacman_map_get_tile_map() {
             j0++;
         }
     }
-    
-    for (var n = 0; n < 7; n++) {
-        var i = 6;
-        var j = sub.y - 14 - n;
+
+    for (var n = 0; n < TILEMAP_GHOST_BLANK_COL_COUNT; n++) {
+        var i = TILEMAP_GHOST_BLANK_COL_MAX;
+        var j = sub.y - TILEMAP_GHOST_BLANK_BOTTOM_OFFSET - n;
         pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
-        var j0 = 1;
         if (pacman_map_get_tile_state(result, i, j, sub.x, sub.y, midX) == TileState.PATH &&
                pacman_map_get_tile_state(result, i-1, j, sub.x, sub.y, midX) == TileState.WALL &&
                pacman_map_get_tile_state(result, i+1, j, sub.x, sub.y, midX) == TileState.WALL) {
             pacman_map_set_tile(result, i, j, TileState.PATHBLANK, sub.x, sub.y, midX);
         }
     }
-    
-	// set the Pacman, and Ghost locations
-	result[14][23].state = TileState.PACMAN;
+
+	// Pac-Man and fruit spawn positions (character placement lives in get_tile_map)
+	result[PACMAN_SPAWN_TILE_X][PACMAN_SPAWN_TILE_Y].state = TileState.PACMAN;
 	//result[12][11].state = TileState.BLINKY;
 	//result[12][14].state = TileState.PINKY;
 	//result[13][14].state = TileState.INKY;
 	//result[14][14].state = TileState.CLYDE;
-	result[14][17].state = TileState.FRUIT;
+	result[FRUIT_SPAWN_TILE_X][FRUIT_SPAWN_TILE_Y].state = TileState.FRUIT;
 	
     tileMap = result;
     return result;
@@ -223,7 +221,7 @@ function pacman_map_get_top_energizer_range(tM, w, h, midX) {
         }
     }
     
-    maxy = min(h div 2, miny + 7);
+    maxy = min(h div 2, miny + TILEMAP_ENERGIZER_RANGE_SPAN);
     
     for (var j = miny + 1; j < maxy; j++) {
         if (pacman_map_get_tile_state(tM, i - 1, j, w, h, midX) == TileState.PATH) {
@@ -249,7 +247,7 @@ function pacman_map_get_bot_energizer_range(tM, w, h, midX) {
         }
     }
     
-    miny = max(h div 2, maxy - 7);
+    miny = max(h div 2, maxy - TILEMAP_ENERGIZER_RANGE_SPAN);
     
     for (var j = maxy - 1; j > miny; j--) {
         if (pacman_map_get_tile_state(tM, i - 1, j, w, h, midX) == TileState.PATH) {

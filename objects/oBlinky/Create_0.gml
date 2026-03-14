@@ -1,4 +1,4 @@
-/// ===============================================================================
+﻿/// ===============================================================================
 /// BLINKY GHOST OBJECT - CREATE EVENT
 /// ===============================================================================
 /// Purpose: Initialize Blinky (Red Ghost) with oGhost inheritance
@@ -49,7 +49,7 @@ cornery = 32;                               // Scatter target Y coordinate (top-
 /// Set Blinky's starting state and facing direction
 /// Blinky starts in chase mode (ready to hunt immediately)
 state = GHOST_STATE.CHASE;                  // Start in chase/scatter mode
-dir = GHOST_DIRECTION.LEFT;                 // Start facing left (toward maze exit)
+dir = GRID_DIRECTION.LEFT;                 // Start facing left (toward maze exit)
 
 /// ===============================================================================
 /// BLINKY'S PERSONALITY NOTES

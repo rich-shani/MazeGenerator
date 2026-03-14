@@ -6,6 +6,38 @@
 #macro CELL_MAP_SIZE_X 5  // Width of cell map (5 cells)
 #macro CELL_MAP_SIZE_Y 9  // Height of cell map (9 cells)
 
+/// @description Ghost space cell positions in the 5x9 cell grid
+#macro GHOST_SPACE_X0 0   // Left X of ghost space (columns 0-1)
+#macro GHOST_SPACE_X1 1
+#macro GHOST_SPACE_Y0 3   // Top Y of ghost space (rows 3-4)
+#macro GHOST_SPACE_Y1 4
+
+/// @description Cell rows where connections at x=0 are blocked to preserve the Pac-Man corridor
+#macro CELL_BOUNDARY_ROW_A 6   // cell y=6: cannot connect DOWN at x=0
+#macro CELL_BOUNDARY_ROW_B 7   // cell y=7: cannot connect UP at x=0
+
+/// @description Tile map layout constants
+/// Row offsets are from the bottom of the tile map (sub.y - OFFSET).
+#macro TILEMAP_PACMAN_ROW_OFFSET         8   // Pac-Man path-blank row offset from bottom
+#macro TILEMAP_GHOST_BLANK_BOTTOM_OFFSET 14  // Ghost house blank row (bottom side)
+#macro TILEMAP_GHOST_BLANK_TOP_OFFSET    20  // Ghost house blank row (top side)
+#macro TILEMAP_GHOST_BLANK_COL_COUNT      7  // Number of columns to apply ghost path blanks
+#macro TILEMAP_GHOST_BLANK_COL_MAX        6  // Max column index for ghost path blanks
+#macro TILEMAP_ENERGIZER_RANGE_SPAN       7  // Max row span for energizer placement search
+
+/// @description Ghost wall tile position (in the half-width pre-symmetry coordinate space)
+#macro GHOST_WALL_HALF_TILE_X  2
+#macro GHOST_WALL_HALF_TILE_Y 12
+
+/// @description Spawn tile positions in the full (mirrored) tile map
+/// PACMAN_SPAWN_TILE_X = midX = CELL_MAP_SIZE_X*TILE_SCALE_X - 1 = 14
+/// PACMAN_SPAWN_TILE_Y = sub.y - TILEMAP_PACMAN_ROW_OFFSET = 31 - 8 = 23
+/// FRUIT_SPAWN_TILE_Y  = sub.y - TILEMAP_GHOST_BLANK_TOP_OFFSET + 3 = 17
+#macro PACMAN_SPAWN_TILE_X 14
+#macro PACMAN_SPAWN_TILE_Y 23
+#macro FRUIT_SPAWN_TILE_X  14
+#macro FRUIT_SPAWN_TILE_Y  17
+
 /// @description Tile map calculation constants
 /// These constants define how cells are scaled into tiles.
 /// Each cell typically becomes a 3x3 block of tiles, but can be resized

@@ -53,6 +53,6 @@ function chase_object(argument0, argument1, argument2, argument3) {
 
         // ===== NORMAL PATHFINDING =====
         /// No special zones - use data-driven greedy pathfinding algorithm
-        ghost_chase_pathfinding(objx, objy, chasex, chasey, codir, direction);
+        ghost_chase_pathfinding(objx, objy, chasex, chasey, codir, dir);
     }
 }

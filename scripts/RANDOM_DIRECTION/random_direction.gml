@@ -3,7 +3,7 @@
 /// ===============================================================================
 /// Purpose: Choose a random valid direction at an intersection when ghost is frightened.
 /// Called: From oGhost Step_0 (target) and Step_2 (turning) when state == GHOST_STATE.FRIGHTENED.
-/// Uses: Calling instance's tilex, tiley (grid position). Sets global 'dir' (GHOST_DIRECTION).
+/// Uses: Calling instance's tilex, tiley (grid position) and dir (GRID_DIRECTION). Sets 'dir'.
 ///
 /// Behavior:
 /// - Collects all directions that are open (no wall) via ghost_chase_utils_can_go.
@@ -12,22 +12,21 @@
 /// ===============================================================================
 
 function random_direction() {
-    /// Current cardinal direction (0-3); reverse is not allowed when frightened
-    var _current_dir = cardinal_from_direction(direction);
-    var _reverse = direction_opposite(_current_dir);
+    // dir is already GRID_DIRECTION; reverse is not allowed when frightened
+    var _reverse = direction_opposite(dir);
 
     var _valid = [];
-    if (ghost_chase_utils_can_go(tilex, tiley, GHOST_DIRECTION.RIGHT) && GHOST_DIRECTION.RIGHT != _reverse) {
-        array_push(_valid, GHOST_DIRECTION.RIGHT);
+    if (ghost_chase_utils_can_go(tilex, tiley, GRID_DIRECTION.RIGHT) && GRID_DIRECTION.RIGHT != _reverse) {
+        array_push(_valid, GRID_DIRECTION.RIGHT);
     }
-    if (ghost_chase_utils_can_go(tilex, tiley, GHOST_DIRECTION.UP) && GHOST_DIRECTION.UP != _reverse) {
-        array_push(_valid, GHOST_DIRECTION.UP);
+    if (ghost_chase_utils_can_go(tilex, tiley, GRID_DIRECTION.UP) && GRID_DIRECTION.UP != _reverse) {
+        array_push(_valid, GRID_DIRECTION.UP);
     }
-    if (ghost_chase_utils_can_go(tilex, tiley, GHOST_DIRECTION.LEFT) && GHOST_DIRECTION.LEFT != _reverse) {
-        array_push(_valid, GHOST_DIRECTION.LEFT);
+    if (ghost_chase_utils_can_go(tilex, tiley, GRID_DIRECTION.LEFT) && GRID_DIRECTION.LEFT != _reverse) {
+        array_push(_valid, GRID_DIRECTION.LEFT);
     }
-    if (ghost_chase_utils_can_go(tilex, tiley, GHOST_DIRECTION.DOWN) && GHOST_DIRECTION.DOWN != _reverse) {
-        array_push(_valid, GHOST_DIRECTION.DOWN);
+    if (ghost_chase_utils_can_go(tilex, tiley, GRID_DIRECTION.DOWN) && GRID_DIRECTION.DOWN != _reverse) {
+        array_push(_valid, GRID_DIRECTION.DOWN);
     }
 
     if (array_length(_valid) > 0) {

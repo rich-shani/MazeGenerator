@@ -170,31 +170,30 @@ cornerx = 0;
 cornery = 0;
 
 // ===== DIRECTION TRACKING =====
-/// Current movement direction in DEGREES (physics engine format)
-/// Used by GML's built-in physics: direction + speed = motion
-/// Values: 0° = right, 90° = up, 180° = left, 270° = down
-/// Technically continuous (0-360 degrees possible for diagonal movement)
-/// Updated by pathfinding logic based on chosen direction
+/// GML built-in physics variable: direction (degrees) + speed → motion.
+/// Values: 0°=RIGHT, 90°=UP, 180°=LEFT, 270°=DOWN.
+/// Kept in degrees ONLY because GML physics requires it.
+/// Derived from dir_applied at one conversion point in Step_2 — do not
+/// read this variable directly for AI logic; use dir / dir_applied instead.
 
-direction = 0;  // Movement angle in degrees
+direction = 0;  // GML physics direction in degrees (RIGHT = 0°)
 
-/// Current direction in CARDINAL format (0-3)
-/// Discrete direction representation used by pathfinding
-/// - 0 = RIGHT (direction = 0°)
-/// - 1 = UP (direction = 90°)
-/// - 2 = LEFT (direction = 180°)
-/// - 3 = DOWN (direction = 270°)
-/// Set by pathfinding scripts (chase_object, random_direction)
-/// Converted to degree direction by Step_2 turning logic
+/// Desired GRID_DIRECTION chosen by pathfinding each intersection.
+/// Set by chase_object / random_direction. May differ from dir_applied
+/// when a requested turn hasn't been applied yet.
 
-dir = GHOST_DIRECTION.RIGHT;  // Cardinal direction (0-3)
+dir = GRID_DIRECTION.RIGHT;  // Desired direction (GRID_DIRECTION)
+
+/// Last actually-applied GRID_DIRECTION — the direction the ghost is
+/// physically moving right now. Updated by ghost_apply_grid_turn in Step_2.
+/// Used by about-face logic so the reversal is based on actual movement.
+
+dir_applied = GRID_DIRECTION.RIGHT;
 
 /// Reverse/opposite direction (for reversal logic)
-/// Automatically calculated as opposite of current direction
-/// Used in about-face maneuvers (power pellet reversal)
-/// Value = (dir + 2) % 4  (rotated 180 degrees)
+/// Value = direction_opposite(dir)
 
-resdir = GHOST_DIRECTION.LEFT;  // Opposite direction
+resdir = GRID_DIRECTION.LEFT;  // Opposite direction
 
 /// Fruit direction tracking (unused in current implementation)
 /// Reserved for future special game modes/bonuses
