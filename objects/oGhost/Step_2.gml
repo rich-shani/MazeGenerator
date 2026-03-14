@@ -13,10 +13,28 @@
 /// 5. Elroy mode (faster pursuit when dots low)
 /// 6. Direction reversal (for power pellet)
 ///
-/// Structure: House logic → Speed → Turning → Special checks → Visibility
+/// Structure: House logic → Elroy → Speed → Turning → Special checks → Visibility
 /// ===============================================================================
 
 ghost_house_step();
+
+// ===== ELROY MODE INDICATOR =====
+/// Update elroy variable (used by Draw for visual effects and by ghost_speed_step for speed).
+/// Must run before ghost_speed_step() so the correct speed tier is applied this frame.
+///
+/// Elroy threshold logic:
+/// - elroydots2: Ultra-aggressive threshold (2nd speed boost)
+/// - elroydots: Initial aggressive threshold (1st speed boost)
+/// - Both require oPacman.csig condition (ghosts released from house) or Clyde free
+
+if (oPacman.dotcount >= elroydots2 && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
+    elroy = 2;
+} else if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
+    elroy = 1;
+} else {
+    elroy = 0;
+}
+
 ghost_speed_step();
 
 // ===== PATHFINDING AT INTERSECTIONS =====
@@ -147,30 +165,6 @@ if (oPacman.dead == 0 && oPacman.finish == 0) {
         }
     }
 }  // End Pac alive check
-
-// ===== ELROY MODE INDICATOR =====
-/// Update elroy variable for visual effects (red eyes when in Elroy mode)
-/// This is used by the Draw event to show visual effects
-/// Elroy mode activates when dots get low, making ghosts faster hunters
-///
-/// Elroy threshold logic:
-/// - elroydots2: Ultra-aggressive threshold (2nd speed boost)
-/// - elroydots: Initial aggressive threshold (1st speed boost)
-/// - Both require oPacman.csig condition (ghosts released from house) or Clyde free
-
-if (oPacman.dotcount >= elroydots2 && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
-    /// ELROY MODE 2: Ultra-aggressive, fastest speed
-    /// Triggers when dot count drops to lowest threshold
-    elroy = 2;
-} else if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
-    /// ELROY MODE 1: Aggressive, fast speed
-    /// Triggers when dot count drops to first threshold
-    elroy = 1;
-} else {
-    /// NORMAL: Not in Elroy mode
-    /// Ghost moves at standard speed
-    elroy = 0;
-}
 
 // ===== VISIBILITY FLASHING (FRIGHTENED MODE) =====
 /// Manage ghost visibility during power pellet mode

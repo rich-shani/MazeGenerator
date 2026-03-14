@@ -17,9 +17,9 @@ function ghost_speed_step() {
         if (_in_slow_area) {
             speed = spslow;
         } else {
-            if (oPacman.dotcount >= elroydots2 && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
+            if (elroy == 2) {
                 speed = spelroy2;
-            } else if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
+            } else if (elroy == 1) {
                 speed = spelroy;
             } else {
                 speed = sp;

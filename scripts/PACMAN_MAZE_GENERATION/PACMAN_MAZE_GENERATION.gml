@@ -33,7 +33,7 @@ function pacman_map_attempt_generate() {
             show_debug_message("ERROR: cell is noone in pacman_map_attempt_generate");
             break;
         }
-        Cell_fill(cell, numGroups);
+        cell.fill(numGroups);
         
         // Handle single cell join logic
         if (cell.position.x < CELL_MAP_SIZE_X - 1 &&
@@ -83,9 +83,9 @@ function pacman_map_attempt_generate() {
                             
                             if (chosenDir != -1) {
                                 c.connect(GRID_DIRECTION.LEFT);
-                                Cell_fill(c, numGroups);
+                                c.fill(numGroups);
                                 c.connect(chosenDir);
-                                Cell_fill(c.next[chosenDir], numGroups);
+                                c.next[chosenDir].fill(numGroups);
                                 longPieces++;
                                 size += 2;
                                 stop = true;
@@ -111,7 +111,7 @@ function pacman_map_attempt_generate() {
                         newCell = cell.next[dir];
                         
                         cell.connect(dir);
-                        Cell_fill(newCell, numGroups);
+                        newCell.fill(numGroups);
                         size++;
                         
                         if (firstCell.position.x == 0 && size == 3) {
@@ -154,7 +154,7 @@ function pacman_map_attempt_generate() {
                                 var d = dirs[floor(random(array_length(dirs)))];
                                 var c = cell.next[d];
                                 c.connect(d);
-                                Cell_fill(c.next[d], numGroups);
+                                c.next[d].fill(numGroups);
                                 longPieces++;
                             }
                         }
@@ -333,13 +333,8 @@ function pacman_map_can_raise_height(i, j) {
     }
     
     // Shuffle candidates
-    for (var c = array_length(candidates); c > 1; c--) {
-        var pos = irandom(c - 1);
-        var temp = candidates[c - 1];
-        candidates[c - 1] = candidates[pos];
-        candidates[pos] = temp;
-    }
-    
+    array_shuffle(candidates);
+
     for (var c = 0; c < array_length(candidates); c++) {
         c2 = candidates[c];
         if (pacman_map_can_raise_height(c2.position.x, c2.position.y)) {
@@ -396,13 +391,8 @@ function pacman_map_can_shrink_width(i, j) {
     }
     
     // Shuffle candidates
-    for (var c = array_length(candidates); c > 1; c--) {
-        var pos = irandom(c - 1);
-        var temp = candidates[c - 1];
-        candidates[c - 1] = candidates[pos];
-        candidates[pos] = temp;
-    }
-    
+    array_shuffle(candidates);
+
     for (var c = 0; c < array_length(candidates); c++) {
         c2 = candidates[c];
         if (pacman_map_can_shrink_width(c2.position.x, c2.position.y)) {
