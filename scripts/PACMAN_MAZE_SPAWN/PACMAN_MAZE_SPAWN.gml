@@ -16,7 +16,7 @@ function pacman_map_spawn_entities(_tileMap, _x_offset, _y_offset, _gridSize) {
 
     var elementX = _x_offset + (BLINKY_SPAWN_COL * _gridSize);
     var elementY = _y_offset + (BLINKY_SPAWN_ROW * _gridSize);
-    instance_create_layer(elementX, elementY, "GameElements", oBlinky);
+    instance_create_layer(elementX, elementY, "GameCharacters", oBlinky);
 
     for (var row = 0; row < _mapHeight; row++) {
         for (var col = 0; col < _mapWidth; col++) {
@@ -35,7 +35,7 @@ function pacman_map_spawn_entities(_tileMap, _x_offset, _y_offset, _gridSize) {
             } else if (_tile.isTunnel()) {
                 instance_create_layer(elementX, elementY, "GameElements", Slow);
             } else if (_tile.isPacman()) {
-                instance_create_layer(elementX, elementY, "GameElements", oPacman);
+                instance_create_layer(elementX, elementY, "GameCharacters", oPacman);
             }
         }
     }

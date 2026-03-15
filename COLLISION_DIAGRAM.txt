@@ -1,0 +1,279 @@
+# Visual Explanation of Wall Collision Fix
+
+## BEFORE THE FIX (Pac passes through walls)
+
+```
+Input Handler Only Validates When Processing Keyboard Input
+│
+├─ Frame 1: Player presses RIGHT
+│  ├─ Check: Can move RIGHT? → YES ✓
+│  ├─ Set: hspeed = 2, vspeed = 0
+│  └─ Pac starts moving
+│
+├─ Frame 2-10: Pac continues
+│  ├─ Velocity: hspeed = 2 (unchanged)
+│  ├─ Physics: x += 2 every frame
+│  └─ NO VALIDATION (problem!)
+│
+└─ Frame 11: Pac reaches wall
+   ├─ x = 210 (already past wall at 208)
+   ├─ No collision check happened
+   └─ Pac passes through! ❌
+```
+
+**Timeline of Positions:**
+```
+Frame 1:  x=192 (moving starts)
+Frame 2:  x=194 (moving)
+Frame 3:  x=196 (moving)
+Frame 4:  x=198 (moving)
+Frame 5:  x=200 (moving)
+Frame 6:  x=202 (moving)
+Frame 7:  x=204 (moving)
+Frame 8:  x=206 (moving)
+Frame 9:  x=208 (moving) ← SHOULD STOP HERE
+Frame 10: x=210 (THROUGH WALL!) ❌
+Frame 11: x=212 (THROUGH WALL!) ❌
+```
+
+---
+
+## AFTER THE FIX (Pac stops at walls)
+
+```
+Continuous Movement Validation Every Frame
+│
+├─ Frame 1: Player presses RIGHT
+│  ├─ Validate: Can move RIGHT? → YES ✓
+│  ├─ Check: Wall ahead? NO
+│  ├─ Set: hspeed = 2, vspeed = 0
+│  └─ Pac starts moving
+│
+├─ Frame 2-7: Pac continues
+│  ├─ VALIDATE EVERY FRAME ← FIX!
+│  ├─ Check: Wall ahead? NO
+│  ├─ Velocity: hspeed = 2 (unchanged)
+│  └─ Physics: x += 2 every frame
+│
+└─ Frame 8: Wall detected ahead!
+   ├─ VALIDATE detects wall at x=208
+   ├─ STOP: hspeed = 0, vspeed = 0 ← FIX!
+   ├─ SNAP: x = 208 (grid align)
+   └─ Pac stops cleanly ✅
+```
+
+**Timeline of Positions:**
+```
+Frame 1:  x=192 (moving starts)
+Frame 2:  x=194 (moving)
+Frame 3:  x=196 (moving)
+Frame 4:  x=198 (moving)
+Frame 5:  x=200 (moving)
+Frame 6:  x=202 (moving)
+Frame 7:  x=204 (moving)
+Frame 8:  x=206 (moving) ← Wall detected!
+Frame 9:  x=208 (stopped, grid-aligned) ✅
+Frame 10: x=208 (still stopped, waiting for input)
+```
+
+---
+
+## Execution Order Comparison
+
+### BEFORE THE FIX
+```
+Step_1:
+  ├─ Update tile position
+  ├─ Process input ← Only validation here!
+  └─ Sync direction
+
+Step_2:
+  └─ Handle corners
+```
+
+### AFTER THE FIX
+```
+Step_1:
+  ├─ ⭐ VALIDATE MOVEMENT (NEW!) ← Runs every frame
+  ├─ Update tile position
+  ├─ Process input
+  └─ Sync direction
+
+Step_2:
+  └─ Handle corners
+```
+
+---
+
+## Wall Detection Visual
+
+```
+═══════════════════════════════════════════════════════════════
+                       GAME GRID
+═══════════════════════════════════════════════════════════════
+
+     x=192      x=208      x=224
+       ▼          ▼          ▼
+     ┌──────────┬──────────┬──────────┬──────────┐
+     │          │  [P]     │ ███████  │          │
+     │  CLEAR   │          │ ███████  │ CLEAR    │
+     │          │          │ ███████  │          │
+     └──────────┴──────────┴──────────┴──────────┘
+                  Grid           Wall
+                 Center        (Blocked)
+
+BEFORE: Pac moves through the grid
+├─ x=192 → Check wall ahead? No
+├─ x=194 → NO CHECK (bug!)
+├─ x=196 → NO CHECK (bug!)
+├─ ...
+├─ x=206 → NO CHECK (bug!)
+├─ x=208 → NO CHECK (bug!)
+├─ x=210 → Crashes into wall, passes through ❌
+└─ x=212 → Still moving through wall ❌
+
+AFTER: Pac validates movement every frame
+├─ x=192 → VALIDATE: Wall ahead? No ✓
+├─ x=194 → VALIDATE: Wall ahead? No ✓
+├─ x=196 → VALIDATE: Wall ahead? No ✓
+├─ x=198 → VALIDATE: Wall ahead? No ✓
+├─ x=200 → VALIDATE: Wall ahead? No ✓
+├─ x=202 → VALIDATE: Wall ahead? No ✓
+├─ x=204 → VALIDATE: Wall ahead? No ✓
+├─ x=206 → VALIDATE: Wall ahead? YES ❌
+│          → STOP IMMEDIATELY
+│          → SNAP to x=208
+└─ x=208 → Stopped at grid, waiting for input ✓
+```
+
+---
+
+## Movement Validation Function Flow
+
+```
+pacman_utils_validate_current_movement()
+│
+├─ Is Pac moving?
+│  ├─ NO (hspeed=0, vspeed=0)
+│  │  └─ Return true (nothing to check)
+│  │
+│  └─ YES
+│     ├─ In corner transition?
+│     │  ├─ YES
+│     │  │  └─ Return true (let corner handle it)
+│     │  │
+│     │  └─ NO
+│     │     ├─ Get grid position
+│     │     ├─ Determine current direction (RIGHT/LEFT/UP/DOWN)
+│     │     │
+│     │     └─ Check: Next tile in that direction clear?
+│     │        ├─ YES
+│     │        │  └─ Return true (continue moving)
+│     │        │
+│     │        └─ NO (WALL DETECTED!)
+│     │           ├─ Stop: hspeed = 0
+│     │           ├─ Stop: vspeed = 0
+│     │           ├─ Snap: x = grid_x
+│     │           ├─ Snap: y = grid_y
+│     │           └─ Return false (movement blocked)
+│
+└─ Continue with rest of Step_1
+```
+
+---
+
+## State Machine: Movement Validation
+
+```
+                    VALIDATION LOOP (Every Frame in Step_1)
+
+   Not Moving                         Moving
+  hspeed=0                          hspeed≠0 or
+  vspeed=0                          vspeed≠0
+      │                                │
+      └──────────────────┬─────────────┘
+                         │
+                    Check Velocity
+                         │
+              ┌──────────┼──────────┐
+              │          │          │
+           RIGHT        UP       DOWN
+           LEFT         │
+              │          │
+         Get Next    Get Next   Get Next
+         Tile Right  Tile Up    Tile Down
+              │          │          │
+         Check Wall  Check Wall  Check Wall
+              │          │          │
+           ┌──┴──┐      ┌──┴──┐    ┌──┴──┐
+           │     │      │     │    │     │
+         YES   NO     YES   NO   YES   NO
+           │     │      │     │    │     │
+        Continue STOP Continue STOP Continue STOP
+        Moving   Move Moving  Move Moving  Move
+           │     │      │     │    │     │
+           └──┬──┘      └──┬──┘    └──┬──┘
+              │            │         │
+              └────────────┼─────────┘
+                          │
+                    Return (True/False)
+                    Continue Step_1
+```
+
+---
+
+## The Fix in Action
+
+```
+     Pac Moving RIGHT
+          (hspeed=2)
+             │
+             ▼
+    ┌────────────────────┐
+    │  VALIDATE CURRENT  │  ← CALLED EVERY FRAME (NEW!)
+    │  MOVEMENT FUNCTION │
+    └────────────────────┘
+             │
+         Step 1: Is moving?
+             │YES
+             ▼
+         Step 2: In corner?
+             │NO
+             ▼
+         Step 3: Get grid pos
+             │(x=206, grid=208)
+             ▼
+         Step 4: Determine dir
+             │(hspeed>0 = RIGHT)
+             ▼
+         Step 5: Check next tile
+             │(Check x=224)
+             │
+             ├──→ Clear? → Continue moving ✓
+             │
+             └──→ WALL? → STOP! ✓
+                   ├─ hspeed = 0
+                   ├─ vspeed = 0
+                   ├─ x = 208 (snap)
+                   └─ Return false
+
+         Return to rest of Step_1
+```
+
+---
+
+## Summary
+
+**BEFORE**: Movement checked only at input time
+```
+Input Check → Set Velocity → [NO MORE CHECKS] → Physics → Collision!
+```
+
+**AFTER**: Movement checked every frame
+```
+Input Check → Set Velocity → [CHECK EVERY FRAME!] → Physics → Stop if blocked
+             └─────────────────────┬────────────────────┘
+                    Continuous validation
+```
+
+**Result**: Pac now stops properly at walls! ✅

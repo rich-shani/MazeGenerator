@@ -134,6 +134,22 @@ deadani2m = 0;
 /// Used sparingly for visual polish
 scale = 1;
 
+// ===== MOVEMENT TRACKING VARIABLES =====
+/// Animation frame index for Pac sprite (0-7 for mouth animation)
+im = 0;
+
+/// Direction Pac was eating in (0-7 = 8-way direction, -1 = not set)
+/// Used during pause/stoppy states to restore movement direction
+eatdir = -1;
+
+/// Corner alignment counter
+/// Tracks frames in corner transition to determine re-entry window
+cornercheck = 0;
+
+/// New tile flag for grid tracking
+/// Set to 1 when entering new tile, 0 when aligned
+newtile = 0;
+
 // Note: Game mode variables (oPacman.plus, oPacman.prohibit, scatter, cycle)
 // are now managed by oGameManager
 
@@ -218,5 +234,5 @@ ambience = SIREN_LEVEL.LEVEL_0;
 /// Based on dot count remaining
 siren = 0;
 
-sp = 0;
-spfright = 0;
+sp = 2;          // Normal movement speed (2 pixels/frame)
+spfright = 2.5;  // Fright mode speed (slightly faster)

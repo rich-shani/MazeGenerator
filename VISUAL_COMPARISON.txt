@@ -1,0 +1,210 @@
+================================================================================
+VISUAL COMPARISON: BEFORE vs AFTER SPRITE ORIGIN CORRECTION
+================================================================================
+
+PROBLEM: Sprites were appearing shifted left of their grid positions
+
+================================================================================
+BEFORE CORRECTION (INCORRECT)
+================================================================================
+
+Sprite Origin: (8, 8)     Grid Formula: (round((x-8)/16)*16)+8
+Grid positions return: 8, 24, 40, 56, 72...
+
+Visual appearance:
+
+        Grid 0          Grid 16         Grid 32
+        │               │               │
+        │      ┌─────┐  │      ┌─────┐  │
+        │      │  O  │  │      │  O  │  │
+        │      │     │  │      │     │  │
+        ├──────┼─────┴──┼──────┼─────┴──┼──────┐
+        │      WRONG!   │      WRONG!   │
+        │    (shifted   │    (shifted   │
+        │     left)     │     left)     │
+
+        Result: Sprites appear offset to the left
+                Grid alignment is off by 8 pixels
+
+
+================================================================================
+AFTER CORRECTION (CORRECT)
+================================================================================
+
+Sprite Origin: (16, 16)   Grid Formula: 16*round(x/16)
+Grid positions return: 0, 16, 32, 48, 64...
+
+Visual appearance:
+
+        Grid 0          Grid 16         Grid 32
+        │               │               │
+        ├──────┬─────┐  ├──────┬─────┐  ├──────┬─────┐
+        │      │  O  │  │      │  O  │  │      │  O  │
+        │      │  ✓  │  │      │  ✓  │  │      │  ✓  │
+        ├──────┼─────┼──┼──────┼─────┼──┼──────┼─────┼──┐
+        │    CORRECT! │      CORRECT! │      CORRECT! │
+        │   (centered)│    (centered) │   (centered)  │
+
+        Result: Sprites perfectly centered in tiles
+                Grid alignment is mathematically correct
+
+
+================================================================================
+DETAILED COMPARISON
+================================================================================
+
+┌─────────────────────┬──────────────────────┬──────────────────────┐
+│      ASPECT         │   BEFORE (WRONG)     │    AFTER (RIGHT)     │
+├─────────────────────┼──────────────────────┼──────────────────────┤
+│ Sprite Origin       │ (8, 8)               │ (16, 16)             │
+│                     │ Offset from center   │ True center          │
+├─────────────────────┼──────────────────────┼──────────────────────┤
+│ Grid Formula        │ Complex offset-based │ Simple boundary-based│
+│                     │ (round((x-8)/16)...  │ 16*round(x/16)      │
+├─────────────────────┼──────────────────────┼──────────────────────┤
+│ Grid Positions      │ 8, 24, 40, 56...     │ 0, 16, 32, 48...    │
+│                     │ (offset)             │ (boundary)           │
+├─────────────────────┼──────────────────────┼──────────────────────┤
+│ Visual Alignment    │ Shifted left         │ Centered             │
+├─────────────────────┼──────────────────────┼──────────────────────┤
+│ Mathematical Match  │ Offset ≠ Visual      │ Boundary = Visual    │
+├─────────────────────┼──────────────────────┼──────────────────────┤
+│ Code Complexity     │ 3 operations         │ 1 operation          │
+├─────────────────────┼──────────────────────┼──────────────────────┤
+│ Clarity             │ Confusing offsets    │ Clear and intuitive  │
+└─────────────────────┴──────────────────────┴──────────────────────┘
+
+
+================================================================================
+SPRITE POSITIONING IN TILE (32x32 sprite in 16x16 tile)
+================================================================================
+
+BEFORE (Origin at 8,8):
+
+        0   8   16  24  32
+        │   │   │   │   │
+    0   ├───┼───┼───┼───┤
+        │ O │   │   │   │   ← Origin at (8, 8)
+        ├───┼───┼───┼───┤
+    16  │   │   │   │   │
+        │   │   │   │   │
+        ├───┼───┼───┼───┤
+
+        Sprite spans 32 pixels but origin is only 8 pixels in
+        Visual center is at 16, but origin is at 8
+        Result: 8-pixel offset to the left
+
+
+AFTER (Origin at 16,16):
+
+        0   8   16  24  32
+        │   │   │   │   │
+    0   ├───┼───┼───┼───┤
+        │   │   O   │   │   ← Origin at (16, 16) = CENTER
+        ├───┼───┼───┼───┤
+    16  │   │   │   │   │
+        │   │   │   │   │
+        ├───┼───┼───┼───┤
+
+        Sprite spans 32 pixels and origin is at 16 (middle)
+        Visual center is at 16, origin is at 16
+        Result: Perfect alignment!
+
+
+================================================================================
+GRID ALIGNMENT EXAMPLE: Placing sprite at position 16
+================================================================================
+
+BEFORE (Incorrect):
+
+        Sprite position 16 with origin at (8,8)
+
+        Visual position: 16 - 8 = 8 (appears at grid 0!)
+
+        Grid 0          Grid 16         Grid 32
+        │               │               │
+        ├────┬──────┐   │               │
+        │    │ O    │   │               │   ← Sprite appears here (WRONG!)
+        ├────┼──────┘   │               │       But position says 16
+        │  SHIFTED!  │               │
+
+
+AFTER (Correct):
+
+        Sprite position 16 with origin at (16,16)
+
+        Visual position: 16 (appears at grid 16)
+
+        Grid 0          Grid 16         Grid 32
+        │               │               │
+        │               ├────┬──────┐   │
+        │               │    │ O    │   │   ← Sprite appears here (RIGHT!)
+        │               ├────┼──────┘   │       Position matches visual
+        │               │   PERFECT!    │
+
+
+================================================================================
+GRID POSITION CALCULATION COMPARISON
+================================================================================
+
+Example: Converting pixel position 25 to grid position
+
+BEFORE (Old Formula):
+    x = 25
+    _tile_index = round((25 - 8) / 16)
+    _tile_index = round(17 / 16)
+    _tile_index = round(1.0625)
+    _tile_index = 1
+    result = (1 * 16) + 8
+    result = 24
+
+    Sprite at x=25 snaps to grid position 24
+    That's the WRONG grid (offset by 8)
+
+AFTER (New Formula):
+    x = 25
+    result = 16 * round(25 / 16)
+    result = 16 * round(1.5625)
+    result = 16 * 2
+    result = 32
+
+    Sprite at x=25 snaps to grid position 32
+    That's the CORRECT grid (nearest boundary)
+
+
+================================================================================
+COORDINATE SYSTEM UNDERSTANDING
+================================================================================
+
+GRID SYSTEM:
+  Each tile is 16 pixels wide
+  Tile boundaries at: 0, 16, 32, 48, 64...
+  Tile centers at: 8, 24, 40, 56, 72... (old system)
+                   8, 24, 40, 56, 72... (8 pixels into each tile)
+
+SPRITE SYSTEM:
+  Sprites are 32x32 pixels
+  When placed at grid position X, origin determines where visually
+  Old origin (8,8): Shifted sprite left
+  New origin (16,16): Centered sprite
+
+THE FIX:
+  OLD: Place sprite at offset grid (8, 24, 40...) with origin (8,8)
+  NEW: Place sprite at boundary grid (0, 16, 32...) with origin (16,16)
+
+  Both achieve centered sprites, but new way is simpler!
+
+
+================================================================================
+SUMMARY
+================================================================================
+
+BEFORE:  Complex offset system → Sprites appeared shifted left
+AFTER:   Simple boundary system → Sprites perfectly centered
+
+✅ Cleaner code
+✅ Correct visual positioning
+✅ Mathematical integrity
+✅ Standard approach
+
+Ready for testing!

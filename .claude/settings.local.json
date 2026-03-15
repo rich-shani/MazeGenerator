@@ -8,7 +8,8 @@
       "Bash(grep -n \"alarm\\\\[0\\\\] < 121\" /f/GitHub/MazeGenerator/objects/oGhost/Step_*.gml)",
       "Bash(grep -n \"aboutface\" /f/GitHub/MazeGenerator/objects/oGhost/*.gml | head -20)",
       "Bash(grep -n \"y > 8\" /f/GitHub/MazeGenerator/objects/oGhost/*.gml)",
-      "Bash(grep -n \"oPacman.dead == 0 && oPacman.finish == 0\" /f/GitHub/MazeGenerator/scripts/*.gml /f/GitHub/MazeGenerator/objects/*/*.gml 2>/dev/null)"
+      "Bash(grep -n \"oPacman.dead == 0 && oPacman.finish == 0\" /f/GitHub/MazeGenerator/scripts/*.gml /f/GitHub/MazeGenerator/objects/*/*.gml 2>/dev/null)",
+      "Bash(dir \"C:\\Users\\shani\\OneDrive\\Documents\\GitHub\\MazeGenerator\\scripts\" \")"
     ]
   }
 }
