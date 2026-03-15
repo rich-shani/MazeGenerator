@@ -36,6 +36,11 @@ function pacman_map_wall_tile_state_is_wall(_state) {
     return (_state == TileState.WALL || _state == TileState.GHOSTWALL);
 }
 
+/// @description True if tile state is solid wall
+function pacman_map_wall_tile_state_is_tunnel(_state) {
+    return (_state == TileState.PATHTUNNEL);
+}
+
 /// @description True if tile state is path for diagonal neighbor checks (narrower than path-adjacent)
 function pacman_map_wall_tile_state_is_path_diagonal(_state) {
     return (_state == TileState.PATHBLANK || _state == TileState.PATH || _state == TileState.ENERGIZER);
@@ -77,15 +82,18 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
         if (w21 && w10 && w12) {
             var t20 = pacman_map_get_tile_from_map(tileMap, i+1, j-1);
             var w20 = pacman_map_wall_tile_state_is_wall(t20);
-            tileDrawn = w20 ? WALL_SPRITE_TOPLEFT : WALL_SPRITE_LEFT_EDGE;
+            tileDrawn = w20 ? WALL_SPRITE_TOPLEFT : WALL_SPRITE_BOTLEFT;
         } else if (w21 && w10 && bgo12) {
-            tileDrawn = WALL_SPRITE_LEFT_EDGE;
+            tileDrawn = WALL_SPRITE_BOTLEFT;
         } else if (w21 && w12 && bgo10) {
             tileDrawn = WALL_SPRITE_TOPLEFT;
         } else if (w21 && (bp10 || bp12)) {
             tileDrawn = bp10 ? WALL_SPRITE_HORIZ_PATH_ABOVE : WALL_SPRITE_HORIZ_PATH_BELOW;
         } else {
-            tileDrawn = WALL_SPRITE_LEFT_EDGE;
+			// special case/check for tunnel
+			if (pacman_map_wall_tile_state_is_tunnel(t10)) tileDrawn = WALL_SPRITE_INNER_TOPRIGHT;
+			else if (pacman_map_wall_tile_state_is_tunnel(t12)) tileDrawn = WALL_SPRITE_INNER_BOTRIGHT;
+			else tileDrawn = WALL_SPRITE_LEFT_EDGE;
         }
     } else if (i == mapWidth - 1) {
         if (w01 && w10 && w12) {
@@ -99,7 +107,10 @@ function pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight) {
         } else if (w01 && (bp10 || bp12)) {
             tileDrawn = bp10 ? WALL_SPRITE_HORIZ_PATH_ABOVE : WALL_SPRITE_HORIZ_PATH_BELOW;
         } else {
-            tileDrawn = WALL_SPRITE_RIGHT_EDGE;
+			// special case/check for tunnel
+			if (pacman_map_wall_tile_state_is_tunnel(t10)) tileDrawn = WALL_SPRITE_INNER_TOPLEFT;
+			else if (pacman_map_wall_tile_state_is_tunnel(t12)) tileDrawn = WALL_SPRITE_INNER_BOTLEFT;
+            else tileDrawn = WALL_SPRITE_RIGHT_EDGE;
         }
     } else {
         if (w01 && w21 && bp10 && (bgo12 || w12)) {

@@ -41,6 +41,9 @@ function Tile_create(_x, _y) constructor {
     // Set to noone if tile is not directly associated with a cell
     cell = noone;
     
+	// reference to sprite image in TileMap
+	spriteIndex = -1;
+	
     // Instance method to check if tile is walkable
     // Returns true if players or ghosts can move onto this tile
     static isWalkable = function() {

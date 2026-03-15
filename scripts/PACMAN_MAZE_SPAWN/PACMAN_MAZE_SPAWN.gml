@@ -40,3 +40,22 @@ function pacman_map_spawn_entities(_tileMap, _x_offset, _y_offset, _gridSize) {
         }
     }
 }
+
+function pacman_map_gen_sprite_index(_tileMap) {
+    var _mapWidth = array_length(_tileMap);
+    var _mapHeight = array_length(_tileMap[0]);	
+	
+	for (var row = 0; row < _mapHeight; row++) {
+		for (var col = 0; col < _mapWidth; col++) {
+			
+			if (_tileMap[col][row].isWall()) {
+	            // This determines the correct wall tile (corner, edge, straight, etc.)
+	            // The function analyzes adjacent tiles to pick the right wall graphic
+	            _tileMap[col][row].spriteIndex = pacman_map_calculate_wall_tile(_tileMap, col, row, _mapWidth, _mapHeight);          
+			}
+			else if (_tileMap[col][row].isGhostWall()) {       
+				_tileMap[col][row].spriteIndex = WALL_SPRITE_GHOST_ENTRANCE;			
+			}
+		}
+	}
+}
