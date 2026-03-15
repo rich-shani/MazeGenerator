@@ -26,6 +26,8 @@ function pacman_map_spawn_entities(_tileMap, _x_offset, _y_offset, _gridSize) {
 
             if (_tile.isWall()) {
                 instance_create_layer(elementX, elementY, "GameElements", Wall);
+            } else if (_tile.isGhostWall()) {
+                instance_create_layer(elementX, elementY, "GameElements", GhostWall);
             } else if (_tile.hasPellet()) {
                 instance_create_layer(elementX, elementY, "GameElements", oDot);
             } else if (_tile.isEnergizer()) {

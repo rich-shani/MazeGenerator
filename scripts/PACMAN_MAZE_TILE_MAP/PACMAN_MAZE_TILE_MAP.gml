@@ -1,4 +1,4 @@
-﻿/// PACMAN_MAZE_TILE_MAP - Tile grid build and helpers
+/// PACMAN_MAZE_TILE_MAP - Tile grid build and helpers
 /// Responsibility: get_tile_map, set_tile, get_tile_state, get_tile_from_map, print_ascii, etc.
 /// Globals: tileMap (written by get_tile_map).
 

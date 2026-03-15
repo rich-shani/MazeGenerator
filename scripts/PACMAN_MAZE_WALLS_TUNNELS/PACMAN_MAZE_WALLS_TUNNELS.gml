@@ -1,4 +1,4 @@
-﻿/// PACMAN_MAZE_WALLS_TUNNELS - Walls and tunnels
+/// PACMAN_MAZE_WALLS_TUNNELS - Walls and tunnels
 /// Responsibility: setup_scale_coords, join_walls, create_tunnels, replace_group, etc.
 /// Globals: cellMap, tallRows, narrowCols.
 

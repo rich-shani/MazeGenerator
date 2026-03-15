@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"GHOST_DIRECTION",
+  "%Name":"GRID_DIRECTION",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"GHOST_DIRECTION",
+  "name":"GRID_DIRECTION",
   "parent":{
-    "name":"GHOST_LOGIC",
-    "path":"folders/scripts/GHOST_LOGIC.yy",
+    "name":"GRID",
+    "path":"folders/scripts/GRID.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

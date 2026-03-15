@@ -162,7 +162,7 @@ countdown  = 0;
 /// Scatter mode active flag
 /// 0 = Chase mode (ghosts hunt Pac)
 /// 1 = Scatter mode (ghosts flee to corners)
-scatter = 1;
+scatter = 0;
 
 /// Game cycle counter
 /// Tracks which phase of level cycle is active

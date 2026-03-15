@@ -8,17 +8,20 @@
 
 for (var row = 0; row < mapHeight; row++) {
 	for (var col = 0; col < mapWidth; col++) {
-		
+
+        var drawX = x_offset + (col * gridSize);
+        var drawY = y_offset + (row * gridSize);
+			
 		// draw wall components
 		if (tileMap[col][row].isWall()) {
             // This determines the correct wall tile (corner, edge, straight, etc.)
             // The function analyzes adjacent tiles to pick the right wall graphic
-            var spriteIndex = pacman_map_calculate_wall_tile(tileMap, col, row, mapWidth, mapHeight);
-            var drawX = x_offset + (col * gridSize);
-            var drawY = y_offset + (row * gridSize);
-            
+            var spriteIndex = pacman_map_calculate_wall_tile(tileMap, col, row, mapWidth, mapHeight);          
 			draw_sprite(sGridTiles, spriteIndex, drawX, drawY);
-		}	
+		}
+		else if (tileMap[col][row].isGhostWall()) {       
+			draw_sprite(sGridTiles, WALL_SPRITE_GHOST_ENTRANCE, drawX, drawY);			
+		}
 	}
 }
 

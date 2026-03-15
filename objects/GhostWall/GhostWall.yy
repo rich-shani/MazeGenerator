@@ -1,9 +1,9 @@
 {
   "$GMObject":"",
-  "%Name":"HanglyWall",
+  "%Name":"GhostWall",
   "eventList":[],
   "managed":true,
-  "name":"HanglyWall",
+  "name":"GhostWall",
   "overriddenProperties":[],
   "parent":{
     "name":"TriggerPoints",
@@ -28,6 +28,9 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":null,
-  "spriteMaskId":null,
+  "spriteMaskId":{
+    "name":"s16x16",
+    "path":"sprites/s16x16/s16x16.yy",
+  },
   "visible":true,
 }

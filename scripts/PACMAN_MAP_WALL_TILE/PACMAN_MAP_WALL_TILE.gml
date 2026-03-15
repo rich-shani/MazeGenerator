@@ -18,6 +18,7 @@
 #macro WALL_SPRITE_INNER_TOPRIGHT 39
 #macro WALL_SPRITE_INNER_BOTRIGHT 38
 #macro WALL_SPRITE_INNER_BOTLEFT 37
+#macro WALL_SPRITE_GHOST_ENTRANCE 50
 
 /// @description True if tile state is path-adjacent (walkable / path type)
 function pacman_map_wall_tile_state_is_path_adjacent(_state) {

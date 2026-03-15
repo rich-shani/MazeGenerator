@@ -38,7 +38,7 @@ function pacman_map_get_sprite_map_index(tileMap) {
                 n = "29,";
             } else if (t11 == TileState.GHOSTWALL) {
                 spriteMap[i][j] = 19;
-                n = "19,";
+                n = "0,";
             } else if (t11 == TileState.WALL) {
                 var tileDrawn = pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight);
                 spriteMap[i][j] = tileDrawn;
