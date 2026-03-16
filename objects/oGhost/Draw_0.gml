@@ -76,7 +76,7 @@ if (state != GHOST_STATE.EYES) {
         1, 1,              // Scale (1x = normal)
         0,                 // Rotation
         _draw_color,       // Color tint
-        1                  // Alpha (1 = fully opaque)
+        0.75               // Alpha (1 = fully opaque)
     );
 }
 

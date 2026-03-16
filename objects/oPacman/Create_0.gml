@@ -239,7 +239,7 @@ spfright = 2.5;  // Fright mode speed (slightly faster)
 
 // ===== DEBUG / INSTRUMENTATION VARIABLES =====
 /// Enable/disable on-screen corner debug for Pac (toggled via console)
-pac_debug_corners = true;
+pac_debug_corners = false;
 
 /// Rolling frame counter for debug snapshots
 pac_debug_frame = 0;

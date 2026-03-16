@@ -16,16 +16,16 @@
 switch (direction) {
 	case 0:
 		//draw_sprite(sPacman_Right, 0, x, y);
-		draw_sprite_ext(sPacman_Right, 0, x, y, 1, 1, 0, c_white, 0.2);
+		draw_sprite_ext(sPacman_Right, image_index, x, y, 1, 1, 0, c_white, 0.8);
 		break;
 	case 90:
-		draw_sprite_ext(sPacman_Up, 0, x, y,  1, 1, 0, c_white, 0.2);
+		draw_sprite_ext(sPacman_Up, image_index, x, y,  1, 1, 0, c_white, 0.8);
 		break;	
 	case 180:
-		draw_sprite_ext(sPacman_Left, 0, x, y, 1, 1, 0, c_white, 0.2);
+		draw_sprite_ext(sPacman_Left, image_index, x, y, 1, 1, 0, c_white, 0.8);
 		break;	
 	case 270:
-		draw_sprite_ext(sPacman_Down, 0, x, y, 1, 1, 0, c_white, 0.2);
+		draw_sprite_ext(sPacman_Down, image_index, x, y, 1, 1, 0, c_white, 0.8);
 		break;	
 }
 
