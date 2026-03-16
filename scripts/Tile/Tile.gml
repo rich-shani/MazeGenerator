@@ -54,18 +54,18 @@ function Tile_create(_x, _y) constructor {
                 state == TileState.ENERGIZER);
     }
     
-    // Instance method to check if tile is a wall
-    // Returns true if this tile blocks player movement
-    static isWall = function() {
-        return (state == TileState.WALL);
-    }
-
     // Note: GHOSTWALL blocks players but not ghosts 
 	static isGhostWall = function() {
         return (state == TileState.GHOSTWALL);
     }
 	
-     static isTunnel = function() {
+    // Instance method to check if tile is a wall
+    // Returns true if this tile blocks player movement
+    static isWall = function() {
+        return (state == TileState.WALL || state == TileState.GHOSTWALL);
+    }
+	
+    static isTunnel = function() {
         return (state == TileState.PATHTUNNEL);
     }
 	

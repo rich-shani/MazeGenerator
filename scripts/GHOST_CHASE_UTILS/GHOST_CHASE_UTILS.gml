@@ -10,8 +10,8 @@
 /// ===============================================================================
 
 /// @function ghost_chase_utils_free(_x, _y)
-/// @description Return true if the given point is free of solid maze walls.
-/// NOTE: This intentionally only checks against `Wall` – `HanglyWall` is no longer used.
+/// @description Return true if the given point is free of solid maze walls for ghosts.
+/// Wall.allowsGhost = true (ghost house entrance) lets ghosts pass through.
 function ghost_chase_utils_free(_x, _y) {
     return !collision_point(_x, _y, Wall, false, true);
 }

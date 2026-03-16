@@ -53,7 +53,6 @@
   "resources":[
     {"id":{"name":"Down","path":"objects/Down/Down.yy",},},
     {"id":{"name":"Fruit","path":"objects/Fruit/Fruit.yy",},},
-    {"id":{"name":"GhostWall","path":"objects/GhostWall/GhostWall.yy",},},
     {"id":{"name":"Left","path":"objects/Left/Left.yy",},},
     {"id":{"name":"NoUp","path":"objects/NoUp/NoUp.yy",},},
     {"id":{"name":"oBlinky","path":"objects/oBlinky/oBlinky.yy",},},

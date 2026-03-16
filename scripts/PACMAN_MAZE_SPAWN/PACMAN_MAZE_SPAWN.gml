@@ -1,7 +1,7 @@
 /// ===============================================================================
 /// PACMAN_MAZE_SPAWN - Spawn game entities from the tile map
 /// ===============================================================================
-/// Instantiates Wall, oDot, oPowerPill, Slow, oPacman, and Blinky from tile map state.
+/// Instantiates Wall (with allowsGhost for ghost house), oDot, oPowerPill, Slow, oPacman, Blinky.
 /// Call once after maze generation (e.g. from oMazeGenerator Step_1 with initializeGridElements guard).
 /// ===============================================================================
 
@@ -24,11 +24,10 @@ function pacman_map_spawn_entities(_tileMap, _x_offset, _y_offset, _gridSize) {
             elementY = _y_offset + (row * _gridSize);
             var _tile = _tileMap[col][row];
 
-            if (_tile.isWall()) {
-                instance_create_layer(elementX, elementY, "GameElements", Wall);
-            } else if (_tile.isGhostWall()) {
-                instance_create_layer(elementX, elementY, "GameElements", GhostWall);
-            } else if (_tile.hasPellet()) {
+			if (_tile.isGhostWall() || _tile.isWall()) {
+                var _wall = instance_create_layer(elementX, elementY, "GameElements", Wall);
+                _wall.allowsGhost = _tile.isGhostWall();
+			} else if (_tile.hasPellet()) {
                 instance_create_layer(elementX, elementY, "GameElements", oDot);
             } else if (_tile.isEnergizer()) {
                 instance_create_layer(elementX, elementY, "GameElements", oPowerPill);
@@ -48,13 +47,13 @@ function pacman_map_gen_sprite_index(_tileMap) {
 	for (var row = 0; row < _mapHeight; row++) {
 		for (var col = 0; col < _mapWidth; col++) {
 			
-			if (_tileMap[col][row].isWall()) {
+			if (_tileMap[col][row].isGhostWall()) {       
+				_tileMap[col][row].spriteIndex = WALL_SPRITE_GHOST_ENTRANCE;			
+			}
+			else if (_tileMap[col][row].isWall()) {
 	            // This determines the correct wall tile (corner, edge, straight, etc.)
 	            // The function analyzes adjacent tiles to pick the right wall graphic
 	            _tileMap[col][row].spriteIndex = pacman_map_calculate_wall_tile(_tileMap, col, row, _mapWidth, _mapHeight);          
-			}
-			else if (_tileMap[col][row].isGhostWall()) {       
-				_tileMap[col][row].spriteIndex = WALL_SPRITE_GHOST_ENTRANCE;			
 			}
 		}
 	}
