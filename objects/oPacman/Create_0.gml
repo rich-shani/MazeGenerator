@@ -169,7 +169,7 @@ tiley = 0;
 finish = 0;
 
 /// Total dots collected this level
-dotcount = 240;
+dotcount = 0; //240;
 
 /// Countdown timer (for death/respawn sequences)
 countdown  = 0;
@@ -236,3 +236,13 @@ siren = 0;
 
 sp = 2;          // Normal movement speed (2 pixels/frame)
 spfright = 2.5;  // Fright mode speed (slightly faster)
+
+// ===== DEBUG / INSTRUMENTATION VARIABLES =====
+/// Enable/disable on-screen corner debug for Pac (toggled via console)
+pac_debug_corners = true;
+
+/// Rolling frame counter for debug snapshots
+pac_debug_frame = 0;
+
+/// Remaining frames to capture around a corner event
+pac_debug_corner_frames = 0;

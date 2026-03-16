@@ -19,7 +19,7 @@
   - RIGHT, DOWN approaches: 6px zone (original 3)
   - LEFT, UP approaches: 8px zone (original 4)
 - **Diagonal**: `hspeed ±spd`, `vspeed ±spd` → correct 45° movement
-- **Completion**: When passed intersection by `CORNER_SNAP_TOLERANCE` (0) in both axes → snap to `(tilex, tiley)`
+- **Completion**: When within `CORNER_SNAP_TOLERANCE` (1px) of intersection in both axes → snap to `(tilex, tiley)`
 - **Post-turn**: Past center → immediate snap and turn (no diagonal)
 
 ### Alignment Summary
