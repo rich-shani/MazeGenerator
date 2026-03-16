@@ -1,11 +1,9 @@
 /// ===============================================================================
-/// oPacman STEP_2 - CORNER COMPLETION
+/// oPacman STEP_2 - CORNER COMPLETION & PAUSE
 /// ===============================================================================
 /// Purpose: Complete corner transitions when grid alignment is reached
-/// Called: Third each frame
 /// ===============================================================================
 
-// Complete any active corner transitions
 if (corner != PAC_CORNER.NONE) {
     pacman_complete_corners();
 }

@@ -2,18 +2,22 @@
 /// PACMAN_CORNER - Corner Completion Logic
 /// ===============================================================================
 /// NOTE: Tile positions use boundaries (0, 16, 32, ...) with sprite origins at centers
+/// Snaps to (tilex, tiley) - the intersection when we entered the turn.
+/// Only completes when Pac has passed the intersection by CORNER_SNAP_TOLERANCE
+/// in both axes, so the diagonal corner cut feels fluid and consistent.
 
 /// @function pacman_complete_corners()
 /// @description Complete corner transitions when grid alignment is reached
 /// @return {bool} True if corner was completed this frame
 function pacman_complete_corners() {
     var _spd = pacman_get_speed();
+    var _tol = CORNER_SNAP_TOLERANCE;
 
-    // UP_TO_RIGHT transitions
+    // UP_TO_RIGHT transitions (must pass intersection: y past tiley, x past tilex)
     if (corner == PAC_CORNER.UP_TO_RIGHT_PRE) {
-        var _grid_y = pacman_utils_get_grid_position(y);
-        if (y <= _grid_y) {
-            y = _grid_y;
+        if (y <= tiley - _tol && x >= tilex + _tol) {
+            x = tilex;
+            y = tiley;
             hspeed = _spd;
             vspeed = 0;
             corner = PAC_CORNER.NONE;
@@ -22,9 +26,9 @@ function pacman_complete_corners() {
         }
     }
     if (corner == PAC_CORNER.UP_TO_RIGHT_POST) {
-        var _grid_y = pacman_utils_get_grid_position(y);
-        if (y >= _grid_y) {
-            y = _grid_y;
+        if (y >= tiley && x >= tilex) {  // POST: correcting overshoot, snap when reached
+            x = tilex;
+            y = tiley;
             hspeed = _spd;
             vspeed = 0;
             corner = PAC_CORNER.NONE;
@@ -35,9 +39,9 @@ function pacman_complete_corners() {
 
     // RIGHT_TO_UP transitions
     if (corner == PAC_CORNER.RIGHT_TO_UP_PRE) {
-        var _grid_x = pacman_utils_get_grid_position(x);
-        if (x >= _grid_x) {
-            x = _grid_x;
+        if (x >= tilex + _tol && y <= tiley - _tol) {
+            x = tilex;
+            y = tiley;
             hspeed = 0;
             vspeed = -_spd;
             corner = PAC_CORNER.NONE;
@@ -46,9 +50,9 @@ function pacman_complete_corners() {
         }
     }
     if (corner == PAC_CORNER.RIGHT_TO_UP_POST) {
-        var _grid_x = pacman_utils_get_grid_position(x);
-        if (x <= _grid_x) {
-            x = _grid_x;
+        if (x <= tilex && y <= tiley) {  // POST: correcting overshoot
+            x = tilex;
+            y = tiley;
             hspeed = 0;
             vspeed = -_spd;
             corner = PAC_CORNER.NONE;
@@ -59,9 +63,9 @@ function pacman_complete_corners() {
 
     // DOWN_TO_LEFT transitions
     if (corner == PAC_CORNER.DOWN_TO_LEFT_PRE) {
-        var _grid_y = pacman_utils_get_grid_position(y);
-        if (y >= _grid_y) {
-            y = _grid_y;
+        if (y >= tiley + _tol && x <= tilex - _tol) {
+            x = tilex;
+            y = tiley;
             hspeed = -_spd;
             vspeed = 0;
             corner = PAC_CORNER.NONE;
@@ -70,9 +74,9 @@ function pacman_complete_corners() {
         }
     }
     if (corner == PAC_CORNER.DOWN_TO_LEFT_POST) {
-        var _grid_y = pacman_utils_get_grid_position(y);
-        if (y <= _grid_y) {
-            y = _grid_y;
+        if (y <= tiley && x <= tilex) {  // POST: correcting overshoot
+            x = tilex;
+            y = tiley;
             hspeed = -_spd;
             vspeed = 0;
             corner = PAC_CORNER.NONE;
@@ -83,9 +87,9 @@ function pacman_complete_corners() {
 
     // LEFT_TO_DOWN transitions
     if (corner == PAC_CORNER.LEFT_TO_DOWN_PRE) {
-        var _grid_x = pacman_utils_get_grid_position(x);
-        if (x <= _grid_x) {
-            x = _grid_x;
+        if (x <= tilex - _tol && y >= tiley + _tol) {
+            x = tilex;
+            y = tiley;
             hspeed = 0;
             vspeed = _spd;
             corner = PAC_CORNER.NONE;
@@ -94,9 +98,9 @@ function pacman_complete_corners() {
         }
     }
     if (corner == PAC_CORNER.LEFT_TO_DOWN_POST) {
-        var _grid_x = pacman_utils_get_grid_position(x);
-        if (x >= _grid_x) {
-            x = _grid_x;
+        if (x >= tilex && y >= tiley) {  // POST: correcting overshoot
+            x = tilex;
+            y = tiley;
             hspeed = 0;
             vspeed = _spd;
             corner = PAC_CORNER.NONE;
@@ -107,9 +111,9 @@ function pacman_complete_corners() {
 
     // DOWN_TO_RIGHT transitions
     if (corner == PAC_CORNER.DOWN_TO_RIGHT_PRE) {
-        var _grid_y = pacman_utils_get_grid_position(y);
-        if (y >= _grid_y) {
-            y = _grid_y;
+        if (y >= tiley + _tol && x >= tilex + _tol) {
+            x = tilex;
+            y = tiley;
             hspeed = _spd;
             vspeed = 0;
             corner = PAC_CORNER.NONE;
@@ -118,9 +122,9 @@ function pacman_complete_corners() {
         }
     }
     if (corner == PAC_CORNER.DOWN_TO_RIGHT_POST) {
-        var _grid_y = pacman_utils_get_grid_position(y);
-        if (y <= _grid_y) {
-            y = _grid_y;
+        if (y <= tiley && x >= tilex) {  // POST: correcting overshoot
+            x = tilex;
+            y = tiley;
             hspeed = _spd;
             vspeed = 0;
             corner = PAC_CORNER.NONE;
@@ -131,9 +135,9 @@ function pacman_complete_corners() {
 
     // RIGHT_TO_DOWN transitions
     if (corner == PAC_CORNER.RIGHT_TO_DOWN_PRE) {
-        var _grid_x = pacman_utils_get_grid_position(x);
-        if (x >= _grid_x) {
-            x = _grid_x;
+        if (x >= tilex + _tol && y >= tiley + _tol) {
+            x = tilex;
+            y = tiley;
             hspeed = 0;
             vspeed = _spd;
             corner = PAC_CORNER.NONE;
@@ -142,9 +146,9 @@ function pacman_complete_corners() {
         }
     }
     if (corner == PAC_CORNER.RIGHT_TO_DOWN_POST) {
-        var _grid_x = pacman_utils_get_grid_position(x);
-        if (x <= _grid_x) {
-            x = _grid_x;
+        if (x <= tilex && y >= tiley) {  // POST: correcting overshoot
+            x = tilex;
+            y = tiley;
             hspeed = 0;
             vspeed = _spd;
             corner = PAC_CORNER.NONE;
@@ -155,9 +159,9 @@ function pacman_complete_corners() {
 
     // UP_TO_LEFT transitions
     if (corner == PAC_CORNER.UP_TO_LEFT_PRE) {
-        var _grid_y = pacman_utils_get_grid_position(y);
-        if (y <= _grid_y) {
-            y = _grid_y;
+        if (y <= tiley - _tol && x <= tilex - _tol) {
+            x = tilex;
+            y = tiley;
             hspeed = -_spd;
             vspeed = 0;
             corner = PAC_CORNER.NONE;
@@ -166,9 +170,9 @@ function pacman_complete_corners() {
         }
     }
     if (corner == PAC_CORNER.UP_TO_LEFT_POST) {
-        var _grid_y = pacman_utils_get_grid_position(y);
-        if (y >= _grid_y) {
-            y = _grid_y;
+        if (y >= tiley && x <= tilex) {  // POST: correcting overshoot
+            x = tilex;
+            y = tiley;
             hspeed = -_spd;
             vspeed = 0;
             corner = PAC_CORNER.NONE;
@@ -179,9 +183,9 @@ function pacman_complete_corners() {
 
     // LEFT_TO_UP transitions
     if (corner == PAC_CORNER.LEFT_TO_UP_PRE) {
-        var _grid_x = pacman_utils_get_grid_position(x);
-        if (x <= _grid_x) {
-            x = _grid_x;
+        if (x <= tilex - _tol && y <= tiley - _tol) {
+            x = tilex;
+            y = tiley;
             hspeed = 0;
             vspeed = -_spd;
             corner = PAC_CORNER.NONE;
@@ -190,9 +194,9 @@ function pacman_complete_corners() {
         }
     }
     if (corner == PAC_CORNER.LEFT_TO_UP_POST) {
-        var _grid_x = pacman_utils_get_grid_position(x);
-        if (x >= _grid_x) {
-            x = _grid_x;
+        if (x >= tilex && y <= tiley) {  // POST: correcting overshoot
+            x = tilex;
+            y = tiley;
             hspeed = 0;
             vspeed = -_spd;
             corner = PAC_CORNER.NONE;

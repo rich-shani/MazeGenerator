@@ -47,10 +47,11 @@ function pacman_utils_can_move_direction(_current_x, _current_y, _direction) {
 }
 
 /// @function pacman_utils_is_at_vertical_bounds()
-/// @description Check if Pac is within horizontal bounds (valid for vertical movement)
+/// @description Check if Pac is within horizontal bounds (valid for left/right movement)
+/// Procedural maze starts at y=0; wall check handles validity - no Y restriction needed.
 /// @return {bool} True if Y is within valid range for movement
 function pacman_utils_is_at_vertical_bounds() {
-    return (y > 48 && y < room_height - 48);
+    return true;  // Allow left/right on all rows; wall check validates
 }
 
 /// @function pacman_utils_is_at_horizontal_bounds()
@@ -135,9 +136,20 @@ function pacman_utils_validate_current_movement() {
         return true;  // Not moving, nothing to validate
     }
 
-    // Skip if in corner transition
+    // When in corner transition: still validate bounds to prevent exiting screen
     if (corner != PAC_CORNER.NONE) {
-        return true;  // Let corner completion handle it
+        if (!pacman_utils_is_at_vertical_bounds() || !pacman_utils_is_at_horizontal_bounds()) {
+            // Out of bounds during diagonal corner movement - force snap and clear
+            var _gx = pacman_utils_get_grid_position(x);
+            var _gy = pacman_utils_get_grid_position(y);
+            x = clamp(_gx, 16, room_width - 16);
+            y = clamp(_gy, 64, room_height - 64);
+            hspeed = 0;
+            vspeed = 0;
+            corner = PAC_CORNER.NONE;
+            return false;
+        }
+        return true;  // In bounds, let corner completion handle it
     }
 
     var _grid_x = pacman_utils_get_grid_position(x);

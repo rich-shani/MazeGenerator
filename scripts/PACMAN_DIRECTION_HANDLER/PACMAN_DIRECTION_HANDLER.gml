@@ -31,9 +31,7 @@ function pacman_handle_direction_right(_spd) {
                 vspeed = -_spd;
             }
             else {
-                corner = PAC_CORNER.UP_TO_RIGHT_POST;
-                hspeed = _spd;
-                vspeed = _spd;
+                x = _grid_x; y = _grid_y; hspeed = _spd; vspeed = 0; corner = PAC_CORNER.NONE;
             }
         }
         else if (direction == 270 && vspeed != 0) {  // Moving DOWN
@@ -43,9 +41,7 @@ function pacman_handle_direction_right(_spd) {
                 vspeed = _spd;
             }
             else {
-                corner = PAC_CORNER.DOWN_TO_RIGHT_POST;
-                hspeed = _spd;
-                vspeed = -_spd;
+                x = _grid_x; y = _grid_y; hspeed = _spd; vspeed = 0; corner = PAC_CORNER.NONE;
             }
         }
         else {
@@ -82,9 +78,7 @@ function pacman_handle_direction_up(_spd) {
                 vspeed = -_spd;
             }
             else {
-                corner = PAC_CORNER.RIGHT_TO_UP_POST;
-                hspeed = -_spd;
-                vspeed = -_spd;
+                x = _grid_x; y = _grid_y; hspeed = 0; vspeed = -_spd; corner = PAC_CORNER.NONE;
             }
         }
         else if (direction == 180 && hspeed != 0) {  // Moving LEFT
@@ -94,9 +88,7 @@ function pacman_handle_direction_up(_spd) {
                 vspeed = -_spd;
             }
             else {
-                corner = PAC_CORNER.LEFT_TO_UP_POST;
-                hspeed = _spd;
-                vspeed = -_spd;
+                x = _grid_x; y = _grid_y; hspeed = 0; vspeed = -_spd; corner = PAC_CORNER.NONE;
             }
         }
         else {
@@ -131,9 +123,7 @@ function pacman_handle_direction_left(_spd) {
                 vspeed = -_spd;
             }
             else {
-                corner = PAC_CORNER.UP_TO_LEFT_POST;
-                hspeed = -_spd;
-                vspeed = _spd;
+                x = _grid_x; y = _grid_y; hspeed = -_spd; vspeed = 0; corner = PAC_CORNER.NONE;
             }
         }
         else if (direction == 270 && vspeed != 0) {  // Moving DOWN
@@ -143,9 +133,7 @@ function pacman_handle_direction_left(_spd) {
                 vspeed = _spd;
             }
             else {
-                corner = PAC_CORNER.DOWN_TO_LEFT_POST;
-                hspeed = -_spd;
-                vspeed = -_spd;
+                x = _grid_x; y = _grid_y; hspeed = -_spd; vspeed = 0; corner = PAC_CORNER.NONE;
             }
         }
         else {
@@ -180,9 +168,7 @@ function pacman_handle_direction_down(_spd) {
                 vspeed = _spd;
             }
             else {
-                corner = PAC_CORNER.RIGHT_TO_DOWN_POST;
-                hspeed = -_spd;
-                vspeed = _spd;
+                x = _grid_x; y = _grid_y; hspeed = 0; vspeed = _spd; corner = PAC_CORNER.NONE;
             }
         }
         else if (direction == 180 && hspeed != 0) {  // Moving LEFT
@@ -192,9 +178,7 @@ function pacman_handle_direction_down(_spd) {
                 vspeed = _spd;
             }
             else {
-                corner = PAC_CORNER.LEFT_TO_DOWN_POST;
-                hspeed = _spd;
-                vspeed = _spd;
+                x = _grid_x; y = _grid_y; hspeed = 0; vspeed = _spd; corner = PAC_CORNER.NONE;
             }
         }
         else {

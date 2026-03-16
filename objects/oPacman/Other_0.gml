@@ -1,8 +1,8 @@
 /// ===============================================================================
-/// oGHOST - BASE GHOST OBJECT - OTHER_0 EVENT (TUNNEL WRAPAROUND)
+/// oPacman - OTHER_0 EVENT (TUNNEL WRAPAROUND)
 /// ===============================================================================
-/// Purpose: Handle horizontal wraparound when ghost enters tunnel
-/// Triggered: When ghost moves through left or right edge (wall collision)
+/// Purpose: Handle horizontal wraparound when Pacman enters tunnel
+/// Triggered: When pacman moves through left or right edge (wall collision)
 /// Other_0 is a special event triggered by wall/collision objects
 ///
 /// Tunnel Wraparound:
@@ -15,7 +15,7 @@
 /// ===============================================================================
 
 /// ===== LEFT TUNNEL WRAPAROUND =====
-/// When ghost exits left side of tunnel, wrap to right side
+/// When pacman exits left side of tunnel, wrap to right side
 /// Check if moving LEFT (hspeed < 0) and went past left edge
 
 if (hspeed < 0) {
@@ -28,13 +28,10 @@ if (hspeed < 0) {
 
     /// Update tile position after wraparound
     tilex = 16 * (round(x / 16));
-
-	/// Clear pathfinding to recalculate path from new position
-	newtile = 0;
 }
 
 /// ===== RIGHT TUNNEL WRAPAROUND =====
-/// When ghost exits right side of tunnel, wrap to left side
+/// When pacman exits right side of tunnel, wrap to left side
 /// Check if moving RIGHT (hspeed > 0) and went past right edge
 
 if (hspeed > 0) {
@@ -47,11 +44,8 @@ if (hspeed > 0) {
 
     /// Update tile position after wraparound
     tilex = 16 * (round(x / 16));
-
-	/// Clear pathfinding to recalcualate path from new position
-	newtile = 0;
 }
 
 /// ===============================================================================
-/// END oGHOST OTHER_0 EVENT
+/// END oPacman OTHER_0 EVENT
 /// ===============================================================================

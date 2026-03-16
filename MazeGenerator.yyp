@@ -47,7 +47,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.2.213",
+    "IDEVersion":"2024.14.3.217",
   },
   "name":"MazeGenerator",
   "resources":[
@@ -106,7 +106,10 @@
     {"id":{"name":"sEyes","path":"sprites/sEyes/sEyes.yy",},},
     {"id":{"name":"sGhost","path":"sprites/sGhost/sGhost.yy",},},
     {"id":{"name":"sGridTiles","path":"sprites/sGridTiles/sGridTiles.yy",},},
+    {"id":{"name":"sPacman_Down","path":"sprites/sPacman_Down/sPacman_Down.yy",},},
     {"id":{"name":"sPacman_Left","path":"sprites/sPacman_Left/sPacman_Left.yy",},},
+    {"id":{"name":"sPacman_Right","path":"sprites/sPacman_Right/sPacman_Right.yy",},},
+    {"id":{"name":"sPacman_Up","path":"sprites/sPacman_Up/sPacman_Up.yy",},},
     {"id":{"name":"sPowerPill","path":"sprites/sPowerPill/sPowerPill.yy",},},
   ],
   "resourceType":"GMProject",

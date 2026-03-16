@@ -20,7 +20,7 @@
 // ===== MOVEMENT DIRECTION VARIABLES (PLAYER 1) =====
 /// Target direction input variables (0=right, 1=up, 2=left, 3=down)
 /// Used to detect keyboard input and set desired direction
-xdir = 0;   // Horizontal direction component
+xdir = 2;   // Horizontal direction component
 ydir = 0;   // Vertical direction component
 dir = 0;    // Cardinal direction (0-3, used for pathfinding)
 
@@ -105,7 +105,7 @@ park = 0;
 /// Range: 0, 90, 180, 270 (representing 4 cardinal directions)
 /// Updated each frame based on movement velocity
 /// Used for sprite rotation and animation direction
-direction = 0;
+direction = 180;
 
 // ===== VISUAL/ANIMATION VARIABLES =====
 /// Blink animation counter during level intermission

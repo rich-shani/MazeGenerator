@@ -7,6 +7,9 @@
 // Grid
 #macro TILE_PIXELS 16
 
+/// Pixels past intersection before corner snap - 0 = complete at arrival, minimizes shutter
+#macro CORNER_SNAP_TOLERANCE 0
+
 // Ghost house (reference for offset math: xstart/ystart are per-ghost; 216/224 are standard)
 #macro GHOST_HOUSE_CENTER_X 216
 #macro GHOST_HOUSE_ENTRANCE_Y 224
