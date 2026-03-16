@@ -113,6 +113,37 @@ function pacman_utils_is_before_grid(_pixel_pos, _grid_pos, _direction) {
     return false;
 }
 
+/// @function pacman_utils_is_in_pre_turn_zone(_pixel_pos, _grid_pos, _direction)
+/// @description Original arcade has asymmetric pre-turn zones (Pac-Man Dossier)
+/// Approach from LEFT/UP = 3 px before center. Approach from RIGHT/DOWN = 4 px.
+/// Scaled for 16px tiles: NARROW=6, WIDE=8. Must be before center AND within zone.
+/// @param {real} _pixel_pos Current pixel position
+/// @param {real} _grid_pos Intersection center (tile center)
+/// @param {real} _direction Current movement direction (approach direction)
+/// @return {bool} True if within pre-turn zone and can start diagonal corner cut
+function pacman_utils_is_in_pre_turn_zone(_pixel_pos, _grid_pos, _direction) {
+    var _dist = 0;
+    switch (_direction) {
+        case PAC_DIRECTION.RIGHT:  // Approach from left: 3 pre (narrow)
+            if (_pixel_pos >= _grid_pos) return false;
+            _dist = _grid_pos - _pixel_pos;
+            return _dist <= CORNER_PRE_TURN_NARROW;
+        case PAC_DIRECTION.LEFT:   // Approach from right: 4 pre (wide)
+            if (_pixel_pos <= _grid_pos) return false;
+            _dist = _pixel_pos - _grid_pos;
+            return _dist <= CORNER_PRE_TURN_WIDE;
+        case PAC_DIRECTION.UP:     // Approach from bottom: 4 pre (wide)
+            if (_pixel_pos <= _grid_pos) return false;
+            _dist = _pixel_pos - _grid_pos;
+            return _dist <= CORNER_PRE_TURN_WIDE;
+        case PAC_DIRECTION.DOWN:   // Approach from top: 3 pre (narrow)
+            if (_pixel_pos >= _grid_pos) return false;
+            _dist = _grid_pos - _pixel_pos;
+            return _dist <= CORNER_PRE_TURN_NARROW;
+    }
+    return false;
+}
+
 /// @function pacman_utils_clear_buffered_input()
 /// @description Clear any buffered input direction
 function pacman_utils_clear_buffered_input() {

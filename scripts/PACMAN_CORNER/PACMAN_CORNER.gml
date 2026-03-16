@@ -1,10 +1,10 @@
 /// ===============================================================================
-/// PACMAN_CORNER - Corner Completion Logic
+/// PACMAN_CORNER - Corner Completion Logic (aligned with original Pac-Man arcade)
 /// ===============================================================================
-/// NOTE: Tile positions use boundaries (0, 16, 32, ...) with sprite origins at centers
-/// Snaps to (tilex, tiley) - the intersection when we entered the turn.
-/// Only completes when Pac has passed the intersection by CORNER_SNAP_TOLERANCE
-/// in both axes, so the diagonal corner cut feels fluid and consistent.
+/// Per Pac-Man Dossier: Pre-turn = diagonal 1px new per 1px old (45°). Completion
+/// when Pac "reaches the centerline of the new direction's path" -> pure cardinal.
+/// Snaps to (tilex, tiley) - the intersection at turn entry. CORNER_SNAP_TOLERANCE=0
+/// completes at arrival (no overshoot), matching original centerline behavior.
 
 /// @function pacman_complete_corners()
 /// @description Complete corner transitions when grid alignment is reached
