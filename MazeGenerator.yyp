@@ -47,7 +47,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.2.213",
+    "IDEVersion":"2024.14.3.217",
   },
   "name":"MazeGenerator",
   "resources":[
@@ -57,6 +57,7 @@
     {"id":{"name":"NoUp","path":"objects/NoUp/NoUp.yy",},},
     {"id":{"name":"oBlinky","path":"objects/oBlinky/oBlinky.yy",},},
     {"id":{"name":"oDot","path":"objects/oDot/oDot.yy",},},
+    {"id":{"name":"oGameManager","path":"objects/oGameManager/oGameManager.yy",},},
     {"id":{"name":"oGhost","path":"objects/oGhost/oGhost.yy",},},
     {"id":{"name":"oMazeGenerator","path":"objects/oMazeGenerator/oMazeGenerator.yy",},},
     {"id":{"name":"oPacman","path":"objects/oPacman/oPacman.yy",},},

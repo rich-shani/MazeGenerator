@@ -9,10 +9,11 @@
 
 /// Cornering (per Pac-Man Dossier): complete when Pac reaches intersection centerline
 /// 1px tolerance reduces visible snap/flicker while remaining arcade-faithful
-#macro CORNER_SNAP_TOLERANCE 1
+#macro CORNER_SNAP_TOLERANCE 4
 
 /// Pre-turn zone limits - original arcade has asymmetric 3/4 pixel zones (8px tiles)
 /// Scaled 2x for 16px tiles: 3→6, 4→8. Approach from LEFT/UP = 3 pre. RIGHT/DOWN = 4 pre.
+/// Post-turn zones use same constants with inverse mapping: LEFT/UP = 4 post (wide), RIGHT/DOWN = 3 post (narrow).
 #macro CORNER_PRE_TURN_NARROW 6   // 3 px original * 2
 #macro CORNER_PRE_TURN_WIDE 8     // 4 px original * 2
 

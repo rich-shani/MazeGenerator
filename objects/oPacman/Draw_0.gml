@@ -13,18 +13,18 @@
 //		break;	
 //}
 
-switch (direction) {
-	case 0:
+switch (dir) {
+	case PAC_DIRECTION.RIGHT:
 		//draw_sprite(sPacman_Right, 0, x, y);
 		draw_sprite_ext(sPacman_Right, image_index, x, y, 1, 1, 0, c_white, 0.8);
 		break;
-	case 90:
+	case PAC_DIRECTION.UP:
 		draw_sprite_ext(sPacman_Up, image_index, x, y,  1, 1, 0, c_white, 0.8);
 		break;	
-	case 180:
+	case PAC_DIRECTION.LEFT:
 		draw_sprite_ext(sPacman_Left, image_index, x, y, 1, 1, 0, c_white, 0.8);
 		break;	
-	case 270:
+	case PAC_DIRECTION.DOWN:
 		draw_sprite_ext(sPacman_Down, image_index, x, y, 1, 1, 0, c_white, 0.8);
 		break;	
 }

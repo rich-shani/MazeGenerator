@@ -144,6 +144,37 @@ function pacman_utils_is_in_pre_turn_zone(_pixel_pos, _grid_pos, _direction) {
     return false;
 }
 
+/// @function pacman_utils_is_in_post_turn_zone(_pixel_pos, _grid_pos, _direction)
+/// @description Post-turn zones per Pac-Man Dossier (inverse of pre-turn)
+/// Approach from LEFT/UP = 4 post px (wide). Approach from RIGHT/DOWN = 3 post px (narrow).
+/// Must be past center AND within zone. Uses same NARROW/WIDE constants.
+/// @param {real} _pixel_pos Current pixel position
+/// @param {real} _grid_pos Intersection center (tile center)
+/// @param {real} _direction Current movement direction (approach direction)
+/// @return {bool} True if within post-turn zone and can start diagonal corner cut
+function pacman_utils_is_in_post_turn_zone(_pixel_pos, _grid_pos, _direction) {
+    var _dist = 0;
+    switch (_direction) {
+        case PAC_DIRECTION.RIGHT:  // Approach from left: 4 post (wide)
+            if (_pixel_pos <= _grid_pos) return false;
+            _dist = _pixel_pos - _grid_pos;
+            return _dist <= CORNER_PRE_TURN_WIDE;
+        case PAC_DIRECTION.LEFT:   // Approach from right: 3 post (narrow)
+            if (_pixel_pos >= _grid_pos) return false;
+            _dist = _grid_pos - _pixel_pos;
+            return _dist <= CORNER_PRE_TURN_NARROW;
+        case PAC_DIRECTION.UP:     // Approach from bottom: 3 post (narrow)
+            if (_pixel_pos >= _grid_pos) return false;
+            _dist = _grid_pos - _pixel_pos;
+            return _dist <= CORNER_PRE_TURN_NARROW;
+        case PAC_DIRECTION.DOWN:   // Approach from top: 4 post (wide)
+            if (_pixel_pos <= _grid_pos) return false;
+            _dist = _pixel_pos - _grid_pos;
+            return _dist <= CORNER_PRE_TURN_WIDE;
+    }
+    return false;
+}
+
 /// @function pacman_utils_clear_buffered_input()
 /// @description Clear any buffered input direction
 function pacman_utils_clear_buffered_input() {
