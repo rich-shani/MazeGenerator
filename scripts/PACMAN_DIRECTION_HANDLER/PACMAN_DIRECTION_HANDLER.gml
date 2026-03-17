@@ -26,6 +26,8 @@ function pacman_handle_direction_right(_spd) {
         // Corner transition (per Pac-Man Dossier: pre-turn and post-turn zones)
         if (direction == 90 && vspeed != 0) {  // Moving UP
             if (pacman_utils_is_in_pre_turn_zone(y, _grid_y, PAC_DIRECTION.UP)) {
+                tilex = _grid_x;
+                tiley = _grid_y;
                 corner = PAC_CORNER.UP_TO_RIGHT_PRE;
                 hspeed = _spd;
                 vspeed = -_spd;
@@ -43,6 +45,8 @@ function pacman_handle_direction_right(_spd) {
         }
         else if (direction == 270 && vspeed != 0) {  // Moving DOWN
             if (pacman_utils_is_in_pre_turn_zone(y, _grid_y, PAC_DIRECTION.DOWN)) {
+                tilex = _grid_x;
+                tiley = _grid_y;
                 corner = PAC_CORNER.DOWN_TO_RIGHT_PRE;
                 hspeed = _spd;
                 vspeed = _spd;
@@ -87,6 +91,8 @@ function pacman_handle_direction_up(_spd) {
 
         if (direction == 0 && hspeed != 0) {  // Moving RIGHT
             if (pacman_utils_is_in_pre_turn_zone(x, _grid_x, PAC_DIRECTION.RIGHT)) {
+                tilex = _grid_x;
+                tiley = _grid_y;
                 corner = PAC_CORNER.RIGHT_TO_UP_PRE;
                 hspeed = _spd;
                 vspeed = -_spd;
@@ -104,6 +110,8 @@ function pacman_handle_direction_up(_spd) {
         }
         else if (direction == 180 && hspeed != 0) {  // Moving LEFT
             if (pacman_utils_is_in_pre_turn_zone(x, _grid_x, PAC_DIRECTION.LEFT)) {
+                tilex = _grid_x;
+                tiley = _grid_y;
                 corner = PAC_CORNER.LEFT_TO_UP_PRE;
                 hspeed = -_spd;
                 vspeed = -_spd;
@@ -146,6 +154,8 @@ function pacman_handle_direction_left(_spd) {
 
         if (direction == 90 && vspeed != 0) {  // Moving UP
             if (pacman_utils_is_in_pre_turn_zone(y, _grid_y, PAC_DIRECTION.UP)) {
+                tilex = _grid_x;
+                tiley = _grid_y;
                 corner = PAC_CORNER.UP_TO_LEFT_PRE;
                 hspeed = -_spd;
                 vspeed = -_spd;
@@ -163,6 +173,8 @@ function pacman_handle_direction_left(_spd) {
         }
         else if (direction == 270 && vspeed != 0) {  // Moving DOWN
             if (pacman_utils_is_in_pre_turn_zone(y, _grid_y, PAC_DIRECTION.DOWN)) {
+                tilex = _grid_x;
+                tiley = _grid_y;
                 corner = PAC_CORNER.DOWN_TO_LEFT_PRE;
                 hspeed = -_spd;
                 vspeed = _spd;
@@ -205,6 +217,8 @@ function pacman_handle_direction_down(_spd) {
 
         if (direction == 0 && hspeed != 0) {  // Moving RIGHT
             if (pacman_utils_is_in_pre_turn_zone(x, _grid_x, PAC_DIRECTION.RIGHT)) {
+                tilex = _grid_x;
+                tiley = _grid_y;
                 corner = PAC_CORNER.RIGHT_TO_DOWN_PRE;
                 hspeed = _spd;
                 vspeed = _spd;
@@ -222,6 +236,8 @@ function pacman_handle_direction_down(_spd) {
         }
         else if (direction == 180 && hspeed != 0) {  // Moving LEFT
             if (pacman_utils_is_in_pre_turn_zone(x, _grid_x, PAC_DIRECTION.LEFT)) {
+                tilex = _grid_x;
+                tiley = _grid_y;
                 corner = PAC_CORNER.LEFT_TO_DOWN_PRE;
                 hspeed = -_spd;
                 vspeed = _spd;

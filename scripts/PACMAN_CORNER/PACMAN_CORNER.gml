@@ -3,8 +3,8 @@
 /// ===============================================================================
 /// Per Pac-Man Dossier: Pre-turn = diagonal 1px new per 1px old (45°). Completion
 /// when Pac "reaches the centerline of the new direction's path" -> pure cardinal.
-/// Snaps to (tilex, tiley) - the intersection at turn entry. CORNER_SNAP_TOLERANCE=0
-/// completes at arrival (no overshoot), matching original centerline behavior.
+/// Snap preserves forward progress: horizontal turns use max/min(tilex,x); vertical use min/max(tiley,y).
+/// Prevents visible backward pull when overshooting the completion point.
 
 /// @function pacman_complete_corners()
 /// @description Complete corner transitions when grid alignment is reached
@@ -16,7 +16,7 @@ function pacman_complete_corners() {
     // UP_TO_RIGHT transitions (reach horizontal centerline, advance on X)
     if (corner == PAC_CORNER.UP_TO_RIGHT_PRE) {
         if (y <= tiley && x >= tilex + _tol) {
-            x = tilex;
+            x = max(tilex, x);
             y = tiley;
             hspeed = _spd;
             vspeed = 0;
@@ -28,7 +28,7 @@ function pacman_complete_corners() {
     }
     if (corner == PAC_CORNER.UP_TO_RIGHT_POST) {
         if (y >= tiley && x >= tilex) {  // POST: correcting overshoot, snap when reached
-            x = tilex;
+            x = max(tilex, x);
             y = tiley;
             hspeed = _spd;
             vspeed = 0;
@@ -43,7 +43,7 @@ function pacman_complete_corners() {
     if (corner == PAC_CORNER.RIGHT_TO_UP_PRE) {
         if (x >= tilex && y <= tiley - _tol) {
             x = tilex;
-            y = tiley;
+            y = min(tiley, y);
             hspeed = 0;
             vspeed = -_spd;
             direction = 90; // UP
@@ -55,7 +55,7 @@ function pacman_complete_corners() {
     if (corner == PAC_CORNER.RIGHT_TO_UP_POST) {
         if (x <= tilex && y <= tiley) {  // POST: correcting overshoot
             x = tilex;
-            y = tiley;
+            y = min(tiley, y);
             hspeed = 0;
             vspeed = -_spd;
             direction = 90; // UP
@@ -68,7 +68,7 @@ function pacman_complete_corners() {
     // DOWN_TO_LEFT transitions (reach horizontal centerline, advance on X)
     if (corner == PAC_CORNER.DOWN_TO_LEFT_PRE) {
         if (y >= tiley && x <= tilex - _tol) {
-            x = tilex;
+            x = min(tilex, x);
             y = tiley;
             hspeed = -_spd;
             vspeed = 0;
@@ -80,7 +80,7 @@ function pacman_complete_corners() {
     }
     if (corner == PAC_CORNER.DOWN_TO_LEFT_POST) {
         if (y <= tiley && x <= tilex) {  // POST: correcting overshoot
-            x = tilex;
+            x = min(tilex, x);
             y = tiley;
             hspeed = -_spd;
             vspeed = 0;
@@ -95,7 +95,7 @@ function pacman_complete_corners() {
     if (corner == PAC_CORNER.LEFT_TO_DOWN_PRE) {
         if (x <= tilex && y >= tiley + _tol) {
             x = tilex;
-            y = tiley;
+            y = max(tiley, y);
             hspeed = 0;
             vspeed = _spd;
             direction = 270; // DOWN
@@ -107,7 +107,7 @@ function pacman_complete_corners() {
     if (corner == PAC_CORNER.LEFT_TO_DOWN_POST) {
         if (x >= tilex && y >= tiley) {  // POST: correcting overshoot
             x = tilex;
-            y = tiley;
+            y = max(tiley, y);
             hspeed = 0;
             vspeed = _spd;
             direction = 270; // DOWN
@@ -120,7 +120,7 @@ function pacman_complete_corners() {
     // DOWN_TO_RIGHT transitions (reach horizontal centerline, advance on X)
     if (corner == PAC_CORNER.DOWN_TO_RIGHT_PRE) {
         if (y >= tiley && x >= tilex + _tol) {
-            x = tilex;
+            x = max(tilex, x);
             y = tiley;
             hspeed = _spd;
             vspeed = 0;
@@ -132,7 +132,7 @@ function pacman_complete_corners() {
     }
     if (corner == PAC_CORNER.DOWN_TO_RIGHT_POST) {
         if (y <= tiley && x >= tilex) {  // POST: correcting overshoot
-            x = tilex;
+            x = max(tilex, x);
             y = tiley;
             hspeed = _spd;
             vspeed = 0;
@@ -147,7 +147,7 @@ function pacman_complete_corners() {
     if (corner == PAC_CORNER.RIGHT_TO_DOWN_PRE) {
         if (x >= tilex && y >= tiley + _tol) {
             x = tilex;
-            y = tiley;
+            y = max(tiley, y);
             hspeed = 0;
             vspeed = _spd;
             direction = 270; // DOWN
@@ -159,7 +159,7 @@ function pacman_complete_corners() {
     if (corner == PAC_CORNER.RIGHT_TO_DOWN_POST) {
         if (x <= tilex && y >= tiley) {  // POST: correcting overshoot
             x = tilex;
-            y = tiley;
+            y = max(tiley, y);
             hspeed = 0;
             vspeed = _spd;
             direction = 270; // DOWN
@@ -172,7 +172,7 @@ function pacman_complete_corners() {
     // UP_TO_LEFT transitions (reach horizontal centerline, advance on X)
     if (corner == PAC_CORNER.UP_TO_LEFT_PRE) {
         if (y <= tiley && x <= tilex - _tol) {
-            x = tilex;
+            x = min(tilex, x);
             y = tiley;
             hspeed = -_spd;
             vspeed = 0;
@@ -184,7 +184,7 @@ function pacman_complete_corners() {
     }
     if (corner == PAC_CORNER.UP_TO_LEFT_POST) {
         if (y >= tiley && x <= tilex) {  // POST: correcting overshoot
-            x = tilex;
+            x = min(tilex, x);
             y = tiley;
             hspeed = -_spd;
             vspeed = 0;
@@ -199,7 +199,7 @@ function pacman_complete_corners() {
     if (corner == PAC_CORNER.LEFT_TO_UP_PRE) {
         if (x <= tilex && y <= tiley - _tol) {
             x = tilex;
-            y = tiley;
+            y = min(tiley, y);
             hspeed = 0;
             vspeed = -_spd;
             direction = 90; // UP
@@ -211,7 +211,7 @@ function pacman_complete_corners() {
     if (corner == PAC_CORNER.LEFT_TO_UP_POST) {
         if (x >= tilex && y <= tiley) {  // POST: correcting overshoot
             x = tilex;
-            y = tiley;
+            y = min(tiley, y);
             hspeed = 0;
             vspeed = -_spd;
             direction = 90; // UP
