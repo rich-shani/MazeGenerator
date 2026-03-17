@@ -21,12 +21,6 @@
 var _draw_color = c_white;
 
 switch (state) {
-    case GHOST_STATE.CHASE:
-        /// Normal mode: use ghost's primary color
-        /// Child objects set this color (Blinky=red, Pinky=pink, etc.)
-        _draw_color = ghost_get_color(ghost_name);
-        break;
-
     case GHOST_STATE.FRIGHTENED:
         /// Power pellet mode: blue with white flashing
         if (!visible) {
@@ -42,13 +36,11 @@ switch (state) {
         _draw_color = ghost_color_eyes();
         break;
 
-    case GHOST_STATE.IN_HOUSE:
-        /// In house: draw with normal color while exiting
-        _draw_color = draw_color;
-        break;
-
-    default:
-        _draw_color = draw_color;
+    default:        
+		/// Normal mode: use ghost's primary color
+        /// Child objects set this color (Blinky=red, Pinky=pink, etc.)
+        _draw_color = ghost_get_color(ghost_name);
+		break;
 }
 
 // ===== DETERMINE SPRITE INDEX =====

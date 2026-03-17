@@ -39,3 +39,6 @@
 // Blinky spawn position in grid cells (used when spawning from tile map)
 #macro BLINKY_SPAWN_COL 12
 #macro BLINKY_SPAWN_ROW 11
+// Pinky spawn position in grid cells (used when spawning from tile map)
+#macro PINKY_SPAWN_COL 11
+#macro PINKY_SPAWN_ROW 12

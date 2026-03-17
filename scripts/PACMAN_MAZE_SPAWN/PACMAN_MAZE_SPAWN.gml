@@ -17,8 +17,13 @@ function pacman_map_spawn_entities(_tileMap, _x_offset, _y_offset, _gridSize) {
     var elementX = _x_offset + (BLINKY_SPAWN_COL * _gridSize);
     var elementY = _y_offset + (BLINKY_SPAWN_ROW * _gridSize);
     instance_create_layer(elementX, elementY, "GameCharacters", oBlinky);
-
+	// TODO: use the x, y parameters to set the Create location x,y 
+    instance_create_layer(elementX, elementY, "GameCharacters", oPinky);
+    instance_create_layer(elementX, elementY, "GameCharacters", oInky);
+    instance_create_layer(elementX, elementY, "GameCharacters", oClyde);
+	
     for (var row = 0; row < _mapHeight; row++) {
+		
         for (var col = 0; col < _mapWidth; col++) {
             elementX = _x_offset + (col * _gridSize);
             elementY = _y_offset + (row * _gridSize);
