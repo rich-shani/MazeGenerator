@@ -49,9 +49,9 @@ timerstart = 240;
 
 /// Ghost release signatures (dot count thresholds)
 /// When oPacman.dotcount reaches these values, ghosts are released
-psig = 10;  /// Pinky release signature
-isig = 20;  /// Inky release signature
-csig = 30;  /// Clyde release signature
+psig = 0;  /// Pinky release signature
+isig = 30;  /// Inky release signature
+csig = 60;  /// Clyde release signature
 
 // ===== MOVEMENT PAUSE/SUSPENSION VARIABLES =====
 /// Player 1 movement pause counter

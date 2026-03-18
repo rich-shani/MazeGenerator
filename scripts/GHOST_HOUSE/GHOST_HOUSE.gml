@@ -5,6 +5,18 @@
 /// housestate, x, y, hspeed, vspeed, dir, state, newtile, tilex, tiley as needed.
 /// ===============================================================================
 
+function ghost_house_idle() {
+	//  move up and down waiting ...
+	if (dir == GRID_DIRECTION.UP) {
+		if (y > (ystart - 8)) move_towards_point(x, ystart - 12, spslow);
+		else dir = GRID_DIRECTION.DOWN;
+	}
+	else {
+		if (y < (ystart + 8)) move_towards_point(x, ystart + 12, spslow);
+		else dir = GRID_DIRECTION.UP;
+	}	
+}
+
 /// @description Run one frame of ghost house logic.
 /// Handles two major flows for the calling ghost instance:
 /// 1) HOUSE_READY / IN_HOUSE release logic (dot-gated exit from ghost house)
@@ -37,11 +49,8 @@ function ghost_house_step() {
                 hspeed     = 0;
                 vspeed     = -spslow;
                 dir        = GRID_DIRECTION.UP;
-				
-				// set target as the tile above the GHOST ENTRANCE
-				//tilex = GHOST_HOUSE_ENTRANCE_X;
-				//tiley = GHOST_HOUSE_ENTRANCE_Y -32;
             }
+			else ghost_house_idle();
         }
         // Inky release: uses oPacman.isig threshold.
         else if (_name == "Inky") {
@@ -52,6 +61,7 @@ function ghost_house_step() {
                 vspeed     = 0;
                 dir        = GRID_DIRECTION.RIGHT;
             }
+			else ghost_house_idle();
         }
         // Clyde release: uses oPacman.csig threshold.
         else if (_name == "Clyde") {
@@ -62,13 +72,14 @@ function ghost_house_step() {
                 vspeed     = 0;
                 dir        = GRID_DIRECTION.LEFT;
             }
+			else ghost_house_idle();
         }
     }
 
-    if (house == 1) {
-        tilex = (xstart - GHOST_HOUSE_CENTER_X) + GHOST_HOUSE_ENTRANCE_X;
-        tiley = (ystart - GHOST_HOUSE_ENTRANCE_Y) + GHOST_HOUSE_ENTRANCE_Y;
-    }
+    //if (house == 1) {
+    //    tilex = (xstart - GHOST_HOUSE_CENTER_X) + GHOST_HOUSE_ENTRANCE_X;
+    //    tiley = (ystart - GHOST_HOUSE_ENTRANCE_Y) + GHOST_HOUSE_ENTRANCE_Y;
+    //}
 
     // -------------------------------------------------------------------------
     // EYES → IN_HOUSE: eyes arrive at house entrance and drop into center

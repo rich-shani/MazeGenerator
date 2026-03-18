@@ -49,7 +49,7 @@ cornery = 432;                               // Scatter target Y coordinate (bot
 /// Set Blinky's starting state and facing direction
 /// Blinky starts in chase mode (ready to hunt immediately)
 state = GHOST_STATE.IN_HOUSE;				// Start in house
-dir = GRID_DIRECTION.RIGHT;						// Start facing right
+dir = GRID_DIRECTION.DOWN;						// Start facing right
 
 /// ===============================================================================
 /// BLINKY'S PERSONALITY NOTES

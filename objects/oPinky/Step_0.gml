@@ -33,8 +33,8 @@ if (state == GHOST_STATE.CHASE) {
 	/// Calculate Player 1 (Pac) target: 2 tiles ahead of movement direction
 	/// Pac.xdir and Pac.ydir are unit vectors (-1, 0, or 1) indicating direction
 	/// Multiply by 2 to get 2 tiles ahead, then multiply by 16 to convert to pixels
-	var _pac_target_x = 16 * (round(oPacman.x / 16)) + (2 * oPacman.xdir);
-	var _pac_target_y = 16 * (round(oPacman.y / 16)) + (2 * oPacman.ydir);
+	var _pac_target_x = 16 * ((round(oPacman.x / 16)) + (2 * oPacman.xdir));
+	var _pac_target_y = 16 * ((round(oPacman.y / 16)) + (2 * oPacman.ydir));
     
     /// Set target to Pac's position (direct chase)
     pursuex = _pac_target_x;
