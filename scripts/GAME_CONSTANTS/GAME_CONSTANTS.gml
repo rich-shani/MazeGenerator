@@ -18,8 +18,8 @@
 #macro CORNER_PRE_TURN_WIDE 8     // 4 px original * 2
 
 // Ghost house (reference for offset math: xstart/ystart are per-ghost; 216/224 are standard)
-#macro GHOST_HOUSE_CENTER_X 216
-#macro GHOST_HOUSE_ENTRANCE_Y 224
+#macro GHOST_HOUSE_CENTER_X 224
+
 #macro GHOST_HOUSE_BOTTOM_OFFSET 280
 #macro GHOST_HOUSE_EYES_X_MIN 212
 #macro GHOST_HOUSE_EYES_X_MAX 220
@@ -33,7 +33,9 @@
 #macro SPEED_EYES 4.0
 
 // Eyes target (house entrance) for pathfinding
-#macro GHOST_HOUSE_ENTRANCE_X 208
+#macro GHOST_HOUSE_ENTRANCE_X 216
+#macro GHOST_HOUSE_ENTRANCE_Y 192
+
 #macro GHOST_HOUSE_ENTRANCE_Y_EYES 240
 
 // Blinky spawn position in grid cells (used when spawning from tile map)

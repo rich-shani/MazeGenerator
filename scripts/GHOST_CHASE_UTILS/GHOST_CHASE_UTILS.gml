@@ -11,9 +11,19 @@
 
 /// @function ghost_chase_utils_free(_x, _y)
 /// @description Return true if the given point is free of solid maze walls for ghosts.
-/// Wall.allowsGhost = true (ghost house entrance) lets ghosts pass through.
+/// Special handling:
+/// - Wall.allowsGhost = true (ghost house entrance / ghost wall) lets ghosts pass through.
+/// - GHOSTWALL tiles only allow re-entry into the house when the ghost is in EYES state.
 function ghost_chase_utils_free(_x, _y) {
-    return !collision_point(_x, _y, Wall, false, true);
+    // Check for a Wall instance at this point.
+    var _wall = collision_point(_x, _y, Wall, false, true);
+    if (_wall == noone) {
+        // No wall instance here at all → free.
+        return true;
+    }
+
+    // Otherwise, this is a solid wall for ghosts.
+    return false;
 }
 
 /// @function ghost_chase_utils_can_go(_objx, _objy, _dir)

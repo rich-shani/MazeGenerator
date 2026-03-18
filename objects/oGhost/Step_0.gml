@@ -101,13 +101,6 @@ else if (state == GHOST_STATE.IN_HOUSE) {
 /// Ghost waiting in house, waiting for release condition
 /// Once release condition met, transitions to IN_HOUSE state
 
-else if (state == GHOST_STATE.HOUSE_READY) {
-    /// HOUSE_READY: Ghost waiting in house
-    /// Not yet released to roam the maze
-    /// Release condition checked elsewhere (when dot count thresholds met)
-    /// No movement until state transition occurs
-}
-
 /// ===============================================================================
 /// HOW CHILD GHOSTS OVERRIDE THIS EVENT WITH UNIQUE TARGETING
 /// ===============================================================================

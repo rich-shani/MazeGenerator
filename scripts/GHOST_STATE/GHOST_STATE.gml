@@ -41,23 +41,19 @@ enum GHOST_STATE {
     EYES = 2,
 
     /// IN_HOUSE = 3
-    /// Description: Ghost is exiting the ghost house
-    /// Behavior: Complex bouncing/movement pattern to get out of house
+    /// Description: Ghost is waiting inside the HOUSE
+    /// Behavior: Complex bouncing/movement pattern 
     /// Animation: Normal sprite animation
     /// Speed: Varies based on house logic
-    /// Transitions to: CHASE (once fully exited)
-    /// Note: House exit logic varies by ghost (Blinky bounces up/down,
-    ///       Pinky/Inky/Clyde have more complex patterns)
+    /// Transitions to: LEAVING_HOUSE (once fully exited)
     IN_HOUSE = 3,
 
-    /// HOUSE_READY = 4
-    /// Description: Ghost waiting in house for release condition
-    /// Behavior: Waiting for dot count or other trigger to leave
+    /// LEAVING_HOUSE = 4
+    /// Description: Ghost in house and now leaving for the Maze ...
     /// Animation: Normal sprite animation
-    /// Speed: 0 (not moving, just waiting)
-    /// Transitions to: IN_HOUSE (when release condition met)
-    /// Note: Currently not used in codebase, reserved for future use
-    HOUSE_READY = 4
+    /// Speed: Varies based on house logic
+    /// Transitions to: CHASE (when release condition met)
+    LEAVING_HOUSE = 4
 }
 
 /// ===============================================================================
@@ -72,6 +68,7 @@ enum GHOST_STATE {
 ///     |                v
 ///     |            IN_HOUSE
 ///     |                |
+///		|			LEAVING_HOUSE
 ///     +----------------+
 ///
 /// Notes:
@@ -104,8 +101,8 @@ function ghost_state_name(_state) {
             return "EYES";
         case GHOST_STATE.IN_HOUSE:
             return "IN_HOUSE";
-        case GHOST_STATE.HOUSE_READY:
-            return "HOUSE_READY";
+		case GHOST_STATE.LEAVING_HOUSE:
+			return "LEAVING HOUSE";
         default:
             return "UNKNOWN";
     }

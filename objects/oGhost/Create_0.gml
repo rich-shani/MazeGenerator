@@ -146,8 +146,7 @@ aboutface = 0;  // Reversal flag (0=normal, 1=reverse)
 /// - GHOST_STATE.FRIGHTENED = 1: Power pellet active, vulnerable
 /// - GHOST_STATE.EYES = 2: Ghost eaten, eyes returning to house
 /// - GHOST_STATE.IN_HOUSE = 3: Inside ghost house, bouncing
-/// - GHOST_STATE.HOUSE_READY = 4: Waiting to exit house
-state = GHOST_STATE.CHASE;
+state = GHOST_STATE.IN_HOUSE;
 
 // ===== ELROY MODE (Faster pursuit when dots are low) =====
 /// Dot count threshold for Elroy mode 1 (first speed increase)

@@ -25,11 +25,11 @@ ghost_house_step();
 /// Elroy threshold logic:
 /// - elroydots2: Ultra-aggressive threshold (2nd speed boost)
 /// - elroydots: Initial aggressive threshold (1st speed boost)
-/// - Both require oPacman.csig condition (ghosts released from house) or Clyde free
+/// - Both require oPacman.csig condition (ghosts released from house) or oClyde free
 
-if (oPacman.dotcount >= elroydots2 && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
+if (oPacman.dotcount >= elroydots2 && (oPacman.dotcount >= oPacman.csig || oClyde.house == 0)) {
     elroy = 2;
-} else if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || Clyde.house == 0)) {
+} else if (oPacman.dotcount >= elroydots && (oPacman.dotcount >= oPacman.csig || oClyde.house == 0)) {
     elroy = 1;
 } else {
     elroy = 0;
