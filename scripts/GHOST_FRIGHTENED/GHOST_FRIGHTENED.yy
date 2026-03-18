@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"random_direction",
+  "%Name":"GHOST_FRIGHTENED",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"random_direction",
+  "name":"GHOST_FRIGHTENED",
   "parent":{
     "name":"GHOST_LOGIC",
     "path":"folders/scripts/GHOST_LOGIC.yy",

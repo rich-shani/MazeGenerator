@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"old_frightened",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"old_frightened",
+  "parent":{
+    "name":"GHOST_LOGIC",
+    "path":"folders/scripts/GHOST_LOGIC.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

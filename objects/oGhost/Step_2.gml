@@ -16,7 +16,9 @@
 /// Structure: House logic → Elroy → Speed → Turning → Special checks → Visibility
 /// ===============================================================================
 
-ghost_house_step();
+if (state == GHOST_STATE.IN_HOUSE || state == GHOST_STATE.LEAVING_HOUSE) {
+	ghost_house_step();
+}
 
 // ===== ELROY MODE INDICATOR =====
 /// Update elroy variable (used by Draw for visual effects and by ghost_speed_step for speed).
@@ -48,7 +50,7 @@ ghost_speed_step();
 /// 4. On new tile: Make turning decision based on state
 /// 5. Apply pathfinding script based on behavior mode
 
-if (y > 8 && y < room_height - 8) {
+if (( y > 8 && y < room_height - 8)) {
     /// Keep ghost in vertical bounds (avoids room edges where wrapping occurs)
     /// Top: y > 48 (below top of screen)
     /// Bottom: y < room_height - 48 (above bottom of screen)
@@ -102,11 +104,11 @@ if (y > 8 && y < room_height - 8) {
                                 script_execute(chase_object, tilex, tiley, pursuex, pursuey);
                             }
                         }
-                        else if (state == GHOST_STATE.FRIGHTENED) {
-                            /// FRIGHTENED MODE: Random movement (power pellet active)
-                            /// Same for all ghosts - no special behavior
-                            script_execute(random_direction);
-                        }
+                        //else if (state == GHOST_STATE.FRIGHTENED) {
+                        //    /// FRIGHTENED MODE: Random movement (power pellet active)
+                        //    /// Same for all ghosts - no special behavior
+                        //    script_execute(GHOST_FRIGHTENED);
+                        //}
                         else if (state == GHOST_STATE.EYES) {
                             /// EYES MODE: Chase house entrance to resurrect
                             /// Ghost is just eyes, returning home at high speed
@@ -140,7 +142,7 @@ if (y > 8 && y < room_height - 8) {
 /// - When turning, we need to snap back to grid while moving perpendicular
 /// - The math: apply offset equal to drift amount in perpendicular direction
 
-if (oPacman.dead == 0 && oPacman.finish == 0) {
+if ((oPacman.dead == 0 && oPacman.finish == 0)) {
 
     if (oPacman.chomp == 0 || state == GHOST_STATE.EYES) {
         /// Turn only when Pac is not eating (not paused) OR in eyes mode
@@ -175,17 +177,17 @@ if (oPacman.dead == 0 && oPacman.finish == 0) {
 /// - Frightened mode with <121 frames left: Flash on/off (warning effect)
 /// - Normal modes or plenty of time left: Always visible
 
-if (state == GHOST_STATE.FRIGHTENED) {
-    /// Power pellet active: ghost is vulnerable
-    if (oPacman.alarm[0] < 121) {
-        /// Near end of power pellet: apply flashing effect (handled in Step_0)
-        /// Keep visible (Step_0 controls the actual flashing)
-        visible = true;
-    }
-} else {
-    /// Normal states (Chase, Eyes, In_House): always visible
-    visible = true;
-}
+//if (state == GHOST_STATE.FRIGHTENED) {
+//    /// Power pellet active: ghost is vulnerable
+//    if (oPacman.alarm[0] < 121) {
+//        /// Near end of power pellet: apply flashing effect (handled in Step_0)
+//        /// Keep visible (Step_0 controls the actual flashing)
+//        visible = true;
+//    }
+//} else {
+//    /// Normal states (Chase, Eyes, In_House): always visible
+//    visible = true;
+//}
 
 /// ===============================================================================
 /// END oGHOST STEP_2 EVENT

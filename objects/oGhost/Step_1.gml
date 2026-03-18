@@ -60,7 +60,7 @@ if (state == GHOST_STATE.FRIGHTENED) {
     flash = (flash + 1) % 30;  // Cycles 0-29 continuously
 
     // Check if power pellet is near expiration (less than 2 seconds left)
-    if (oPacman.alarm[0] < 121) {
+    if (oPacman.alarm[0] != -1 && oPacman.alarm[0] < 121) {
         /// FLASHING PHASE: Power pellet about to expire
         /// Create warning effect: ghost appears/disappears
         visible = (flash < 15);  // Visible for first 15 frames, invisible for next 15

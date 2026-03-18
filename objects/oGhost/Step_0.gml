@@ -57,7 +57,7 @@ if (state == GHOST_STATE.FRIGHTENED) {
     /// This script picks a random valid direction at each intersection
     /// The script modifies the 'dir' variable to point in new direction
     /// No pursuex/pursuey needed (pathfinding uses randomness, not target)
-    script_execute(random_direction);
+    script_execute(GHOST_FRIGHTENED);
     /// See scripts/random_direction/random_direction.gml for implementation details
 }
 
@@ -78,120 +78,6 @@ else if (state == GHOST_STATE.EYES) {
     pursuex = GHOST_HOUSE_ENTRANCE_X;
     pursuey = GHOST_HOUSE_ENTRANCE_Y_EYES;
 }
-
-// ===== IN_HOUSE MODE - NO TARGET NEEDED =====
-/// Ghost is inside ghost house, bouncing/exiting
-/// Movement is controlled entirely by house state machine in Step_2
-/// No pathfinding target needed
-
-else if (state == GHOST_STATE.IN_HOUSE) {
-    /// IN_HOUSE: Ghost inside house, in exit sequence
-    /// House state machine (in Step_2) handles all movement directly
-    /// Not using pathfinding, so no pursuex/pursuey calculation needed
-    ///
-    /// House exit sequence:
-    /// 1. Eyes enter house
-    /// 2. Body reconstitutes
-    /// 3. Ghost bounces down
-    /// 4. Ghost bounces back up
-    /// 5. Ghost exits through top of house
-}
-
-// ===== HOUSE_READY MODE - NO TARGET NEEDED =====
-/// Ghost waiting in house, waiting for release condition
-/// Once release condition met, transitions to IN_HOUSE state
-
-/// ===============================================================================
-/// HOW CHILD GHOSTS OVERRIDE THIS EVENT WITH UNIQUE TARGETING
-/// ===============================================================================
-/// Each of the four ghost children (Blinky, Pinky, Inky, Clyde) completely
-/// overrides this event with their own Step_1 code implementing unique AI
-///
-/// They keep the FRIGHTENED, EYES, and house mode logic identical
-/// But provide their own CHASE mode targeting algorithm
-///
-/// ───────────────────────────────────────────────────────────────────────────
-/// EXAMPLE 1: PINKY'S OVERRIDE (Ambush Predator)
-/// ───────────────────────────────────────────────────────────────────────────
-/// Purpose: Pinky tries to AMBUSH Pac by targeting ahead of movement
-///
-/// if state == GHOST_STATE.CHASE {
-///     // Anticipation: Target 4 tiles ahead of Pac in direction he's moving
-///     // If Pac moving right, target is 4 tiles to his right
-///     // oPacman.xdir and oPacman.ydir are his unit movement directions
-///
-///     var _ahead_x = 2 * oPacman.xdir;  // 2 tiles ahead (4x multiplier in some versions)
-///     var _ahead_y = 2 * oPacman.ydir;
-///
-///     pursuex = 16 * round((oPacman.x + _ahead_x * 16) / 16);
-///     pursuey = 16 * round((oPacman.y + _ahead_y * 16) / 16);
-/// }
-/// else if state == GHOST_STATE.FRIGHTENED {
-///     script_execute(random_direction);  // Same as base
-/// }
-/// else if state == GHOST_STATE.EYES {
-///     pursuex = 216;  // Same as base
-///     pursuey = 240;
-/// }
-///
-/// ───────────────────────────────────────────────────────────────────────────
-/// EXAMPLE 2: CLYDE'S OVERRIDE (Ambiguous/Shy Behavior)
-/// ───────────────────────────────────────────────────────────────────────────
-/// Purpose: Clyde changes behavior based on distance to Pac
-/// Close = flee, far = chase (ambiguous personality)
-///
-/// if state == GHOST_STATE.CHASE {
-///     // Calculate distance from Clyde to Pac
-///     var _distance = point_distance(x, y, oPacman.x, oPacman.y);
-///
-///     if (_distance < 128) {
-///         // Too close! Pac is threatening, flee to scatter corner
-///         // Scatter corner for Clyde is bottom-right of maze
-///         pursuex = cornerx;  // Set in Clyde's Create event
-///         pursuey = cornery;
-///     }
-///     else {
-///         // Safe distance, pursue normally like Blinky
-///         pursuex = 16 * round(oPacman.x / 16);
-///         pursuey = 16 * round(oPacman.y / 16);
-///     }
-/// }
-/// else if state == GHOST_STATE.FRIGHTENED {
-///     script_execute(random_direction);  // Same as base
-/// }
-/// else if state == GHOST_STATE.EYES {
-///     pursuex = 216;  // Same as base
-///     pursuey = 240;
-/// }
-///
-/// ───────────────────────────────────────────────────────────────────────────
-/// EXAMPLE 3: INKY'S OVERRIDE (Geometric Ambush)
-/// ───────────────────────────────────────────────────────────────────────────
-/// Purpose: Inky uses Blinky's position to calculate a geometric "double vector"
-/// Creates triangle geometry: Pac -> Blinky -> Target (extension beyond Blinky)
-///
-/// if state == GHOST_STATE.CHASE {
-///     // Vector from Pac to Blinky
-///     var _vec_x = Blinky.x - oPacman.x;
-///     var _vec_y = Blinky.y - oPacman.y;
-///
-///     // Extend vector from Blinky in same direction
-///     var _target_x = Blinky.x + _vec_x;
-///     var _target_y = Blinky.y + _vec_y;
-///
-///     // Snap to grid
-///     pursuex = 16 * round(_target_x / 16);
-///     pursuey = 16 * round(_target_y / 16);
-/// }
-/// else if state == GHOST_STATE.FRIGHTENED {
-///     script_execute(random_direction);  // Same as base
-/// }
-/// else if state == GHOST_STATE.EYES {
-///     pursuex = 216;  // Same as base
-///     pursuey = 240;
-/// }
-///
-/// ===============================================================================
 
 /// ===============================================================================
 /// END oGHOST STEP_1 EVENT
