@@ -71,13 +71,13 @@ if (state == GHOST_STATE.FRIGHTENED) {
         visible = true;  // Always visible when time remaining > 2 seconds
     }
 }
-else if (!visible) {
-    /// Non-frightened states (Chase, Eyes, In_House): Always visible
-    /// Ghost is not vulnerable, no need to flash
-    visible = true;
-    flash = 0;  // Reset flash counter when entering non-frightened state
-    /// (Ensures smooth transition when exiting frightened mode)
-}
+//else if (!visible) {
+//    /// Non-frightened states (Chase, Eyes, In_House): Always visible
+//    /// Ghost is not vulnerable, no need to flash
+//    visible = true;
+//    flash = 0;  // Reset flash counter when entering non-frightened state
+//    /// (Ensures smooth transition when exiting frightened mode)
+//}
 
 // ===== TILE COORDINATE TRACKING =====
 /// Update grid position for pathfinding and collision detection

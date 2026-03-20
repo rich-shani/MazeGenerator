@@ -4,9 +4,15 @@ dotcount++;
 alarm[0] = 240;
 
 with (oGhost) {
-	// edge condition to address .. what if the GHOST is still IN_HOUSE
-	// we don't want to just set to CHASE as the Ghost will then just leave and ignore the Wall boundaries
-	// need to think about whether we need a in-house attribute, as we want to change to FRIGHTENED
-	
-	state = GHOST_STATE.FRIGHTENED;
+	// Only Ghosts that are active in the Maze are changed to FRIGHTENED
+	if (state == GHOST_STATE.CHASE) {
+		/// Reverse direction 
+		dir = direction_opposite(dir_applied);
+
+	    /// Also reset newtile to force immediate pathfinding update
+	    /// This allows ghosts to pick new target right away
+	    newtile = 0;	
+		
+		state = GHOST_STATE.FRIGHTENED;
+	}
 }
