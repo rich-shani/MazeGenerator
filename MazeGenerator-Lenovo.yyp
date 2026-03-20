@@ -115,6 +115,7 @@
     {"id":{"name":"sPacman_Right","path":"sprites/sPacman_Right/sPacman_Right.yy",},},
     {"id":{"name":"sPacman_Up","path":"sprites/sPacman_Up/sPacman_Up.yy",},},
     {"id":{"name":"sPowerPill","path":"sprites/sPowerPill/sPowerPill.yy",},},
+    {"id":{"name":"Sprite13","path":"sprites/Sprite13/Sprite13.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",

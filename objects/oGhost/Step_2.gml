@@ -19,6 +19,14 @@
 if (state == GHOST_STATE.IN_HOUSE || state == GHOST_STATE.LEAVING_HOUSE) {
 	ghost_house_step();
 }
+else if (state == GHOST_STATE.EYES) {
+	// check if we've reached the house
+	if (tilex == GHOST_HOUSE_ENTRANCE_X && 
+		tiley == GHOST_HOUSE_ENTRANCE_Y+32) {
+			
+			state = GHOST_STATE.LEAVING_HOUSE;
+		}
+}
 
 // ===== ELROY MODE INDICATOR =====
 /// Update elroy variable (used by Draw for visual effects and by ghost_speed_step for speed).
@@ -113,8 +121,8 @@ if (( y > 8 && y < room_height - 8)) {
                             /// EYES MODE: Chase house entrance to resurrect
                             /// Ghost is just eyes, returning home at high speed
                             /// Target is always house entrance (xstart, ystart)
-                            var _house_x = (xstart - GHOST_HOUSE_CENTER_X) + GHOST_HOUSE_ENTRANCE_X;
-                            var _house_y = (ystart - GHOST_HOUSE_ENTRANCE_Y) + GHOST_HOUSE_ENTRANCE_Y;
+                            var _house_x = GHOST_HOUSE_ENTRANCE_X;
+                            var _house_y = GHOST_HOUSE_ENTRANCE_Y+32;
                             script_execute(chase_object, tilex, tiley, _house_x, _house_y);
                         }
                     }

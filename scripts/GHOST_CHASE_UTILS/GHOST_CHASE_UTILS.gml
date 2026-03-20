@@ -21,7 +21,8 @@ function ghost_chase_utils_free(_x, _y) {
         // No wall instance here at all → free.
         return true;
     }
-
+	else if ((state == GHOST_STATE.EYES) && _wall.allowsGhost) return true;
+	
     // Otherwise, this is a solid wall for ghosts.
     return false;
 }

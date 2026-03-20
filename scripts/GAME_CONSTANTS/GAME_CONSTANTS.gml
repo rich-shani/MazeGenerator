@@ -33,10 +33,8 @@
 #macro SPEED_EYES 4.0
 
 // Eyes target (house entrance) for pathfinding
-#macro GHOST_HOUSE_ENTRANCE_X 216
+#macro GHOST_HOUSE_ENTRANCE_X 224
 #macro GHOST_HOUSE_ENTRANCE_Y 192
-
-#macro GHOST_HOUSE_ENTRANCE_Y_EYES 240
 
 // Blinky spawn position in grid cells (used when spawning from tile map)
 #macro BLINKY_SPAWN_COL 12

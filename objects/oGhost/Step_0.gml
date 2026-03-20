@@ -65,19 +65,19 @@ if (state == GHOST_STATE.FRIGHTENED) {
 /// Ghost was eaten by Pac, now only eyes remain
 /// Eyes have one mission: return to ghost house entrance to resurrect
 
-else if (state == GHOST_STATE.EYES) {
-    /// EYES MODE: Ghost eaten, eyes pursuing resurrection
-    /// Always target the ghost house entrance (fixed location)
-    /// Eyes move directly toward this point at high speed
+//else if (state == GHOST_STATE.EYES) {
+//    /// EYES MODE: Ghost eaten, eyes pursuing resurrection
+//    /// Always target the ghost house entrance (fixed location)
+//    /// Eyes move directly toward this point at high speed
 
-    /// Ghost house location (standard Pacman maze):
-    /// - X = 216 (centered horizontally in house)
-    /// - Y = 240 (entrance point, just below house boundary)
-    /// This position is same for all ghosts (universal house entrance)
+//    /// Ghost house location (standard Pacman maze):
+//    /// - X = 216 (centered horizontally in house)
+//    /// - Y = 240 (entrance point, just below house boundary)
+//    /// This position is same for all ghosts (universal house entrance)
 
-    pursuex = GHOST_HOUSE_ENTRANCE_X;
-    pursuey = GHOST_HOUSE_ENTRANCE_Y_EYES;
-}
+//    pursuex = GHOST_HOUSE_ENTRANCE_X;
+//    pursuey = GHOST_HOUSE_ENTRANCE_Y_EYES;
+//}
 
 /// ===============================================================================
 /// END oGHOST STEP_1 EVENT
