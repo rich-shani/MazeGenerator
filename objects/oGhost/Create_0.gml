@@ -262,6 +262,10 @@ vspeed = 0;  // Vertical velocity
 
 elroy_display = 0;  // Debug indicator
 
+// TODO: need to remove
+fruity = 0;
+codir = 0;
+
 // ===== INITIALIZATION COMPLETE =====
 /// At this point, basic variables are initialized
 /// Child ghost objects now call event_inherited() to execute this code
