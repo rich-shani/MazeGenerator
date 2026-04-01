@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(rd /s /q \"scripts\\old_frightened\")"
+      "Bash(rd /s /q \"scripts\\old_frightened\")",
+      "Bash(pdftotext \"C:\\\\Users\\\\shani\\\\OneDrive\\\\Documents\\\\GitHub\\\\MazeGenerator\\\\The Pac-Man Dossier.pdf\" -)",
+      "Bash(pdftotext \"C:\\\\Users\\\\shani\\\\OneDrive\\\\Documents\\\\GitHub\\\\MazeGenerator\\\\The Pac-Man Dossier.pdf\" /tmp/dossier.txt)",
+      "Read(//tmp/**)",
+      "Bash(pdftotext \"C:\\\\Users\\\\shani\\\\OneDrive\\\\Documents\\\\GitHub\\\\MazeGenerator\\\\The Pac-Man Dossier.pdf\" \"C:\\\\Users\\\\shani\\\\.claude\\\\dossier.txt\")",
+      "Bash(pdftotext -layout \"C:\\\\Users\\\\shani\\\\OneDrive\\\\Documents\\\\GitHub\\\\MazeGenerator\\\\The Pac-Man Dossier.pdf\" -)",
+      "Bash(pdftotext -table \"C:\\\\Users\\\\shani\\\\OneDrive\\\\Documents\\\\GitHub\\\\MazeGenerator\\\\The Pac-Man Dossier.pdf\" -)"
     ],
     "deny": [],
     "ask": []
