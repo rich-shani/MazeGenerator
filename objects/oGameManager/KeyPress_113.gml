@@ -1,0 +1,1 @@
+oPacman.scatter = !oPacman.scatter;

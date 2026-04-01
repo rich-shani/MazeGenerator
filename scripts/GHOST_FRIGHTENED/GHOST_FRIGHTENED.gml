@@ -184,9 +184,10 @@ function _ghost_frightened_pick_dir(_objx, _objy, _cur) {
 }
 
 function GHOST_FRIGHTENED() {
-    // Similar safety bounds as the old frightened code (prevents odd edge cases)
-    if (x <= 8 || x >= (room_width - 8)) return;
-    if (y <= 8 || y >= (room_height - 8)) return;
+    // REMOVED problematic early return that caused ghosts to escape maze boundaries.
+    // Boundary checking now happens in ghost_chase_utils_can_go() instead.
+    // The old code would return without changing direction, allowing ghosts
+    // to continue moving toward the edge and escape the maze.
 
     // Use the actually applied movement direction so we forbid the true reverse.
     // (Using `dir` here can be wrong because `dir` is "desired".)

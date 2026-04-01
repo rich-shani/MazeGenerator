@@ -1,15 +1,60 @@
 /// PACMAN_MAZE_TILE_MAP - Tile grid build and helpers
+///
+/// TILE MAP BUILDING PHASE:
+/// This module converts the high-level 5×9 Cell Map into the final ~34×31 Tile Map.
+/// The tile map is the actual grid used for gameplay (walls, paths, dots, character positions).
+///
+/// CONVERSION PROCESS:
+/// 1. CALCULATE DIMENSIONS:
+///    - Each cell becomes 3×3 tiles by default (or 2×3 if narrow, 3×4 if tall)
+///    - Add padding for borders and ghost house
+///    - Mirror left half to create symmetric full maze (~34 tiles wide, ~31 tall)
+///
+/// 2. FILL GHOST SPACE:
+///    - Mark tiles inside cells with isGhostSpace=true as GHOSTSPACE
+///    - This creates the ghost house in the center
+///
+/// 3. GENERATE PATHS:
+///    - For each pair of adjacent cells with a connection, draw PATH tiles between them
+///    - Paths run through the "seams" between cells
+///    - Paths are marked as PATH, but blank cells remain BLANK
+///
+/// 4. PLACE ENERGIZERS:
+///    - Identify valid positions in top and bottom rows for power pills
+///    - Place 2 energizers total (1 top, 1 bottom) using get_top/bot_energizer_range()
+///
+/// 5. GHOST HOUSE PATHS:
+///    - Mark path from ghost house exit to main maze
+///    - Set tiles as PATHBLANK (walkable by ghosts but no dots)
+///    - Erase path until it hits an intersection (connects to main paths)
+///
+/// 6. MARK TUNNELS:
+///    - Identify tunnel entrance/exit tiles on left/right edges
+///    - Mark continuous tunnel path as PATHTUNNEL (wrap-around tunnels)
+///
+/// 7. SET CHARACTER SPAWNS:
+///    - Place PACMAN, BLINKY, PINKY, INKY, CLYDE spawn markers
+///    - Based on specific tile positions calculated from cell layout
+///
+/// 8. MIRROR & FINALIZE:
+///    - All operations use pacman_map_set_tile() which automatically mirrors
+///    - Left half → right half symmetry (except ghost house center region)
+///
 /// Responsibility: get_tile_map, set_tile, get_tile_state, get_tile_from_map, print_ascii, etc.
 /// Globals: tileMap (written by get_tile_map).
 
 
 /// @description Generate tile map from cell map
 function pacman_map_get_tile_map() {
+    // Calculate dimensions for the left half of the maze (before mirroring)
+    // sub.x = left half width: (5 cells × 3 tiles) - 1 (overlap) + 2 (border padding) = 16
+    // sub.y = full height: (9 cells × 3 tiles) + 1 (top padding) + 3 (bottom padding) = 31
     var sub = new intTuple_create(
         CELL_MAP_SIZE_X * 3 - 1 + 2,
         CELL_MAP_SIZE_Y * 3 + 1 + 3
     );
-    
+
+    // midX = boundary of left half (14), fullX = total width after mirroring (28)
     var midX = sub.x - 2;
     var fullX = (sub.x - 2) * 2;
     

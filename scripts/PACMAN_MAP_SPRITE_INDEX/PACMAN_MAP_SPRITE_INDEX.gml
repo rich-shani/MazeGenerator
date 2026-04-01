@@ -3,6 +3,25 @@
 /// ===============================================================================
 /// Converts the tile map into JSON / sprite indices for export and wall tile lookup.
 /// pacman_map_calculate_wall_tile lives in PACMAN_MAP_WALL_TILE.
+///
+/// SPRITE INDEX LEGEND:
+/// These are the hardcoded sprite indices used in the tile-to-sprite mapping.
+/// Each TileState maps to a specific sprite index for rendering:
+///
+///   0  = Blank/Empty tile (BLANK, PATHBLANK, GHOSTSPACE)
+///   19 = Ghost house wall (GHOSTWALL)
+///   28 = Pac-Man spawn marker (PACMAN)
+///   29 = Power pill / Energizer (ENERGIZER)
+///   30 = Normal path with dot (PATH)
+///   31 = Tunnel path (PATHTUNNEL)
+///   32 = Fruit spawn marker (FRUIT)
+///   33 = Inky spawn marker (INKY)
+///   34 = Clyde spawn marker (CLYDE)
+///   35 = Pinky spawn marker (PINKY)
+///   36 = Blinky spawn marker (BLINKY)
+///   1-18, 20-27 = Wall tiles (calculated by pacman_map_calculate_wall_tile based on neighbors)
+///
+/// NOTE: These indices should eventually be replaced with named constants in TILE_SPRITE_INDICES.gml
 /// ===============================================================================
 
 /// @description Generate sprite map index string (JSON format)
@@ -22,45 +41,45 @@ function pacman_map_get_sprite_map_index(tileMap) {
             var n = "";
             
             if (t11 == TileState.PATH) {
-                spriteMap[i][j] = 30;
-                n = "30,";
+                spriteMap[i][j] = SPRITE_DOT;
+                n = string(SPRITE_DOT) + ",";
             } else if (t11 == TileState.PATHBLANK) {
-                spriteMap[i][j] = 0;
-                n = "0,";
+                spriteMap[i][j] = SPRITE_BLANK;
+                n = string(SPRITE_BLANK) + ",";
             } else if (t11 == TileState.PATHTUNNEL) {
-                spriteMap[i][j] = 31;
-                n = "31,";
+                spriteMap[i][j] = SPRITE_TUNNEL;
+                n = string(SPRITE_TUNNEL) + ",";
             } else if (t11 == TileState.BLANK || t11 == TileState.GHOSTSPACE) {
-                spriteMap[i][j] = 0;
-                n = "0,";
+                spriteMap[i][j] = SPRITE_BLANK;
+                n = string(SPRITE_BLANK) + ",";
             } else if (t11 == TileState.ENERGIZER) {
-                spriteMap[i][j] = 29;
-                n = "29,";
+                spriteMap[i][j] = SPRITE_ENERGIZER;
+                n = string(SPRITE_ENERGIZER) + ",";
             } else if (t11 == TileState.GHOSTWALL) {
-                spriteMap[i][j] = 19;
-                n = "0,";
+                spriteMap[i][j] = SPRITE_GHOSTWALL;
+                n = string(SPRITE_BLANK) + ",";
             } else if (t11 == TileState.WALL) {
                 var tileDrawn = pacman_map_calculate_wall_tile(tileMap, i, j, mapWidth, mapHeight);
                 spriteMap[i][j] = tileDrawn;
                 n = string(tileDrawn) + ",";
             } else if (t11 == TileState.PACMAN) {
-                spriteMap[i][j] = 28;
-                n = "28,";
+                spriteMap[i][j] = SPRITE_PACMAN;
+                n = string(SPRITE_PACMAN) + ",";
             } else if (t11 == TileState.BLINKY) {
-                spriteMap[i][j] = 36;
-                n = "36,";
+                spriteMap[i][j] = SPRITE_BLINKY;
+                n = string(SPRITE_BLINKY) + ",";
             } else if (t11 == TileState.PINKY) {
-                spriteMap[i][j] = 35;
-                n = "35,";
+                spriteMap[i][j] = SPRITE_PINKY;
+                n = string(SPRITE_PINKY) + ",";
             } else if (t11 == TileState.INKY) {
-                spriteMap[i][j] = 36;
-                n = "33,";
+                spriteMap[i][j] = SPRITE_INKY;  // Fixed: was 36 (BLINKY), now SPRITE_INKY (33)
+                n = string(SPRITE_INKY) + ",";
             } else if (t11 == TileState.CLYDE) {
-                spriteMap[i][j] = 34;
-                n = "34,";
+                spriteMap[i][j] = SPRITE_CLYDE;
+                n = string(SPRITE_CLYDE) + ",";
             } else if (t11 == TileState.FRUIT) {
-                spriteMap[i][j] = 32;
-                n = "32,";
+                spriteMap[i][j] = SPRITE_FRUIT;
+                n = string(SPRITE_FRUIT) + ",";
             }
             
             s += n;

@@ -118,17 +118,6 @@ function pacman_map_get_tile(x, y) {
     return tileMap[x][y];
 }
 
-/// @description Get tile state at position
-/// @param x X coordinate
-/// @param y Y coordinate
-/// @returns Tile state or -1 if invalid
-//function pacman_map_get_tile_state(x, y) {
-//    var tile = pacman_map_get_tile(x, y);
-//    if (tile == noone) return -1;
-//    return tile.state;
-//}
-
-
 /// @description Set tile state at position
 /// Changes the state of a tile in the tile map (e.g., from BLANK to PATH or WALL).
 /// This is used during tile map generation to mark tiles appropriately.

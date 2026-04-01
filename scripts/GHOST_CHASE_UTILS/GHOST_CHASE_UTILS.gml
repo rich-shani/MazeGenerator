@@ -30,6 +30,7 @@ function ghost_chase_utils_free(_x, _y) {
 /// @function ghost_chase_utils_can_go(_objx, _objy, _dir)
 /// @description Return true if the neighbor tile in direction `_dir` is open.
 /// `_dir` is a GRID_DIRECTION (RIGHT=0, UP=1, LEFT=2, DOWN=3).
+/// Also validates that the next position is within room boundaries.
 function ghost_chase_utils_can_go(_objx, _objy, _dir) {
     var _nx = _objx;
     var _ny = _objy;
@@ -52,6 +53,11 @@ function ghost_chase_utils_can_go(_objx, _objy, _dir) {
             _ny = _objy + TILE_PIXELS;
             break;
     }
+
+    // BOUNDARY CHECK: Prevent ghosts from escaping the maze
+    // Use 8-pixel margin to match the room boundary conventions
+    if (_nx <= 8 || _nx >= (room_width - 8)) return false;
+    if (_ny <= 8 || _ny >= (room_height - 8)) return false;
 
     return ghost_chase_utils_free(_nx, _ny);
 }

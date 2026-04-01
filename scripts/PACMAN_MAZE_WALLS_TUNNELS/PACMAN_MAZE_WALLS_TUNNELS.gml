@@ -1,4 +1,36 @@
 /// PACMAN_MAZE_WALLS_TUNNELS - Walls and tunnels
+///
+/// WALL JOINING & TUNNEL CREATION PHASE:
+/// This module runs after cell generation but before tile map building.
+/// It performs final refinements to improve maze connectivity and gameplay.
+///
+/// 1. SETUP SCALE COORDS:
+///    - Convert cell grid positions (0-4, 0-8) to tile grid positions
+///    - Account for narrow columns (width 2 instead of 3) and tall rows (height 4 instead of 3)
+///    - Store final tilePosition and tileSize for each cell
+///
+/// 2. JOIN WALLS:
+///    - Identify isolated cells on top/bottom edges that could create boring "dead zones"
+///    - Randomly connect some of these cells to the outer border (25% chance)
+///    - This creates more interesting wall structures and reduces empty space
+///    - Conditions: cell must be isolated (no connections or only down), neighbors must allow joining
+///
+/// 3. CREATE TUNNELS:
+///    - Select 1-2 cells on the right edge to become tunnel entrances (45% chance for 2 tunnels)
+///    - Tunnel candidates must be "dead ends" (only 1 connection) for good gameplay
+///    - Types of tunnel candidates (in priority order):
+///      a) RIGHT-only: Cell connected only to the right (wraps to left edge perfectly)
+///      b) LEFT-only: Cell connected only to left (simple dead end)
+///      c) Other single connections (UP/DOWN only)
+///    - Randomly select from available candidates, mark tunnel cells
+///    - Change tunnel cell's group ID to separate it from main maze groups
+///
+/// TUNNEL SELECTION LOGIC:
+/// - Prefer cells with exactly 1 connection (true dead ends)
+/// - Avoid cells with 2+ connections (would create confusing paths)
+/// - Right-connected tunnels are ideal (create wrap-around effect)
+/// - If not enough candidates, use cells with single UP/DOWN connections
+///
 /// Responsibility: setup_scale_coords, join_walls, create_tunnels, replace_group, etc.
 /// Globals: cellMap, tallRows, narrowCols.
 
@@ -40,7 +72,7 @@ function pacman_map_join_walls() {
                       c.next[GRID_DIRECTION.DOWN].next[GRID_DIRECTION.RIGHT] != noone &&
                       c.next[GRID_DIRECTION.DOWN].next[GRID_DIRECTION.RIGHT].connections[GRID_DIRECTION.RIGHT])) {
                     c.isJoinCandidate = true;
-                    if (random(1.0) <= 0.25) {
+                    if (random(1.0) <= PROB_WALL_JOIN_EDGE) {
                         c.connections[GRID_DIRECTION.UP] = true;
                     }
                 }
@@ -62,7 +94,7 @@ function pacman_map_join_walls() {
                       c.next[GRID_DIRECTION.UP].next[GRID_DIRECTION.RIGHT] != noone &&
                       c.next[GRID_DIRECTION.UP].next[GRID_DIRECTION.RIGHT].connections[GRID_DIRECTION.RIGHT])) {
                     c.isJoinCandidate = true;
-                    if (random(1.0) <= 0.25) {
+                    if (random(1.0) <= PROB_WALL_JOIN_EDGE) {
                         c.connections[GRID_DIRECTION.DOWN] = true;
                     }
                 }
@@ -86,7 +118,7 @@ function pacman_map_join_walls() {
                 if (!c2.connections[GRID_DIRECTION.UP] && !c2.connections[GRID_DIRECTION.DOWN] &&
                     !c2.connections[GRID_DIRECTION.LEFT]) {
                     c.isJoinCandidate = true;
-                    if (random(1.0) <= 0.5) {
+                    if (random(1.0) <= PROB_WALL_JOIN_RIGHT) {
                         c.connections[GRID_DIRECTION.RIGHT] = true;
                     }
                 }
@@ -97,15 +129,23 @@ function pacman_map_join_walls() {
 
 /// @description Create tunnel connections
 function pacman_map_create_tunnels() {
+    // TUNNEL CANDIDATE ARRAYS (organized by type and vertical position)
+    // "singleDeadEnd": Cells with LEFT-only connection (simple dead end)
     var singleDeadEndCells = [];
     var topSingleDeadEndCells = [];
     var botSingleDeadEndCells = [];
+
+    // "voidTunnel": Cells with RIGHT-only connection (ideal wrap-around tunnels)
     var voidTunnelCells = [];
     var topVoidTunnelCells = [];
     var botVoidTunnelCells = [];
+
+    // "edgeTunnel": Cells with no connections (isolated on edge)
     var edgeTunnelCells = [];
     var topEdgeTunnelCells = [];
     var botEdgeTunnelCells = [];
+
+    // "doubleDeadEnd": Cells with UP+DOWN connections (less ideal but usable)
     var doubleDeadEndCells = [];
     
     for (var j = 0; j < CELL_MAP_SIZE_Y; j++) {
@@ -171,9 +211,14 @@ function pacman_map_create_tunnels() {
         }
     }
     
-    // Random decision: 1 or 2 tunnels (45% chance of 2)
-    var numTunnelsDesired = (random(1.0) <= 0.45) ? 2 : 1;
-    
+    // TUNNEL COUNT DECISION: 1 or 2 tunnels (45% chance of 2, 55% chance of 1)
+    var numTunnelsDesired = (random(1.0) <= PROB_TWO_TUNNELS) ? 2 : 1;
+
+    // SELECT TUNNEL(S) - Priority order for 1 tunnel case:
+    // 1st: voidTunnel (RIGHT-only) - best wrap-around effect
+    // 2nd: singleDeadEnd (LEFT-only) - clean dead end
+    // 3rd: edgeTunnel (isolated) - fallback option
+    // If none available, generation failed (rare)
     if (numTunnelsDesired == 1) {
         if (array_length(voidTunnelCells) > 0) {
             voidTunnelCells[floor(random(array_length(voidTunnelCells)))].topTunnel = true;
@@ -184,7 +229,7 @@ function pacman_map_create_tunnels() {
         } else if (array_length(edgeTunnelCells) > 0) {
             edgeTunnelCells[floor(random(array_length(edgeTunnelCells)))].topTunnel = true;
         } else {
-            return false;
+            return false;  // No valid tunnel candidates found
         }
     } else if (numTunnelsDesired == 2) {
         if (array_length(doubleDeadEndCells) > 0) {

@@ -194,18 +194,6 @@ dir_applied = GRID_DIRECTION.RIGHT;
 
 resdir = GRID_DIRECTION.LEFT;  // Opposite direction
 
-/// Fruit direction tracking (unused in current implementation)
-/// Reserved for future special game modes/bonuses
-/// Some Pacman variants have moving fruit bonuses
-
-fruity = 0;  // Fruit direction
-
-/// Co-direction/secondary direction option (unused)
-/// Reserved for pathfinding enhancements
-/// Could be used when multiple paths are equally optimal
-
-codir = 0;  // Co-direction
-
 // ===== SPEED CONFIGURATION VARIABLES =====
 /// Normal pursuit speed (pixels per frame)
 /// Used in CHASE mode when not in tunnel and no Elroy

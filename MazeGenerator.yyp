@@ -47,7 +47,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.3.217",
+    "IDEVersion":"2024.14.2.213",
   },
   "name":"MazeGenerator",
   "resources":[
@@ -72,7 +72,6 @@
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"ArrayFns","path":"scripts/ArrayFns/ArrayFns.yy",},},
     {"id":{"name":"Cell","path":"scripts/Cell/Cell.yy",},},
-    {"id":{"name":"DirectionFns","path":"scripts/DirectionFns/DirectionFns.yy",},},
     {"id":{"name":"GAME_CONSTANTS","path":"scripts/GAME_CONSTANTS/GAME_CONSTANTS.yy",},},
     {"id":{"name":"GHOST_CHASE_PATHFINDING","path":"scripts/GHOST_CHASE_PATHFINDING/GHOST_CHASE_PATHFINDING.yy",},},
     {"id":{"name":"GHOST_CHASE_UTILS","path":"scripts/GHOST_CHASE_UTILS/GHOST_CHASE_UTILS.yy",},},
@@ -85,7 +84,7 @@
     {"id":{"name":"GHOST_STATE","path":"scripts/GHOST_STATE/GHOST_STATE.yy",},},
     {"id":{"name":"GRID_DIRECTION","path":"scripts/GRID_DIRECTION/GRID_DIRECTION.yy",},},
     {"id":{"name":"Map","path":"scripts/Map/Map.yy",},},
-    {"id":{"name":"old_frightened","path":"scripts/old_frightened/old_frightened.yy",},},
+    {"id":{"name":"MAZE_GENERATION_CONSTANTS","path":"scripts/MAZE_GENERATION_CONSTANTS/MAZE_GENERATION_CONSTANTS.yy",},},
     {"id":{"name":"PACMAN_CORNER","path":"scripts/PACMAN_CORNER/PACMAN_CORNER.yy",},},
     {"id":{"name":"PACMAN_DIRECTION_HANDLER","path":"scripts/PACMAN_DIRECTION_HANDLER/PACMAN_DIRECTION_HANDLER.yy",},},
     {"id":{"name":"PACMAN_INPUT_SIMPLE","path":"scripts/PACMAN_INPUT_SIMPLE/PACMAN_INPUT_SIMPLE.yy",},},
@@ -102,6 +101,7 @@
     {"id":{"name":"PACMAN_MOVEMENT","path":"scripts/PACMAN_MOVEMENT/PACMAN_MOVEMENT.yy",},},
     {"id":{"name":"PACMAN_STATE","path":"scripts/PACMAN_STATE/PACMAN_STATE.yy",},},
     {"id":{"name":"Tile","path":"scripts/Tile/Tile.yy",},},
+    {"id":{"name":"TILE_SPRITE_INDICES","path":"scripts/TILE_SPRITE_INDICES/TILE_SPRITE_INDICES.yy",},},
     {"id":{"name":"TupleFns","path":"scripts/TupleFns/TupleFns.yy",},},
     {"id":{"name":"BlueGradient","path":"sprites/BlueGradient/BlueGradient.yy",},},
     {"id":{"name":"s16x16_green","path":"sprites/s16x16_green/s16x16_green.yy",},},

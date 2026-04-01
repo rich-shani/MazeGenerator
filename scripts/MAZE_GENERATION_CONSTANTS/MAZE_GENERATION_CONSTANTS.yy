@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"DirectionFns",
+  "%Name":"MAZE_GENERATION_CONSTANTS",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"DirectionFns",
+  "name":"MAZE_GENERATION_CONSTANTS",
   "parent":{
     "name":"scripts",
     "path":"folders/scripts.yy",

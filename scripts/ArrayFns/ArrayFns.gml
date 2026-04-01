@@ -24,34 +24,3 @@ function array_shuffle(arr) {
     // Return the modified array (same reference)
     return arr;
 }
-
-/// @description Create a deep copy of a 2D array
-/// This function creates a completely new 2D array structure with the same dimensions
-/// and values as the source array. Useful when you need to modify an array without
-/// affecting the original.
-/// @param source 2D array to copy (first dimension is width, second is height)
-/// @returns New 2D array with copied values (independent copy, not a reference)
-function array_2d_copy(source) {
-    // Get the width (first dimension length)
-    var width = array_length(source);
-    
-    // Create a new array with the same width
-    var result = array_create(width);
-    
-    // Iterate through each column
-    for (var i = 0; i < width; i++) {
-        // Get the height of this column (second dimension length)
-        var height = array_length(source[i]);
-        
-        // Create a new array for this column with the same height
-        result[i] = array_create(height);
-        
-        // Copy each value from source to result
-        for (var j = 0; j < height; j++) {
-            result[i][j] = source[i][j];
-        }
-    }
-    
-    // Return the new independent copy
-    return result;
-}

@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"old_frightened",
+  "%Name":"TILE_SPRITE_INDICES",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"old_frightened",
+  "name":"TILE_SPRITE_INDICES",
   "parent":{
-    "name":"GHOST_LOGIC",
-    "path":"folders/scripts/GHOST_LOGIC.yy",
+    "name":"scripts",
+    "path":"folders/scripts.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

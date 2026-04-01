@@ -50,23 +50,3 @@ function intTuple_equals(tuple1, tuple2) {
     return (tuple1.x == tuple2.x && tuple1.y == tuple2.y);
 }
 
-/// @description Create a copy of an intTuple
-/// Creates a new intTuple instance with the same values as the source.
-/// This is a shallow copy - creates a new object but copies all values.
-/// @param source Source intTuple to copy
-/// @returns New intTuple instance with same x, y, and direction values
-function intTuple_copy(source) {
-    return new intTuple_create(source.x, source.y, source.direction);
-}
-
-/// @description Get distance between two intTuples
-/// Calculates the Manhattan distance (also called L1 distance or taxicab distance)
-/// between two points. This is the sum of absolute differences in x and y coordinates.
-/// Useful for pathfinding and distance calculations in grid-based systems.
-/// @param tuple1 First intTuple (starting point)
-/// @param tuple2 Second intTuple (destination point)
-/// @returns Manhattan distance: |x1-x2| + |y1-y2|
-function intTuple_distance(tuple1, tuple2) {
-    // Manhattan distance = sum of absolute differences in each dimension
-    return abs(tuple1.x - tuple2.x) + abs(tuple1.y - tuple2.y);
-}

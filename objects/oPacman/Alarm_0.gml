@@ -6,6 +6,6 @@ with (oGhost) {
 	}
 
 	// make all Ghosts visible
-	// edge condition catch; a Ghost could be hidden in flash 
+	// a Ghost could be hidden during the flash of the FRIGHTENED state 
 	visible = true;
 }
